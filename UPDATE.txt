@@ -1,0 +1,20 @@
+UPDATE ONLY - does not contain your data
+========================================
+This package replaces the program files. It has NO Inventory, Issues or Stuff
+folders, so your inventory.xlsx and everything you entered stay untouched.
+
+How to install
+  1. Close the page in the browser. Back up your InfraInventory folder (copy it).
+  2. Copy these into your InfraInventory folder, replacing the existing files:
+       index.html
+       dashboard-template.html
+       vendor\xlsx.full.min.js and vendor\LICENSE-xlsx.txt
+  3. Open index.html, click "Connect project folder" (pick your InfraInventory
+     folder). It loads Inventory\inventory.xlsx.
+  4. Click "Save to Excel" once. This adds the new sheets and columns to your
+     workbook (empty, with default lists) and refreshes index.html with your data.
+     Existing rows are not changed.
+
+New sheets added with defaults on first save: ActivityTypes, ActivityStatuses,
+ServerStatuses (and BackupTypes, Environments, DataCenters, RackList if missing).
+New ServersMI columns added empty: FQDN, vCenter name, Last patch CRQ.
