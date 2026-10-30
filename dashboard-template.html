@@ -2279,8 +2279,8 @@ const dcT='<section class="card" style="margin-top:16px"><div class="tools" styl
 +'<p class="note" style="margin:0 0 12px">The sites that appear on the DC rack layout, DCMI and checks. Renaming a data center renames it everywhere (devices, racks, readings, checks). A data center can be deleted only when it has no racks and no devices.</p>'
 +(dcs.length?'<div class="tw"><table><thead><tr><th>Data center</th><th>Racks</th><th>Total U</th><th>Devices</th><th>Notes</th><th></th></tr></thead><tbody>'+dcs.map(d=>'<tr><td><b>'+esc(d.n)+'</b></td><td class="mono">'+dcRackN(d.n)+'</td><td class="mono">'+dcTotalU(d.n)+'</td><td class="mono">'+devices().filter(x=>x.dc===d.n).length+'</td><td style="white-space:normal">'+esc(d.i>=0?DB.DataCenters[d.i].Notes:'')+'</td><td>'+(d.i>=0?''+mvB('DataCenters',d.i)+'<button class="btn s" data-act="edit" data-sheet="DataCenters" data-i="'+d.i+'">Edit</button>':'<span class="note">only in data</span>')+'</td></tr>').join('')+'</tbody></table></div>':'<div class="empty">No data centers yet. Add at least one.</div>')
 +'</section>';
-const last={};DB.RackList.forEach((r,i)=>{last[r.DC]=i});const first={};DB.RackList.forEach((r,i)=>{if(first[r.DC]==null)first[r.DC]=i});
-const rkT='<section class="card" style="margin-top:16px"><div class="tools" style="justify-content:space-between;margin-bottom:6px"><h2 style="margin:0">Racks</h2><span class="tools"><button class="btn" data-act="rackbulk">Add several racks…</button><button class="btn p" data-act="rackadd">+ Add rack</button></span></div>'
+rackGroup(false);const last={};DB.RackList.forEach((r,i)=>{last[r.DC]=i});const first={};DB.RackList.forEach((r,i)=>{if(first[r.DC]==null)first[r.DC]=i});
+const rkT='<section class="card" style="margin-top:16px"><div class="tools" style="justify-content:space-between;margin-bottom:6px"><h2 style="margin:0">Racks</h2><span class="tools"><button class="btn" data-act="racksort" title="Group by data center and sort the rack names naturally (R2 before R10)">Auto sort</button><button class="btn" data-act="rackbulk">Add several racks…</button><button class="btn p" data-act="rackadd">+ Add rack</button></span></div>'
 +'<p class="note" style="margin:0 0 12px">Every rack of every data center: its name, how many U it has, and where it appears on the DC rack layout (▲ ▼ change the order). Renaming a rack renames it on all devices placed in it. A rack cannot be made smaller than its highest device and can be deleted only when empty.</p>'
 +(DB.RackList.length?'<div class="tw"><table><thead><tr><th>Data center</th><th>Rack</th><th>U</th><th>Devices</th><th>Notes</th><th>Order</th><th></th></tr></thead><tbody>'+DB.RackList.map((r,i)=>'<tr><td>'+esc(r.DC)+'</td><td class="mono"><b>'+esc(r.Rack)+'</b></td><td class="mono">'+esc(r['U count'])+'</td><td class="mono">'+rackDevCount(r.DC,r.Rack)+'</td><td style="white-space:normal">'+esc(r.Notes)+'</td><td style="white-space:nowrap"><button class="btn s" data-act="rkorder" data-i="'+i+'" data-d="-1" aria-label="Move up"'+(first[r.DC]===i?' disabled':'')+'>▲</button> <button class="btn s" data-act="rkorder" data-i="'+i+'" data-d="1" aria-label="Move down"'+(last[r.DC]===i?' disabled':'')+'>▼</button></td><td><button class="btn s" data-act="edit" data-sheet="RackList" data-i="'+i+'">Edit</button></td></tr>').join('')+'</tbody></table></div>':'<div class="empty">No racks yet. Use Add several racks to create them.</div>')
 +'</section>';
@@ -2297,13 +2297,14 @@ $('modal').innerHTML='<div class="modal" data-act="mbg"><div class="dlg" role="d
 +'<p class="note" style="margin:0">Creates names like R01, R02, … Racks whose name already exists in that data center are skipped. Rename single racks afterwards with Edit.</p>'
 +'<div id="rb-err" class="note" style="color:var(--bad-fg)" role="alert"></div>'
 +'<div class="acts"><span></span><div class="tools"><button class="btn" data-act="mclose">Cancel</button><button class="btn p" data-act="rackbulkgo">Add racks</button></div></div></div></div>'}
+function rackGroup(nat){const o=DCS.slice();DB.RackList.forEach(r=>{if(o.indexOf(r.DC)<0)o.push(r.DC)});const L=DB.RackList.map((r,i)=>({r:r,i:i}));L.sort((a,b)=>o.indexOf(a.r.DC)-o.indexOf(b.r.DC)||(nat?String(a.r.Rack).localeCompare(String(b.r.Rack),undefined,{numeric:true,sensitivity:'base'}):a.i-b.i));DB.RackList.splice(0,DB.RackList.length,...L.map(x=>x.r))}
 function doRackBulk(){
 const dc=$('rb-dc').value,n=parseInt($('rb-n').value),u=parseInt($('rb-u').value),p=$('rb-p').value,st=parseInt($('rb-s').value),pad=parseInt($('rb-d').value)||0;
 if(!dc){$('rb-err').textContent='Add a data center first';return}
 if(!(n>=1&&n<=60)||!(u>=1&&u<=100)||isNaN(st)){$('rb-err').textContent='Check the numbers: 1–60 racks, 1–100 U';return}
 const have=dcRacks(dc).map(x=>x.toLowerCase());let added=0;
 makeRacks(dc,n,u,p,st,pad).forEach(r=>{if(have.indexOf(String(r.Rack).toLowerCase())<0){DB.RackList.push(r);added++}});
-closeForm();changed();route();toast(added+' racks added to '+dc+(added<n?' ('+(n-added)+' skipped, name already used)':''))}
+rackGroup(false);closeForm();changed();route();toast(added+' racks added to '+dc+(added<n?' ('+(n-added)+' skipped, name already used)':''))}
 function ssCard(){
 const cnt=n=>DB.ServerMI.filter(a=>a.Status===n).length;
 return '<section class="card" style="margin-top:16px"><div class="tools" style="justify-content:space-between;margin-bottom:6px"><h2 style="margin:0">Server statuses</h2><button class="btn" data-act="sortaz" data-sheet="ServerStatuses" title="Sort the list A to Z. The dropdown follows this order.">Sort A–Z</button> <button class="btn p" data-act="ssadd">+ Add status</button></div>'
@@ -2466,6 +2467,7 @@ dcadd(){openForm('DataCenters',null)},
 rackadd(){if(!DCS.length){toast('Add a data center first');return}openForm('RackList',null)},
 rackbulk(){if(!DCS.length){toast('Add a data center first');return}openRackBulk()},
 rackbulkgo(){doRackBulk()},
+racksort(){rackGroup(true);changed();route();toast('Racks sorted by data center and name')},
 rkorder(el){const i=+el.dataset.i,d=+el.dataset.d,a=DB.RackList[i];let j=i+d;while(j>=0&&j<DB.RackList.length&&DB.RackList[j].DC!==a.DC)j+=d;if(j<0||j>=DB.RackList.length)return;DB.RackList[i]=DB.RackList[j];DB.RackList[j]=a;changed();route()},
 dtdefaults(){defaultDT().forEach(t=>{if(!DB.DeviceTypes.some(x=>x.Name===t.Name))DB.DeviceTypes.push(t)});changed();route()},
 rootconnect(){rootConnect()},
