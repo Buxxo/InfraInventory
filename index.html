@@ -803,7 +803,7 @@ if(isNew&&sheet==='DeviceTypes'){row.Color='Slate';row['Default U']=1}
 if(isNew&&sheet==='OpenIssues'){row.Created=ds(0);row.Status='New';row.Priority='Medium';row.Type='Task'}
 if(isNew&&sheet==='KB'){row.Created=ds(0);row.Status='Draft';row.Version='1.0';row['Review due']=ds(180)}
 const name=isNew?'New '+(TV[sheet]?TV[sheet].add.replace(/^Add |^New /,''):sheet==='Operators'?'operator':sheet==='DeviceTypes'?'device type':sheet==='Environments'?'environment':sheet==='DataCenters'?'data center':sheet==='BackupJobs'?'backup job':sheet==='BackupTypes'?'backup category':sheet==='ActivityTypes'?'activity type':sheet==='KBTypes'?'article type':sheet==='ActivityStatuses'?'activity status':sheet==='ServerStatuses'?'server status':sheet==='RackDevices'?'device':sheet==='Links'?'link':sheet==='KB'?'article':'issue'):'Edit '+(row[S.key]||'');
-$('modal').innerHTML='<div class="modal" data-act="mbg"><form class="dlg" id="frm" role="dialog" aria-modal="true" aria-label="'+esc(name)+'" data-sheet="'+sheet+'" data-i="'+(isNew?'':i)+'"><h2>'+esc(name)+'</h2><div class="fgrid">'+formCols(sheet).map(c=>fieldHtml(sheet,c,row,(sheet==='Issues'&&c.k==='ID')||((sheet==='KB'||sheet==='OpenIssues')&&(c.k==='ID'||c.k==='Files')))).join('')+'</div>'+attBlock(sheet,row,isNew)+'<div id="ferr" class="note" style="color:var(--bad-fg)" role="alert"></div><div class="acts"><div>'+(isNew?'':'<button type="button" class="btn d" data-act="del">Delete</button>')+'</div><div class="tools"><button type="button" class="btn" data-act="mclose">Cancel</button><button type="submit" class="btn p">Save</button></div></div></form></div>';
+$('modal').innerHTML='<div class="modal" data-act="mbg"><form class="dlg" id="frm" role="dialog" aria-modal="true" aria-label="'+esc(name)+'" data-sheet="'+sheet+'" data-i="'+(isNew?'':i)+'"><h2>'+esc(name)+'</h2><div class="fgrid">'+formCols(sheet).map(c=>fieldHtml(sheet,c,row,(sheet==='Issues'&&c.k==='ID')||((sheet==='KB'||sheet==='OpenIssues')&&(c.k==='ID'||c.k==='Files')))).join('')+'</div>'+attBlock(sheet,row,isNew)+'<div id="ferr" class="note" style="color:var(--bad-fg)" role="alert"></div><div class="acts"><div>'+(isNew?'':'<button type="button" class="btn d" data-act="del">Delete</button>')+(!isNew&&sheet==='PatchEvents'&&row.Status!=='Done'?' <button type="button" class="btn" data-act="ptdone" data-i="'+i+'">Mark as done…</button>':'')+'</div><div class="tools"><button type="button" class="btn" data-act="mclose">Cancel</button><button type="submit" class="btn p">Save</button></div></div></form></div>';
 const f=$('frm').querySelector('input:not([readonly]),select');if(f)f.focus();
 }
 function closeForm(){$('modal').innerHTML=''}
@@ -845,6 +845,7 @@ if(sheet==='OpenIssues'&&!base.ID){const n=Math.max(0,...DB.OpenIssues.map(x=>pa
 if(sheet==='OpenIssues'){const dn=base.Status==='Resolved'||base.Status==='Closed';if(dn&&!base.Resolved)base.Resolved=ds(0);if(!dn)base.Resolved=''}
 if(sheet==='KB'&&!base.ID){const n=Math.max(0,...DB.KB.map(x=>parseInt(String(x.ID).replace(/\D/g,''))||0))+1;base.ID='KB-'+String(n).padStart(4,'0')}
 if(sheet==='PatchEvents'&&String(base.Servers||'').trim()&&form.dataset.warned!=='1'){const sc=ptScan(base.Servers);if(sc.no.length){form.dataset.warned='1';$('ferr').textContent='Not found in the inventory: '+sc.no.slice(0,15).join(', ')+'. Fix the names, or save again to keep them as typed.';return false}}
+if(sheet==='PatchEvents'&&base.Status==='Done'&&base.CRQ&&String(base.Servers||'').trim()){const rs=ptApply(String(base.CRQ).trim(),String(base['End date']||base.Date).slice(0,10),/firmware/i.test(base.Notes||''),base.Servers,false);if(rs.n||rs.skip.length)setTimeout(()=>toast(ptMsg(rs,base.CRQ)),50)}
 if(sheet==='ReplJobs'){const ap=n=>{const s=DB.Catalyst.find(x=>x.Store===n);return s?s.Appliance:''};if(base['Source store']&&!base['Source appliance'])base['Source appliance']=ap(base['Source store']);if(base['Target store']&&!base['Target appliance'])base['Target appliance']=ap(base['Target store'])}
 if(!isNew&&sheet==='Catalyst'){const o=DB.Catalyst[+iStr];if(o.Store!==base.Store){DB.BackupJobs.forEach(j=>{if(j['Catalyst store']===o.Store)j['Catalyst store']=base.Store});DB.ReplJobs.forEach(j=>{if(j['Source store']===o.Store)j['Source store']=base.Store;if(j['Target store']===o.Store)j['Target store']=base.Store});DB.Catalyst.forEach(s=>{if(s['Replica store']===o.Store)s['Replica store']=base.Store})}}
 if(sheet==='NetPorts')netSync(base,isNew?null:DB.NetPorts[+iStr]);
@@ -1715,16 +1716,46 @@ $('modal').innerHTML='<div class="modal" data-act="mbg"><div class="dlg" role="d
 +'<p class="note" style="margin:6px 0 0">Searches ServersMI, ESXi hosts, Storage, Backup and Other devices. For servers the part of the name before the first dash is the hostname, so “server01” matches “server01-APP-NodeA”; FQDN and vCenter name match too. Status Done sets Last patched and Last patch CRQ on every matched device; Planned and In progress only create the calendar event.</p>'
 +'<div id="pb-err" class="note" style="color:var(--bad-fg)" role="alert"></div>'
 +'<div class="acts"><span></span><div class="tools"><button class="btn" data-act="mclose">Cancel</button><button class="btn p" data-act="ptbulkgo" id="pb-go">Save patching activity</button></div></div></div></div>';ptPreview();setTimeout(()=>{const c=$('pb-crq');if(c)c.focus()},30)}
+function ptCur(x){const r=DB[x.sheet][x.i];return String(r['Last patched']||'').slice(0,10)}
+function ptPlan(list,when,force){const sc=ptScan(list),up=[],skip=[];sc.ok.forEach(x=>{const c=ptCur(x);(c&&c>when&&!force?skip:up).push(x)});return {sc:sc,up:up,skip:skip}}
+function ptApply(crq,when,fw,list,force){const p=ptPlan(list,when,force);p.up.forEach(x=>{const r=DB[x.sheet][x.i];r['Last patched']=when;r['Last patch CRQ']=crq;if(fw)r['FW patched']=when;r.Updated=ds(0)});return {n:p.up.length,skip:p.skip.map(x=>x.name+' ('+ptCur(x)+')')}}
+function ptMsg(res,crq){return res.n+' devices updated with '+crq+(res.skip.length?' · '+res.skip.length+' skipped, they already have a newer date: '+res.skip.slice(0,5).join(', ')+(res.skip.length>5?' …':''):'')}
+function openPtDone(i){const ev=DB.PatchEvents[i];if(!ev)return;PTD={i:i};
+const when=ev['End date']||ev.Date||ds(0);
+$('modal').innerHTML='<div class="modal" data-act="mbg"><div class="dlg" role="dialog" aria-modal="true" aria-label="Mark patching as done" style="width:min(680px,100%)"><h2>Mark as done · '+esc(ev.CRQ||ev.ID)+'</h2>'
++'<div class="fgrid"><label for="pd-date">Patched on<input class="inp" id="pd-date" type="date" value="'+esc(String(when).slice(0,10))+'" data-act="pdprev"></label><label for="pd-crq">CRQ / INC<input class="inp" id="pd-crq" value="'+esc(ev.CRQ||'')+'" data-act="pdprev"></label></div>'
++'<label class="chkrow" style="margin-top:6px"><input type="checkbox" id="pd-fw" data-act="pdprev"'+(/firmware/i.test(ev.Notes||'')?' checked':'')+'> Firmware update (also set FW patched)</label><label class="chkrow"><input type="checkbox" id="pd-force" data-act="pdprev"> Overwrite devices that already have a newer date</label>'
++'<div id="pd-sum" style="margin-top:8px"></div><div id="pd-err" class="note" style="color:var(--bad-fg)" role="alert"></div>'
++'<div class="acts"><span></span><div class="tools"><button class="btn" data-act="mclose">Cancel</button><button class="btn p" data-act="ptdonego" id="pd-go">Mark as done</button></div></div></div></div>';ptdPrev()}
+let PTD=null;
+function ptdPrev(){const ev=DB.PatchEvents[PTD.i],when=$('pd-date').value,p=ptPlan(ev.Servers,when,$('pd-force').checked),nf=p.sc.no;
+$('pd-sum').innerHTML='<div class="tw" style="max-height:260px"><table><thead><tr><th>Device</th><th>Current Last patched</th><th>Current CRQ</th><th>Result</th></tr></thead><tbody>'
++p.sc.ok.map(x=>{const r=DB[x.sheet][x.i],sk=p.skip.indexOf(x)>=0;return '<tr><td class="mono">'+esc(x.name)+'</td><td>'+(esc(ptCur(x))||'<span class="note">—</span>')+'</td><td class="mono">'+(esc(r['Last patch CRQ'])||'<span class="note">—</span>')+'</td><td>'+(sk?'<span class="badge b-warn">Skipped: newer date on record</span>':'<span class="badge b-ok">Will be updated</span>')+'</td></tr>'}).join('')+nf.map(n=>'<tr><td class="mono">'+esc(n)+'</td><td colspan="2"></td><td><span class="badge b-bad">Not found</span></td></tr>').join('')+'</tbody></table></div>';
+$('pd-go').textContent='Mark as done · update '+p.up.length+' device'+(p.up.length===1?'':'s')}
+function doPtDone(){const ev=DB.PatchEvents[PTD.i],when=$('pd-date').value,crq=$('pd-crq').value.trim();
+if(!when||!crq){$('pd-err').textContent='Enter the date and the CRQ / INC';return}
+const res=ptApply(crq,when,$('pd-fw').checked,ev.Servers,$('pd-force').checked);
+ev.Status='Done';ev.CRQ=crq;if(!ev['End date']&&when>ev.Date)ev['End date']=when;ev.Updated=ds(0);
+closeForm();changed();route();toast(ptMsg(res,crq))}
+function openPtToday(i){const r=DB.ServerMI[i];if(!r)return;PTT={i:i};
+$('modal').innerHTML='<div class="modal" data-act="mbg"><div class="dlg" role="dialog" aria-modal="true" aria-label="Patched" style="width:min(420px,100%)"><h2>Patched · '+esc(r.Hostname)+'</h2>'
++'<div class="fgrid"><label for="pt-crq">CRQ / INC<input class="inp" id="pt-crq" placeholder="CRQ000012345" value="'+esc(r['Last patch CRQ']||'')+'"></label><label for="pt-date">Patched on<input class="inp" id="pt-date" type="date" value="'+ds(0)+'"></label></div>'
++'<div id="pt-err" class="note" style="color:var(--bad-fg)" role="alert"></div><div class="acts"><span></span><div class="tools"><button class="btn" data-act="mclose">Cancel</button><button class="btn p" data-act="ptodaygo" id="pt-go">Save</button></div></div></div></div>';setTimeout(()=>{const c=$('pt-crq');if(c){c.focus();c.select()}},30)}
+let PTT=null;
+function doPtToday(){const r=DB.ServerMI[PTT.i],crq=$('pt-crq').value.trim(),d=$('pt-date').value;if(!crq||!d){$('pt-err').textContent='Enter the CRQ / INC and the date';return}
+const cur=String(r['Last patched']||'').slice(0,10),go=$('pt-go');
+if(cur&&cur>d&&go.dataset.ok!=='1'){go.dataset.ok='1';go.textContent='Overwrite anyway';$('pt-err').textContent='This server already has a newer date ('+cur+(r['Last patch CRQ']?', '+r['Last patch CRQ']:'')+'). Click again to overwrite it with an older one.';return}
+r['Last patched']=d;r['Last patch CRQ']=crq;r.Updated=ds(0);closeForm();changed();route();toast(r.Hostname+': patched '+d+' · '+crq)}
 function doPtBulk(){const crq=$('pb-crq').value.trim(),d=$('pb-date').value,e=$('pb-end').value,st=$('pb-status').value;
 if(!crq){$('pb-err').textContent='Enter the CRQ number';return}if(!d){$('pb-err').textContent='Enter the start date';return}
 if(e&&e<d){$('pb-err').textContent='End date is before the start date';return}
 const sc=ptScan($('pb-list').value);if(!sc.ok.length){$('pb-err').textContent='No device matched the inventory';return}
 const go=$('pb-go');if(sc.no.length&&go.dataset.ok!=='1'){go.dataset.ok='1';go.textContent='Continue without the '+sc.no.length+' not found';$('pb-err').textContent='Not found in the inventory: '+sc.no.slice(0,15).join(', ')+(sc.no.length>15?' …':'')+'. Fix the names, or click again to continue without them.';return}
 const fw=$('pb-fw').checked,when=e||d;
-if(st==='Done')sc.ok.forEach(x=>{const r=DB[x.sheet][x.i];r['Last patched']=when;r['Last patch CRQ']=crq;if(fw)r['FW patched']=when;r.Updated=ds(0)});
+let res=null;if(st==='Done')res=ptApply(crq,when,fw,$('pb-list').value,false);
 const n=Math.max(0,...DB.PatchEvents.map(x=>parseInt(String(x.ID).replace(/\D/g,''))||0))+1;
 DB.PatchEvents.push({ID:'PAT-'+String(n).padStart(4,'0'),Date:d,'End date':e&&e>d?e:'',Title:$('pb-title').value.trim()||'Patching '+crq,CRQ:crq,Status:st,Servers:sc.ok.map(x=>x.name).join('\n'),'In calendar':$('pb-cal').checked?'Yes':'No',Notes:fw?'Firmware update':'',Updated:ds(0)});
-closeForm();changed();route();toast(st==='Done'?sc.ok.length+' devices updated with '+crq:'Event saved ('+sc.ok.length+' devices)')}
+closeForm();changed();route();toast(st==='Done'?ptMsg(res,crq):'Event saved ('+sc.ok.length+' devices)')}
 
 /* ---------- attachments on records (Attachments/<Sheet>/<record>/<file>) ---------- */
 const ATT={q:[]},ATT_SHEETS=['ServerMI','ESXi','Storage','Backup','RackDevices','DCSSActivity','PatchEvents'];
@@ -2428,7 +2459,8 @@ pstat(el){PT.f=el.dataset.v;route()},
 penv(el){PT.env=el.dataset.v;route()},
 ptbulk(){openPtBulk()},
 ptbulkgo(){doPtBulk()},
-ptoday(el){const r=DB.ServerMI[+el.dataset.i];if(!r)return;r['Last patched']=ds(0);r.Updated=ds(0);changed();route();toast(r.Hostname+': Last patched set to today')},
+ptdone(el){openPtDone(+el.dataset.i)},ptdonego(){doPtDone()},ptodaygo(){doPtToday()},
+ptoday(el){openPtToday(+el.dataset.i)},ptoday_old(el){const r=DB.ServerMI[+el.dataset.i];if(!r)return;r['Last patched']=ds(0);r.Updated=ds(0);changed();route();toast(r.Hostname+': Last patched set to today')},
 pcsv(){patchCsv()},
 dcadd(){openForm('DataCenters',null)},
 rackadd(){if(!DCS.length){toast('Add a data center first');return}openForm('RackList',null)},
@@ -2512,6 +2544,7 @@ if(el.dataset&&el.dataset.act==='caljumpx'){calJump(el);return}
 if(el.classList&&el.classList.contains('hpc')){hpSync(el);return}
 if(el.dataset&&el.dataset.act==='dcpf'){dcpField(el);return}
 if(el.dataset&&el.dataset.act==='dcpopt'){if(el.dataset.o==='heat')DPS.heat=el.checked;else DPS.snap=parseFloat(el.value);dcpFull();return}
+if(el.dataset&&el.dataset.act==='pdprev'){ptdPrev();return}
 if(el.id==='csv-sep'){META.csvSep=el.value;persist();return}
 if(el.dataset&&el.dataset.act==='bscol'){bsRender(el.dataset.sheet);return}
 if(el.id==='pl-dc'){$('pl-rack').innerHTML=dcRacks(el.value).map(x=>'<option>'+esc(x)+'</option>').join('');return}
