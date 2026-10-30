@@ -257,6 +257,165 @@ a.ce{text-decoration:none;cursor:pointer}a.btn{text-decoration:none;color:var(--
 .hpl{display:flex;flex-wrap:wrap;gap:4px 16px;margin-top:4px}.hpl .chkrow{grid-column:auto}
 .dcp-box{overflow:auto;max-height:72vh;border:1px solid var(--line);border-radius:10px;background:var(--surface2)}
 #dcp-svg{display:block;touch-action:none;user-select:none;outline:none}.blk{cursor:move}.rsz{cursor:nwse-resize}
+
+/* ---- design refinement layer ---- */
+.split{align-items:stretch}.split>.col>.card:only-child{flex:1}
+.gauges{grid-template-columns:repeat(auto-fit,minmax(104px,1fr));gap:10px}.gauges svg{max-width:100%;height:auto}
+.cal{gap:6px}.cal i{aspect-ratio:auto!important;height:30px;border-radius:6px}
+#view{display:flex;flex-direction:column;gap:18px;min-width:0}
+.card,.glass,.kpi{box-shadow:0 1px 2px rgba(15,23,42,.05),0 0 0 0 transparent}
+.card{border-radius:14px;padding:20px}
+.card h2{font-size:16px;letter-spacing:-.005em;margin-bottom:14px}
+.head h1{font-size:26px;letter-spacing:-.015em}
+.head p{max-width:75ch}
+.kpi{padding:16px 18px;gap:6px}
+.kpi span{font-size:11.5px;font-weight:600;letter-spacing:.07em;text-transform:uppercase}
+.kpi b{font-size:30px;letter-spacing:-.02em}
+.sec{font-size:12px;letter-spacing:.09em;margin:10px 0 -6px}
+.split{display:grid;grid-template-columns:minmax(0,3fr) minmax(0,2fr);gap:16px;align-items:start}
+.split>.col{display:flex;flex-direction:column;gap:16px;min-width:0}
+@media(max-width:900px){.split{grid-template-columns:1fr}}
+.suplist .risk{align-items:center}
+.fresh2>summary{cursor:pointer;display:flex;align-items:center;gap:10px;list-style:none;min-height:32px}
+.fresh2>summary::-webkit-details-marker{display:none}
+.fresh2>summary::before{content:"▸";color:var(--muted);transition:transform .15s}
+.fresh2[open]>summary::before{transform:rotate(90deg)}
+.weekgrid .wd{background:var(--surface2)}
+@supports (background:color-mix(in srgb,red,blue)){
+.ce{background:color-mix(in srgb,var(--c) 17%,var(--surface));color:var(--ink);border-left:3px solid var(--c);border-radius:5px}
+.ce small{color:var(--muted)}
+}
+a:focus-visible,button:focus-visible,.chip:focus-visible,[tabindex]:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+
+/* ======== v2 design system ======== */
+:root{--bg:#F4F6F9;--surface:#FFFFFF;--surface2:#F7F9FB;--ink:#0F172A;--muted:#5A6577;--line:#E2E7EE;--line2:#EDF1F5;
+--accent:#2F5BD3;--accent-ink:#FFFFFF;--accent-soft:#EAF0FD;--accent-hover:#244BB8;
+--side:#0C1424;--side2:#151F33;--side-on:#1D2A45;--side-ink:#C3CCDA;--side-muted:#7F8BA0;
+--ok-c:#15803D;--warn-c:#C26A00;--bad-c:#D92D20;
+--sh-1:0 1px 2px rgba(15,23,42,.05);--sh-2:0 1px 3px rgba(15,23,42,.06),0 6px 16px -6px rgba(15,23,42,.10);--sh-3:0 24px 60px -12px rgba(15,23,42,.35);
+--r-1:8px;--r-2:12px;--r-3:16px}
+:root[data-theme="dark"]{--bg:#0A0F17;--surface:#111824;--surface2:#151E2C;--ink:#E6ECF3;--muted:#93A0B2;--line:#232E3F;--line2:#1A2433;
+--accent:#6E9BFF;--accent-ink:#06122A;--accent-soft:#17264A;--accent-hover:#8CB0FF;
+--side:#080D15;--side2:#111A28;--side-on:#18243A;
+--ok-c:#3FB950;--warn-c:#E3A52B;--bad-c:#F47067;
+--sh-1:0 1px 2px rgba(0,0,0,.35);--sh-2:0 1px 2px rgba(0,0,0,.4),0 8px 20px -8px rgba(0,0,0,.5);--sh-3:0 24px 60px -12px rgba(0,0,0,.7)}
+body{font-size:14px;letter-spacing:-.003em;-webkit-font-smoothing:antialiased}
+::selection{background:var(--accent-soft)}
+*{scrollbar-width:thin;scrollbar-color:var(--line) transparent}
+/* shell */
+.side{flex:0 0 248px;padding:18px 12px;gap:14px;border-right:1px solid rgba(255,255,255,.04);position:sticky;top:0;height:100vh;overflow-y:auto;scrollbar-color:#24314a transparent}
+.brand i{background:linear-gradient(135deg,#3B6FF0,#2348B8);box-shadow:0 4px 12px -4px rgba(59,111,240,.6)}
+.nav{gap:1px}
+.navsearch{display:flex;align-items:center;gap:8px;width:100%;height:36px;padding:0 10px;margin-bottom:8px;border-radius:9px;border:1px solid #223049;background:#0F1A2D;color:var(--side-muted);cursor:pointer;font-size:13px}
+.navsearch:hover{border-color:#34507f;color:#fff}
+.navsearch kbd{margin-left:auto}
+.navlbl{display:flex;align-items:center;gap:6px;width:100%;background:none;border:0;cursor:pointer;color:var(--side-muted);font-size:11px;font-weight:600;letter-spacing:.09em;padding:14px 10px 6px;text-transform:uppercase}
+.navlbl svg{margin-left:auto;transition:transform .15s;opacity:.7}.navlbl[aria-expanded="false"] svg{transform:rotate(-90deg)}
+.navlbl:hover{color:#fff}.navlbl em{font-style:normal;font-size:10px;padding:1px 6px;border-radius:9px;background:#3a1a1c;color:#FF9492;letter-spacing:0}
+.navg{display:flex;flex-direction:column;gap:1px}
+.nav a{min-height:34px;padding:0 10px;gap:10px;border-radius:8px;font-size:13.5px;color:var(--side-ink);position:relative}
+.nav a svg{opacity:.75;flex:none}.nav a span{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.nav a:hover{background:var(--side2)}
+.nav a.on{background:var(--side-on);color:#fff}
+.nav a.on svg{opacity:1;color:#8FB2FF}
+.nav a.on::before{content:"";position:absolute;left:-12px;top:8px;bottom:8px;width:3px;border-radius:0 3px 3px 0;background:#6E9BFF}
+.nav a em{background:rgba(244,112,103,.16);color:#FF9C95;font-weight:600}
+.fresh{background:#0F1A2D;border:1px solid #1B2740}
+.main{padding-top:20px;gap:16px}
+.side + .main{padding-left:32px;padding-right:32px}
+kbd{font:11px/1 var(--mono);padding:3px 5px;border-radius:5px;border:1px solid var(--line);background:var(--surface2);color:var(--muted)}
+.navsearch kbd{border-color:#2a3a57;background:#15223a;color:#8a98ae}
+/* status bar */
+.pending{border-radius:10px;padding:8px 10px 8px 14px;font-size:13px;background:var(--warn-bg);border:1px solid color-mix(in srgb,var(--warn-c) 28%,transparent);gap:10px}
+.pending>span::before{content:"";display:inline-block;width:8px;height:8px;border-radius:50%;background:var(--warn-c);margin-right:10px;vertical-align:1px;box-shadow:0 0 0 3px color-mix(in srgb,var(--warn-c) 22%,transparent)}
+.pending .btn{min-height:30px;margin-left:auto}
+.pending .btn+.btn{margin-left:0}
+/* page header */
+.head{align-items:flex-end;gap:16px;padding-bottom:2px}
+.head h1{font-size:24px;font-weight:650;letter-spacing:-.02em;line-height:1.2}
+.head p{margin-top:4px;font-size:13.5px;line-height:1.5}
+.meta{display:flex;align-items:center;gap:7px;margin-top:8px;font-size:12.5px;color:var(--muted)}
+.meta .sep{opacity:.5}
+.dot{width:8px;height:8px;border-radius:50%;flex:none;background:var(--off-fg)}
+.dot.b-ok{background:var(--ok-c);box-shadow:0 0 0 3px color-mix(in srgb,var(--ok-c) 20%,transparent)}.dot.b-warn{background:var(--warn-c);box-shadow:0 0 0 3px color-mix(in srgb,var(--warn-c) 20%,transparent)}.dot.b-bad{background:var(--bad-c);box-shadow:0 0 0 3px color-mix(in srgb,var(--bad-c) 20%,transparent)}
+/* controls */
+.btn{min-height:36px;padding:0 13px;border-radius:9px;font-size:13.5px;font-weight:500;box-shadow:var(--sh-1);transition:background .12s,border-color .12s,box-shadow .12s}
+.btn:hover{border-color:color-mix(in srgb,var(--accent) 45%,var(--line));background:var(--surface2)}
+.btn.p{box-shadow:0 1px 2px rgba(15,23,42,.1),inset 0 1px 0 rgba(255,255,255,.12)}
+.btn.p:hover{background:var(--accent-hover);border-color:var(--accent-hover)}
+.btn.s{min-height:30px;padding:0 10px;font-size:12.5px;border-radius:8px}
+.btn.d:hover{border-color:var(--bad-c)}
+.btn:disabled{opacity:.5;cursor:not-allowed}
+.inp{height:36px;border-radius:9px;transition:border-color .12s,box-shadow .12s}
+.inp:focus{outline:none;border-color:var(--accent);box-shadow:0 0 0 3px color-mix(in srgb,var(--accent) 22%,transparent)}
+textarea.inp{line-height:1.5}
+.chips{gap:6px}
+.chip{min-height:30px;padding:0 11px;border-radius:8px;font-size:12.5px;font-weight:500;background:var(--surface);color:var(--muted);transition:all .12s}
+.chip:hover{color:var(--ink);border-color:color-mix(in srgb,var(--accent) 40%,var(--line))}
+.chip.on{background:var(--accent-soft);border-color:color-mix(in srgb,var(--accent) 45%,transparent);color:var(--accent)}
+:root[data-theme="dark"] .chip.on{color:#B9CEFF}
+.badge{height:22px;padding:0 8px;border-radius:999px;font-size:11.5px;font-weight:600;letter-spacing:.01em}
+.hint{font-size:12px;color:var(--muted);margin:0}
+.hint::before{content:"i";display:inline-flex;align-items:center;justify-content:center;width:14px;height:14px;border-radius:50%;border:1px solid currentColor;font:600 9px/1 var(--font);margin-right:6px;vertical-align:1px;opacity:.8}
+.chips .hint::before{display:none}
+/* menu */
+details.menu{position:relative}
+details.menu>summary{list-style:none;cursor:pointer}
+details.menu>summary::-webkit-details-marker{display:none}
+details.menu[open]>summary{border-color:var(--accent);background:var(--accent-soft)}
+details.menu .pop{position:absolute;right:0;top:calc(100% + 6px);z-index:40;min-width:250px;background:var(--surface);border:1px solid var(--line);border-radius:12px;box-shadow:var(--sh-3);padding:14px;display:flex;flex-direction:column;gap:10px}
+details.menu .pop label{display:flex;flex-direction:column;gap:5px}
+/* cards, kpis */
+.card,.glass{border-radius:var(--r-3);box-shadow:var(--sh-1);border-color:var(--line)}
+.card h2,.glass h2{font-size:15px;font-weight:600}
+.kpis{gap:12px}
+.kpi{border-radius:var(--r-2);box-shadow:var(--sh-1);padding:15px 16px 14px;gap:4px;position:relative}
+.kpi span{color:var(--muted);font-size:11px;letter-spacing:.08em}
+.kpi b{font-size:28px;font-weight:650;letter-spacing:-.025em}
+.kpi small{font-size:12px}
+a.kpi.tile{transition:border-color .12s,box-shadow .12s,transform .12s}
+a.kpi.tile:hover{box-shadow:var(--sh-2);transform:translateY(-1px)}
+.tile::after{width:0}
+/* tables */
+table{font-size:13px}
+th{background:var(--surface2);font-size:11px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);padding:10px 14px;border-bottom:1px solid var(--line)}
+td{padding:10px 14px;border-top:1px solid var(--line2)}
+tbody tr{transition:background .08s}
+tbody tr:hover{background:color-mix(in srgb,var(--accent) 4%,var(--surface))}
+.card[style*="padding:0"]{overflow:hidden}
+.card[style*="padding:0"]>.tools:first-child{border-bottom:1px solid var(--line2);padding:12px 14px!important}
+.srch{width:240px;padding-left:34px;background:var(--surface) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%238592a6' stroke-width='2'%3E%3Ccircle cx='11' cy='11' r='7'/%3E%3Cpath d='M20 20l-3.5-3.5'/%3E%3C/svg%3E") no-repeat 11px 50%}
+/* dialogs */
+.modal{background:rgba(8,12,20,.45);backdrop-filter:blur(3px);-webkit-backdrop-filter:blur(3px);padding-top:6vh}
+.dlg{border-radius:var(--r-3);box-shadow:var(--sh-3);padding:22px;animation:dlgIn .14s ease-out}
+@keyframes dlgIn{from{opacity:0;transform:translateY(6px) scale(.99)}to{opacity:1;transform:none}}
+@media (prefers-reduced-motion:reduce){.dlg{animation:none}*{transition:none!important}}
+.fgrid label{font-weight:500}
+/* command palette */
+.ckdlg{width:min(640px,100%);padding:0;gap:0;overflow:hidden}
+.ckin{display:flex;align-items:center;gap:10px;padding:14px 16px;border-bottom:1px solid var(--line);color:var(--muted)}
+.ckin input{flex:1;border:0;outline:0;background:none;font-size:16px;color:var(--ink);min-width:0}
+.ckl{max-height:min(420px,60vh);overflow:auto;padding:6px}
+.ckh{font-size:11px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);padding:10px 10px 4px}
+.cki{display:flex;align-items:center;gap:10px;width:100%;text-align:left;border:0;background:none;padding:9px 10px;border-radius:8px;cursor:pointer;color:var(--ink)}
+.cki svg{color:var(--muted);flex:none}.ckt{font-weight:500;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.ckd{margin-left:auto;font-size:12px;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:45%}
+.cki.on,.cki:hover{background:var(--accent-soft)}.cki.on svg{color:var(--accent)}
+.ckempty{padding:28px;text-align:center;color:var(--muted)}
+.ckf{display:flex;gap:16px;padding:10px 16px;border-top:1px solid var(--line);font-size:12px;color:var(--muted);background:var(--surface2)}
+.ckf kbd{margin-right:3px}
+/* settings section nav */
+.subnav{position:sticky;top:0;z-index:20;display:flex;gap:6px;overflow-x:auto;padding:10px 0;margin:-6px 0 -4px;background:color-mix(in srgb,var(--bg) 88%,transparent);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px)}
+.subnav a{flex:none;font-size:12.5px;font-weight:500;padding:6px 11px;border-radius:8px;border:1px solid var(--line);background:var(--surface);color:var(--muted);text-decoration:none}
+.subnav a:hover{color:var(--accent);border-color:color-mix(in srgb,var(--accent) 40%,var(--line))}
+section.card[id^="set-"]{scroll-margin-top:64px}
+/* misc */
+.bar{height:7px;border-radius:99px}.bar i{border-radius:99px}
+.note{line-height:1.5}
+.empty{border:1px dashed var(--line);border-radius:12px;background:var(--surface2)}
+@media (max-width:760px){.side{position:static;height:auto;border-right:0}.side + .main{padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}.nav a.on::before{display:none}.navlbl,.navsearch{display:none}.navg{flex-direction:row}.navg[hidden]{display:flex!important}}
+.chips{align-items:center}
+.chip.lay{gap:7px}.chip.lay i{width:9px;height:9px;border-radius:3px;background:var(--c);opacity:.35}.chip.lay.on{background:color-mix(in srgb,var(--c) 14%,var(--surface));border-color:color-mix(in srgb,var(--c) 55%,transparent);color:var(--ink)}.chip.lay.on i{opacity:1}
+@media (max-width:760px){.side{flex:1 1 100%!important;width:100%}.nav{flex-direction:row;overflow-x:auto;gap:4px}.navg{flex:none;gap:4px}.nav a{flex:none}}
 </style>
 <div class="app">
 <aside class="side" aria-label="Navigation">
@@ -598,7 +757,7 @@ sources:'<path d="M10 14a4 4 0 0 0 5.7 0l3-3a4 4 0 0 0-5.7-5.7l-1 1"/><path d="M
 const NAV=[
 ['',[['overview','Overview'],['calendar','Calendar'],['stuff','Stuff'],['kb','Knowledge base'],['tracker','Open Issues'],['contacts','Contacts'],['agroups','Assignment groups'],['activity','DCSS Activity']]],
 ['Inventory',[['servermi','ServersMI'],['patching','Patching'],['patchevents','Patch events'],['esxi','ESXi hosts'],['storage','Storage'],['datastores','Datastores'],['backup','Backup'],['catalyst','Catalyst stores'],['backupjobs','Backup jobs'],['repljobs','Replication jobs'],['otherdevices','Other devices']]],
-['Data center',[['dcmi','DCMI'],['racks','DC rack layout'],['dcdesign','DC designer'],['ports','Ports & cabling'],['disks','Disks'],['checks','DC Checks'],['issues','DC Open Issues']]],
+['Data center',[['dcmi','DCMI'],['checks','DC Checks'],['issues','DC Open Issues'],['racks','DC rack layout'],['dcdesign','DC designer'],['ports','Ports & cabling'],['disks','Disks']]],
 ['System',[['quality','Data quality'],['sources','Data sources'],['activitylog','Activity log'],['settings','Settings']]]];
 let CUR='overview';
 function sheetUpdated(s){let m='';(DB[s]||[]).forEach(r=>{if(r.Updated&&String(r.Updated)>m)m=String(r.Updated)});return m}
@@ -607,7 +766,9 @@ function openIssues(){return DB.Issues.filter(i=>i.Status!=='Resolved')}
 function renderSide(){
 const q=quality().filter(c=>c.count>0).length,oi=openIssues().length;
 const badge={quality:q,issues:oi,tracker:DB.OpenIssues.filter(r=>r.Status!=='Resolved'&&r.Status!=='Closed').length,activity:DB.DCSSActivity.filter(actionable).length,disks:DB.Disks.filter(r=>r.State==='Failed'||r.State==='Predictive fail').length};
-$('nav').innerHTML=NAV.map(g=>(g[0]?'<div class="navlbl">'+g[0]+'</div>':'')+g[1].map(v=>'<a href="#'+v[0]+'"'+(v[0]===CUR?' class="on" aria-current="page"':'')+'><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true">'+IC[v[0]==='activitylog'?'log':v[0]]+'</svg>'+v[1]+(badge[v[0]]?'<em>'+badge[v[0]]+'</em>':'')+'</a>').join('')).join('');
+const item=v=>'<a href="#'+v[0]+'"'+(v[0]===CUR?' class="on" aria-current="page"':'')+'><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true">'+IC[v[0]==='activitylog'?'log':v[0]]+'</svg><span>'+v[1]+'</span>'+(badge[v[0]]?'<em>'+badge[v[0]]+'</em>':'')+'</a>';
+$('nav').innerHTML='<button class="navsearch" data-act="ckopen"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/></svg><span>Search…</span><kbd>Ctrl K</kbd></button>'+NAV.map(g=>{if(!g[0])return '<div class="navg">'+g[1].map(item).join('')+'</div>';const has=g[1].some(v=>v[0]===CUR),shut=NAVC[g[0]]&&!has,cnt=g[1].reduce((a,v)=>a+(badge[v[0]]||0),0);
+return '<button class="navlbl" data-act="navgrp" data-g="'+g[0]+'" aria-expanded="'+(!shut)+'"><span>'+g[0]+'</span>'+(shut&&cnt?'<em>'+cnt+'</em>':'')+'<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg></button><div class="navg"'+(shut?' hidden':'')+'>'+g[1].map(item).join('')+'</div>'}).join('');
 const row=(l,s)=>{const u=sheetUpdated(s);const f=fresh(u);return '<div><span>'+l+'</span><span'+(f[0]==='b-bad'?' style="color:#FF9492"':f[0]==='b-warn'?' style="color:#FFC966"':'')+'>'+ago(u)+'</span></div>'};
 $('fresh').innerHTML='<b>Data freshness</b><span class="mono" style="color:var(--side-muted)">'+esc(META.fileName||'inventory.xlsx')+'</span>'+row('ServersMI','ServerMI')+row('ESXi hosts','ESXi')+row('Storage','Storage')+row('Datastores','Datastores')+row('Backup','Backup')+row('DCMI','DCMI')+row('DC Checks','DCChecks')+'<span style="color:var(--side-muted);border-top:1px solid #2B4070;padding-top:8px">Page built '+esc(META.loadedAt)+'</span>';
 }
@@ -743,14 +904,14 @@ function tableView(sheet){
 const t=TV[sheet],u=uiOf(sheet),d=DB[sheet];
 const fo=['All'].concat(SCHEMA[sheet].cols.find(c=>c.k===t.filter).o);
 const u0=sheetUpdated(sheet),fr=fresh(u0);
-return '<div class="head"><div><h1>'+t.title+'</h1><p>'+t.sub+'</p></div><div class="tools"><span class="badge '+fr[0]+'" style="height:30px;padding:0 12px;font-size:13px">Data as of '+(u0||'—')+' · '+ago(u0)+'</span><select class="inp" id="csv-sep" aria-label="CSV separator" style="width:auto"><option value=";"'+((META.csvSep||';')===';'?' selected':'')+'>CSV separator ;</option><option value=","'+(META.csvSep===','?' selected':'')+'>CSV separator ,</option></select><button class="btn" data-act="csv" data-sheet="'+sheet+'">Export CSV</button><button class="btn" data-act="cols" data-sheet="'+sheet+'">Columns</button><button class="btn p" data-act="add" data-sheet="'+sheet+'">+ '+t.add+'</button></div></div>'
+return '<div class="head"><div><h1>'+t.title+'</h1><p>'+t.sub+'</p><div class="meta"><span class="dot '+fr[0]+'"></span>Data as of '+(u0||'—')+' · '+ago(u0)+' <span class="sep">·</span> '+d.length+' row'+(d.length===1?'':'s')+'</div></div><div class="tools"><details class="menu"><summary class="btn"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M12 4v11M7 10l5 5 5-5M5 20h14"/></svg>Export</summary><div class="pop"><label class="note" for="csv-sep">CSV separator<select class="inp" id="csv-sep"><option value=";"'+((META.csvSep||';')===';'?' selected':'')+'>Semicolon ( ; ) for Excel EU</option><option value=","'+(META.csvSep===','?' selected':'')+'>Comma ( , )</option></select></label><button class="btn p" data-act="csv" data-sheet="'+sheet+'">Download CSV</button><span class="note">Uses the current filter, search, sort and columns.</span></div></details><button class="btn" data-act="cols" data-sheet="'+sheet+'"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="M9 4v16M15 4v16"/></svg>Columns</button><button class="btn p" data-act="add" data-sheet="'+sheet+'">+ '+t.add+'</button></div></div>'
 +'<div class="kpis">'+t.kpis(d).map(k=>'<div class="kpi"><span>'+k.l+'</span><b>'+k.v+'</b><small class="'+(k.c||'')+'">'+(k.s||'&nbsp;')+'</small></div>').join('')+'</div>'
 +(t.pre?t.pre():'')
 +'<section class="card" style="padding:0"><div class="tools" style="padding:14px 16px;justify-content:space-between"><div class="chips" id="chips">'+chipsHtml(sheet,fo)+'</div><div class="tools"><button class="btn fbtn'+(u.open||u.fl.length?' p':'')+'" data-act="ftoggle" data-sheet="'+sheet+'" aria-expanded="'+(u.open?'true':'false')+'"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M3 5h18l-7 8v6l-4 2v-8z"/></svg>Filters'+(u.fl.length?' ('+u.fl.length+')':'')+'</button>'+(u.fl.length?'<button class="btn" data-act="fclear" data-sheet="'+sheet+'">Clear filters ✕</button>':'')+'<input class="inp srch" id="q-'+sheet+'" type="search" data-act="q" data-sheet="'+sheet+'" placeholder="Search…" aria-label="Search '+t.title+'" value="'+esc(u.q)+'"></div></div>'+'<div id="fsum">'+fsummaryHtml(sheet)+'</div>'+(u.open?fpanelHtml(sheet):'')+'<div class="tw" id="tbl">'+tableHtml(sheet)+'</div></section>'
-+'<p class="note">Click a row to edit all fields, including the ones not shown in the table. Drag a column header to move it. Export CSV saves the rows and columns you see now, with the current filter, search and sort. Changes stay in this page until you save them to Excel.'+(DEMO?' Sample data only.':'')+'</p>';
++'<p class="hint">Click a row to edit every field · drag a column header to move it · changes stay in the page until Save to Excel'+(DEMO?' · sample data':'')+'</p>';
 }
 function fmatch(u,t,r){return u.fm&&u.fm.length?u.fm.indexOf(String(r[t.filter]))>=0:(u.f==='All'||r[t.filter]===u.f)}
-function chipsHtml(sheet,fo){const u=uiOf(sheet),fm=u.fm||[];return fo.map(o=>'<button class="chip'+((fm.length?fm.indexOf(o)>=0:u.f===o)?' on':'')+'" data-act="chip" data-sheet="'+sheet+'" data-v="'+esc(o)+'" title="Shift+click to select several">'+esc(o)+'</button>').join('')+(fo.length>2?'<span class="note" style="margin:0 0 0 4px">Shift+click: select several</span>':'')}
+function chipsHtml(sheet,fo){const u=uiOf(sheet),fm=u.fm||[];return fo.map(o=>'<button class="chip'+((fm.length?fm.indexOf(o)>=0:u.f===o)?' on':'')+'" data-act="chip" data-sheet="'+sheet+'" data-v="'+esc(o)+'" title="Shift+click to select several">'+esc(o)+'</button>').join('')+(fo.length>2?'<span class="hint" style="margin:0 0 0 4px">Shift+click to pick several</span>':'')}
 function tableHtml(sheet){
 const t=TV[sheet],u=uiOf(sheet),d=DB[sheet];
 let rows=d.map((r,i)=>({r,i}));
@@ -1251,7 +1412,7 @@ return '<div class="tw"><table><thead><tr><th>Sheet</th><th>Rows</th><th>Last up
 function devices(){const o=[];[['ESXi','Hostname','esxi'],['Storage','Array','stor'],['Backup','Device','back'],['RackDevices','Name','cust']].forEach(a=>DB[a[0]].forEach((r,i)=>{if(a[0]==='ESXi'&&inEncl(r))return;o.push({sheet:a[0],i:i,name:r[a[1]],t:a[2],dc:r.DC,rack:r.Rack,u:parseInt(r['U start']),sz:parseInt(r['U size']),r:r})}));return o}
 function valid(d){return !isNaN(d.u)&&!isNaN(d.sz)&&d.sz>=1&&d.u>=1&&d.u+d.sz-1<=rackU(d.dc,d.rack)&&dcRacks(d.dc).indexOf(String(d.rack))>=0}
 function overlaps(all){const hit=new Set(),pairs=[];const ok=all.filter(valid);for(let a=0;a<ok.length;a++)for(let b=a+1;b<ok.length;b++){const x=ok[a],y=ok[b];if(x.dc===y.dc&&x.rack===y.rack&&x.u<=y.u+y.sz-1&&y.u<=x.u+x.sz-1){hit.add(x.sheet+x.i);hit.add(y.sheet+y.i);pairs.push([x,y])}}return{hit:hit,pairs:pairs}}
-const RK={dc:'DC2A',sel:null,z:1},RKZ=[['Compact',150,14,10],['Large',340,18,12],['Extra large',560,24,14]];
+const RK={dc:'DC2A',sel:null,z:1},RKZ=[['Compact',136,13,9],['Large',306,16,11],['Extra large',504,22,13]];
 const TYPE_LABEL={esxi:'ESXi host',stor:'Storage array',back:'Backup device'};
 function devLabel(d){return d.t==='srv'?'Blade server':d.t==='cust'?String(d.r.Type||'Other device'):TYPE_LABEL[d.t]}
 function typeColor(name){const t=DB.DeviceTypes.find(x=>x.Name===name);return DT_COLORS[(t&&t.Color)||'Slate']||DT_COLORS.Slate}
@@ -1519,7 +1680,7 @@ if(dl){try{await dl.save({filename:name,data:data});toast(msg)}catch(e){if(!(e&&
 try{const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([data],{type:'text/csv;charset=utf-8'}));a.download=name;document.body.appendChild(a);a.click();a.remove();toast(msg)}catch(e){toast('Download is not available in this view')}}
 
 /* ---------- executive overview ---------- */
-const CV={ok:'var(--ok-fg)',warn:'var(--warn-fg)',bad:'var(--bad-fg)',acc:'var(--accent)',off:'var(--off-fg)',esxi:'var(--u-esxi)',stor:'var(--u-stor)',back:'var(--u-back)'};
+const CV={ok:'var(--ok-c)',warn:'var(--warn-c)',bad:'var(--bad-c)',acc:'var(--accent)',off:'var(--off-fg)',esxi:'var(--u-esxi)',stor:'var(--u-stor)',back:'var(--u-back)'};
 const ENV_CV={Blue:CV.acc,Green:CV.ok,Amber:CV.warn,Red:CV.bad,Grey:CV.off};
 const scoreCv=s=>s>=85?CV.ok:s>=70?CV.warn:CV.bad;
 function svgDonut(parts,size,thick,big,small){
@@ -1568,6 +1729,7 @@ return `<div class="rb" title="${esc(rk)}: ${u}/${rackU(dc,rk)} U${p?' · '+l+'%
 return `<section class="card dcp"><div class="tools" style="justify-content:space-between"><h2 style="margin:0">${esc(dc)}</h2><span class="badge ${iss?'b-warn':'b-ok'}">${iss} open issue${iss===1?'':'s'}</span></div>
 <div class="dcrow"><div class="rbars">${bars||'<span class="note">No racks defined</span>'}</div><div class="dcnum"><div><b>${pct}%</b><span>rack space · ${used}/${tot} U</span></div><div><b style="color:${pp>=80?CV.bad:pp>=60?CV.warn:'inherit'}">${lim?pp+'%':'—'}</b><span>power · ${r1(pw)}/${r1(lim)} kW</span></div><div><b>${hot?num(hot['Inlet C']).toFixed(1)+' °C':'—'}</b><span>hottest inlet${hot?' · '+esc(hot.Rack):''}</span></div></div></div>
 <div class="tools" style="justify-content:space-between;margin-top:6px"><span class="note">${chk?'Last check: <span class="badge '+stCls(chk.Result)+'">'+esc(chk.Result)+'</span> '+esc(String(chk.Date).slice(0,10)):'No check logged yet'}</span><span class="tools"><button class="btn s" data-act="rkdc" data-v="${esc(dc)}">Rack layout</button><button class="btn s" data-act="goto" data-v="dcmi">DCMI</button></span></div></section>`}
+function freshSum(){const c={Fresh:0,Aging:0,Stale:0};['ServerMI','ESXi','Storage','Backup','Datastores','RackDevices','DCMI','DCChecks','OpenIssues'].forEach(s=>{if(DB[s].length){const t=fresh(sheetUpdated(s))[1];if(c[t]!=null)c[t]++}});return (c.Stale?'<span class="badge b-bad">'+c.Stale+' stale</span> ':'')+(c.Aging?'<span class="badge b-warn">'+c.Aging+' aging</span> ':'')+(!c.Stale&&!c.Aging?'<span class="badge b-ok">all fresh</span>':'')}
 function overview(){
 const sv=DB.ServerMI,pst=patchStats(sv),P=healthParts(),W=P.reduce((s,p)=>s+p.w,0),score=W?Math.round(P.reduce((s,p)=>s+p.w*p.s,0)/W):null;
 const risks=risksList(),sd=supDays(),cr=capRows(),vms=sum(DB.ESXi,'VMs'),phys=sv.filter(r=>r.Platform==='Physical').length;
@@ -1600,7 +1762,7 @@ const envParts=names.map(n=>{const e=envRow(n);return{l:n,v:sv.filter(r=>r.Env==
 const envCard=`<section class="card"><h2>Servers by environment</h2><div class="donutrow">${svgDonut(envParts,150,20,String(sv.length),'servers')}${legendHtml(envParts)}</div><div class="pillrow" style="margin-top:12px"><span class="badge b-info">${sv.length-phys} virtual</span><span class="badge b-off">${phys} physical</span></div></section>`;
 const bk=[['Expired',sd.filter(x=>x.d<0).length,CV.bad],['≤ 90 days',sd.filter(x=>x.d>=0&&x.d<=90).length,CV.warn],['≤ 1 year',sd.filter(x=>x.d>90&&x.d<=365).length,CV.acc],['> 1 year',sd.filter(x=>x.d>365).length,CV.ok]];
 const nxt=sd.filter(x=>x.d>=0).sort((a,b)=>a.d-b.d).slice(0,3);
-const supCard=`<section class="card"><h2>Support lifecycle</h2>${sd.length?`<div class="stack">${bk.filter(b=>b[1]).map(b=>`<i style="flex:${b[1]};background:${b[2]}" title="${b[0]}: ${b[1]}"></i>`).join('')}</div>${legendHtml(bk.map(b=>({l:b[0],v:b[1],c:b[2]})))}<div class="tw" style="margin-top:10px"><table><tbody>${sd.filter(x=>x.d<0).sort((a,b)=>a.d-b.d).slice(0,2).concat(nxt).map(x=>`<tr class="clk" tabindex="0" data-act="goto" data-v="${x.v}"><td class="mono">${esc(x.n)}</td><td>${esc(x.sheet)}</td><td>${cellHtml('Support end',{'Support end':x.end})}</td></tr>`).join('')}</tbody></table></div>`:'<p class="note">No support end dates recorded yet.</p>'}</section>`;
+const supCard=`<section class="card"><h2>Support lifecycle</h2>${sd.length?`<div class="stack">${bk.filter(b=>b[1]).map(b=>`<i style="flex:${b[1]};background:${b[2]}" title="${b[0]}: ${b[1]}"></i>`).join('')}</div>${legendHtml(bk.map(b=>({l:b[0],v:b[1],c:b[2]})))}<div class="suplist">${sd.filter(x=>x.d<0).sort((a,b)=>a.d-b.d).slice(0,2).concat(nxt).map(x=>`<a class="risk" href="#${x.v}"><span style="min-width:0;flex:1"><b class="mono">${esc(x.n)}</b><span class="note" style="display:block">${esc(x.sheet)}</span></span>${cellHtml('Support end',{'Support end':x.end})}</a>`).join('')}</div>`:'<p class="note">No support end dates recorded yet.</p>'}</section>`;
 // capacity gauges
 const gcard=(t,rows,v)=>{const a=avg(rows),mx=rows.slice().sort((x,y)=>num(y['Used %'])-num(x['Used %']))[0];return `<div class="gcell"><span class="eyebrow">${t}</span>${rows.length?svgGauge(a,a>=85?CV.bad:a>=70?CV.warn:CV.acc,t):'<p class="note">none</p>'}<small class="note">${rows.length?`${rows.filter(r=>num(r['Used %'])>=85).length} of ${rows.length} at 85%+ · highest ${num(mx['Used %'])}% <a href="#${v}">${esc(mx.Array||mx.Datastore||mx.Device)}</a>`:'No data'}</small></div>`};
 const capCard=`<section class="card"><h2>Capacity</h2><div class="gauges">${gcard('Storage arrays',DB.Storage,'storage')}${gcard('Datastores',DB.Datastores,'datastores')}${gcard('Backup',DB.Backup,'backup')}</div></section>`;
@@ -1629,12 +1791,12 @@ const teamCard=`<section class="card"><h2>Work in progress</h2><div class="pillr
 const empty=['ServerMI','ESXi','Storage','Datastores','Backup','DCMI'].every(s=>!DB[s].length);
 return head('Infrastructure overview','Executive view of the estate. Everything is computed from the workbook'+(lastUp?' · data as of '+esc(lastUp):'')+'.','<button class="btn" data-act="openXlsx">Open Excel…</button><button class="btn p" data-act="saveXlsx">Save to Excel</button>')
 +(empty?'<section class="card"><h2>Getting started</h2><div class="steps"><span>1 · Connect the project folder</span>→<span>2 · Add or edit rows here</span>→<span>3 · Save to Excel</span></div><p class="note" style="margin:10px 0 0">Pick the InfraInventory folder once per visit. Save to Excel then writes Inventory/inventory.xlsx and refreshes index.html by itself. Edge or Chrome is required. Details are on Data sources.</p><div class="tools" style="margin-top:10px">'+rootBtn()+'<button class="btn" data-act="openXlsx">Open Excel…</button><button class="btn" data-act="goto" data-v="sources">Data sources</button></div></section>':'')
-+hero+calCard()+'<div class="dash wide">'+riskCard+workCard+'</div>'+estate
++hero+estate+calCard()+'<div class="split"><div class="col">'+riskCard+'</div><div class="col">'+workCard+teamCard+'</div></div>'
 +'<div class="dash">'+patCard+bkCard+envCard+'</div>'
 +'<div class="dash">'+capCard+supCard+osCard+'</div>'
 +'<h2 class="sec">Data centers</h2><div class="dash">'+DCS.map(dcPanel).join('')+'</div>'
-+'<div class="dash">'+actCard+chkLogCard+teamCard+'</div>'
-+'<section class="card"><h2>Data freshness</h2>'+freshTable()+'</section>';
++'<div class="dash">'+actCard+chkLogCard+'</div>'
++'<details class="card fresh2"><summary><h2 style="margin:0;display:inline">Data freshness</h2> '+freshSum()+'</summary><div style="margin-top:12px">'+freshTable()+'</div></details>';
 }
 
 /* ---------- backup jobs: which server is under which job ---------- */
@@ -1885,7 +2047,7 @@ const detail=sel?'<section class="card"><div class="tools" style="justify-conten
 const seg=(k,l)=>'<button class="chip'+(mode===k?' on':'')+'" data-act="calmode" data-v="'+k+'">'+l+'</button>';
 return head('Calendar','DCSS activities, patching events and DC checks. Tick “In calendar” on an event to show it here.','<button class="btn p" data-act="caladd" data-k="act" data-d="'+(sel||ds(0))+'">+ Add event</button>')
 +'<section class="card" id="calcard"><div class="tools" style="justify-content:space-between"><div class="tools"><button class="btn s" data-act="calnav" data-n="-1" aria-label="Previous">‹</button><button class="btn s" data-act="calnav" data-n="1" aria-label="Next">›</button><button class="btn s" data-act="calnav" data-n="0">Today</button><b style="font-size:18px;margin-left:6px">'+esc(title)+'</b><input class="inp" type="date" id="cal-jump" data-act="caljumpx" value="'+a+'" aria-label="Go to date" style="width:auto;height:32px"></div><div class="tools"><div class="chips">'+seg('month','Month')+seg('week','Week')+seg('agenda','Agenda')+'</div></div></div>'
-+'<div class="tools" style="margin:12px 0">'+CAL_SRC.map(s=>'<button class="chip'+(CAL.off[s.k]?'':' on')+'" data-act="calflt" data-k="'+s.k+'" style="'+(CAL.off[s.k]?'':'background:'+s.c+';border-color:'+s.c)+'">'+esc(s.label)+'</button>').join('')+'</div>'+body+'</section>'+detail}
++'<div class="tools" style="margin:12px 0">'+CAL_SRC.map(s=>'<button class="chip lay'+(CAL.off[s.k]?'':' on')+'" data-act="calflt" data-k="'+s.k+'" style="--c:'+s.c+'" aria-pressed="'+(!CAL.off[s.k])+'"><i></i>'+esc(s.label)+'</button>').join('')+'</div>'+body+'</section>'+detail}
 function calJump(el){if(el.value){CAL.a=el.value;calRedraw()}}
 function calRedraw(){if(CUR==='calendar')$('view').innerHTML=calendarView()}
 const CALACT={
@@ -1930,7 +2092,7 @@ const connTbl=conn.length?'<div class="tw"><table><thead><tr><th>Port</th><th>Ki
 const q=PV.q.trim().toLowerCase(),found=q?DB.NetPorts.map((r,i)=>[r,i]).filter(x=>['Device','Port','Remote device','Remote port','Cable','VLAN / purpose','Notes'].some(k=>String(x[0][k]||'').toLowerCase().includes(q))).slice(0,60):[];
 const res=q?(found.length?'<div class="tw"><table><thead><tr><th>Device</th><th>Port</th><th>State</th><th>Connected to</th><th>Cable</th><th>Purpose</th></tr></thead><tbody>'+found.map(x=>{const r=x[0];return '<tr><td><a href="#" data-act="portgo" data-d="'+esc(r.Device)+'">'+esc(r.Device)+'</a></td><td><a href="#" data-act="portedit" data-i="'+x[1]+'">'+esc(r.Port)+'</a></td><td>'+esc(r.State||'')+'</td><td>'+esc((r['Remote device']||'')+(r['Remote port']?' : '+r['Remote port']:''))+'</td><td>'+esc(r.Cable||'')+'</td><td>'+esc(r['VLAN / purpose']||'')+'</td></tr>'}).join('')+'</tbody></table></div>':'<p class="note" style="margin:8px 0 0">Nothing found.</p>'):'';
 return head('Ports &amp; cabling','Network switches, servers and arrays: mark which port is connected to what. Setting both ends is automatic. · sheet “NetPorts”','<button class="btn" data-act="portlist">All ports (list)</button><button class="btn" data-act="portadd">Add port</button><button class="btn p" data-act="portgen">Generate ports</button>')
-+rootBar()
+
 +'<section class="card"><div class="tools" style="margin-bottom:10px">'+(devs.length||extra.length?devSelect(PV.dev,devs,extra,n=>cnt(n)+' ports','ports')+perSelect(PV.per,per,'ports'):'<span class="note">No devices yet. Add ESXi hosts, storage, backup or other devices first.</span>')+'<span class="tools" style="margin-left:auto"><span class="badge b-ok">'+st('Connected')+' connected</span><span class="badge b-off">'+st('Free')+' free</span><span class="badge b-warn">'+st('Reserved')+' reserved</span><span class="badge b-bad">'+st('Down')+' down</span></span></div>'+grid+'</section>'
 +'<section class="card"><h2>Connections of '+esc(PV.dev||'—')+'</h2>'+connTbl+'</section>'
 +'<section class="card"><h2>Find a port or cable</h2><input class="inp" data-act="pvq" placeholder="Device, port, cable label, VLAN…" value="'+esc(PV.q)+'" style="max-width:420px">'+res+'</section>'}
@@ -1949,7 +2111,7 @@ const grid=rows.length?'<div class="pgrid dk" style="--n:'+per+'">'+rows.map(x=>
 const bad=rows.filter(x=>x[0].State==='Failed'||x[0].State==='Predictive fail');
 const badTbl=bad.length?'<div class="tw"><table><thead><tr><th>Slot</th><th>State</th><th>Type</th><th>Size TB</th><th>Model</th><th>Serial</th><th>Group / pool</th></tr></thead><tbody>'+bad.map(x=>{const r=x[0];return '<tr><td><a href="#" data-act="diskedit" data-i="'+x[1]+'"><b>'+esc(r.Slot)+'</b></a></td><td><span class="badge '+(r.State==='Failed'?'b-bad':'b-warn')+'">'+esc(r.State)+'</span></td><td>'+esc(r.Type||'')+'</td><td>'+esc(r['Size TB']||'')+'</td><td>'+esc(r.Model||'')+'</td><td class="mono">'+esc(r.Serial||'')+'</td><td>'+esc(r['Group / pool']||'')+'</td></tr>'}).join('')+'</tbody></table></div>':'<p class="note" style="margin:0">No failed or predicted-failure disks on this device.</p>';
 return head('Disks','Disk bays of storage arrays, backup devices and servers: type, size, state and RAID group per slot. · sheet “Disks”','<button class="btn" data-act="disklist">All disks (list)</button><button class="btn" data-act="diskadd">Add disk</button><button class="btn p" data-act="diskgen">Generate disks</button>')
-+rootBar()
+
 +'<section class="card"><div class="tools" style="margin-bottom:10px">'+(devs.length||extra.length?devSelect(DV.dev,devs,extra,n=>cnt(n)+' disks','disks')+perSelect(DV.per,per,'disks'):'<span class="note">No devices yet.</span>')+'<span class="tools" style="margin-left:auto"><span class="badge b-ok">'+st('OK')+' OK</span><span class="badge b-info">'+st('Spare')+' spare</span><span class="badge b-warn">'+st('Predictive fail')+' predictive</span><span class="badge b-bad">'+st('Failed')+' failed</span><span class="badge b-off">'+r1(tb)+' TB active</span></span></div>'+grid+'</section>'
 +'<section class="card"><h2>Disks needing attention · '+esc(DV.dev||'—')+'</h2>'+badTbl+'</section>'}
 function genDlg(kind){
@@ -2256,6 +2418,39 @@ ucundo(){const snap=UCUNDO.pop();if(!snap)return;snap.slice().reverse().forEach(
 Object.assign(SRTACT,UCACT);
 
 function srtField(el){const f=el.dataset.f;if(f==='trim'||f==='empty')SRT[f]=el.checked;else if(f==='d1'||f==='d2')SRT[f]=parseInt(el.value);else SRT[f]=el.value;if(f==='sheet'){SRT.k1='';SRT.k2=''}const y=window.scrollY;route();window.scrollTo(0,y)}
+/* ---------- v2 shell: collapsible nav groups, command palette (Ctrl+K), section nav ---------- */
+let NAVC={};try{NAVC=JSON.parse(localStorage.getItem('ii-navc')||'{}')||{}}catch(e){NAVC={}}
+function navSave(){try{localStorage.setItem('ii-navc',JSON.stringify(NAVC))}catch(e){}}
+const CK={q:'',i:0,items:[]};
+function ckSources(){const o=[];
+NAV.forEach(g=>g[1].forEach(v=>o.push({k:'page',t:v[1],s:g[0]||'Pages',go:'#'+v[0],ic:v[0]})));
+[['ServerMI','Hostname','Server',['IP','OS']],['ESXi','Hostname','ESXi host',['Cluster','DC']],['Storage','Array','Storage',['DC','Model']],['Backup','Device','Backup device',['DC','Type']],['RackDevices','Name','Other device',['Type','DC']],['Datastores','Datastore','Datastore',['Cluster','DC']],['Contacts','Name','Contact',['Role','Company / team']],['KB','Title','KB article',['ID','Type']],['OpenIssues','Title','Open issue',['ID','Status']],['Issues','Title','DC issue',['ID','Status']]].forEach(a=>{const sh=a[0];if(!DB[sh])return;DB[sh].forEach((r,i)=>{const n=r[a[1]];if(n)o.push({k:'rec',t:String(n),s:a[2],d:a[3].map(c=>r[c]).filter(Boolean).join(' · '),sh:sh,i:i,ic:SHEET_VIEW[sh]||'servermi'})})});return o}
+function ckFilter(){const q=CK.q.trim().toLowerCase(),all=ckSources();if(!q){CK.items=all.filter(x=>x.k==='page').slice(0,40);return}
+const sc=x=>{const t=x.t.toLowerCase(),d=(x.d||'').toLowerCase();return t===q?0:t.indexOf(q)===0?1:t.indexOf(q)>=0?2:d.indexOf(q)>=0?3:9};
+CK.items=all.map(x=>[sc(x),x]).filter(a=>a[0]<9).sort((a,b)=>a[0]-b[0]||(a[1].k==='page'?-1:1)).slice(0,40).map(a=>a[1])}
+function ckList(){if(CK.i>=CK.items.length)CK.i=Math.max(0,CK.items.length-1);let last='';
+return CK.items.length?CK.items.map((x,j)=>{const h=x.s!==last?'<div class="ckh">'+esc(x.s)+'</div>':'';last=x.s;return h+'<button class="cki'+(j===CK.i?' on':'')+'" data-act="ckgo" data-j="'+j+'"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true">'+(IC[x.ic==='activitylog'?'log':x.ic]||IC.servermi)+'</svg><span class="ckt">'+esc(x.t)+'</span>'+(x.d?'<span class="ckd">'+esc(x.d)+'</span>':'')+'</button>'}).join(''):'<div class="ckempty">Nothing found for “'+esc(CK.q)+'”</div>'}
+function openCk(){CK.q='';CK.i=0;ckFilter();
+$('modal').innerHTML='<div class="modal cmdk" data-act="mbg"><div class="dlg ckdlg" role="dialog" aria-modal="true" aria-label="Search"><div class="ckin"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/></svg><input id="ck-q" data-act="ckq" placeholder="Search pages, servers, hosts, arrays, datastores, contacts, articles…" autocomplete="off" aria-label="Search"><kbd>Esc</kbd></div><div class="ckl" id="ck-l" role="listbox">'+ckList()+'</div><div class="ckf"><span><kbd>↑</kbd><kbd>↓</kbd> move</span><span><kbd>Enter</kbd> open</span><span><kbd>Ctrl</kbd><kbd>K</kbd> anywhere</span></div></div></div>';
+setTimeout(()=>{const i=$('ck-q');if(i)i.focus()},20)}
+function ckDraw(){const l=$('ck-l');if(l){l.innerHTML=ckList();const on=l.querySelector('.cki.on');if(on&&on.scrollIntoView)on.scrollIntoView({block:'nearest'})}}
+function ckGo(j){const x=CK.items[j];if(!x)return;closeForm();if(x.k==='page'){location.hash=x.go;return}
+const id=SHEET_VIEW[x.sh]||({Contacts:'contacts',KB:'kb',OpenIssues:'tracker',Issues:'issues'})[x.sh];
+if(x.sh==='KB'||x.sh==='OpenIssues'||x.sh==='Issues'){location.hash='#'+id;return}
+if(UI[x.sh])UI[x.sh].q=x.t;else if(TV[x.sh])uiOf(x.sh).q=x.t;location.hash='#'+id;setTimeout(()=>openForm(x.sh,x.i),80)}
+document.addEventListener('keydown',e=>{
+if((e.ctrlKey||e.metaKey)&&(e.key==='k'||e.key==='K')){e.preventDefault();if($('ck-q'))closeForm();else openCk();return}
+if(e.target&&e.target.id==='ck-q'){if(e.key==='ArrowDown'){e.preventDefault();CK.i=Math.min(CK.items.length-1,CK.i+1);ckDraw()}else if(e.key==='ArrowUp'){e.preventDefault();CK.i=Math.max(0,CK.i-1);ckDraw()}else if(e.key==='Enter'){e.preventDefault();ckGo(CK.i)}}});
+document.addEventListener('input',e=>{if(e.target&&e.target.id==='ck-q'){CK.q=e.target.value;CK.i=0;ckFilter();ckDraw()}});
+document.addEventListener('click',e=>{const m=document.querySelectorAll('details.menu[open]');m.forEach(d=>{if(!d.contains(e.target))d.removeAttribute('open')})});
+function postRender(){
+if(CUR==='settings'){const secs=[...document.querySelectorAll('#view section.card')].map((s,i)=>{const h=s.querySelector('h2');if(!h)return null;s.id='set-'+i;return [s.id,h.textContent.trim()]}).filter(Boolean);
+const hd=document.querySelector('#view .head');if(hd&&secs.length>2&&!document.querySelector('#view .subnav')){const nv=document.createElement('nav');nv.className='subnav';nv.setAttribute('aria-label','Settings sections');nv.innerHTML=secs.map(s=>'<a href="#" data-act="subgo" data-id="'+s[0]+'">'+esc(s[1])+'</a>').join('');hd.insertAdjacentElement('afterend',nv)}}}
+const SHELLACT={
+navgrp(el){const g=el.dataset.g;NAVC[g]=!NAVC[g];navSave();renderSide()},
+ckopen(){openCk()},
+ckgo(el){ckGo(+el.dataset.j)},
+subgo(el){const s=$(el.dataset.id);if(s)s.scrollIntoView({behavior:'smooth',block:'start'})}};
 
 /* ---------- data quality (computed from the data) ---------- */
 function sevN(s){return s==='high'?0:s==='medium'?1:2}
@@ -2536,7 +2731,7 @@ return head('Stuff','Files from the Stuff folder and the links you go through on
 const VIEWDEF={overview:overview,calendar:calendarView,servermi:()=>tableView('ServerMI'),patching:patchView,patchevents:()=>tableView('PatchEvents'),catalyst:()=>tableView('Catalyst'),repljobs:()=>tableView('ReplJobs'),activitylog:()=>tableView('ActivityLog'),ports:portsView,disks:disksView,netports:()=>tableView('NetPorts'),disklist:()=>tableView('Disks'),contacts:()=>tableView('Contacts'),agroups:()=>tableView('AssignGroups'),activity:()=>tableView('DCSSActivity'),backupjobs:bjView,esxi:()=>tableView('ESXi'),storage:()=>tableView('Storage'),backup:()=>tableView('Backup'),dcmi:()=>tableView('DCMI'),racks:racksView,dcdesign:dcdesignView,dclayoutlist:()=>tableView('DCLayout'),checks:()=>tableView('DCChecks'),issues:issuesView,stuff:stuffView,kb:kbView,otherdevices:()=>tableView('RackDevices'),tracker:oiView,quality:qualityView,sources:sourcesView,datastores:()=>tableView('Datastores'),settings:settingsView};
 function route(){
 const id=(location.hash||'#overview').slice(1);CUR=VIEWDEF[id]?id:'overview';
-syncEnvOptions();syncBackupTypes();syncActivityTypes();syncKBTypes();syncActivityStatuses();syncServerStatuses();syncLayout();renderSide();renderPending();$('view').innerHTML=VIEWDEF[CUR]();
+syncEnvOptions();syncBackupTypes();syncActivityTypes();syncKBTypes();syncActivityStatuses();syncServerStatuses();syncLayout();renderSide();renderPending();$('view').innerHTML=VIEWDEF[CUR]();postRender();
 if(CUR==='issues'){drawDraft();loadPics()}
 }
 const ACT={
@@ -2663,7 +2858,7 @@ const fallback=()=>{const r=document.createRange();r.selectNodeContents(node);co
 if(navigator.clipboard&&navigator.clipboard.writeText)navigator.clipboard.writeText(t).then(()=>toast('Copied'),fallback);else fallback();
 }
 };
-Object.assign(ACT,CALACT,PORTACT,ENCLACT,LOGACT,HPACT,DCPACT,SRTACT);
+Object.assign(ACT,CALACT,PORTACT,ENCLACT,LOGACT,HPACT,DCPACT,SRTACT,SHELLACT);
 document.addEventListener('click',e=>{const el=e.target.closest('[data-act]');if(!el)return;if(el.tagName==='A'&&el.getAttribute('href')==='#')e.preventDefault();const f=ACT[el.dataset.act];if(f)f(el,e)});
 document.addEventListener('submit',e=>{if(e.target.id!=='frm')return;e.preventDefault();const sheet=e.target.dataset.sheet;const r=submitForm(e.target);if(r&&sheet==='Issues'&&r.ID){IS.sel=r.ID;route()}});
 document.addEventListener('input',e=>{const el=e.target,a=el.dataset&&el.dataset.act;if(a==='pvq'){PV.q=el.value;const p=el.selectionStart;route();const n=document.querySelector('[data-act=pvq]');if(n){n.focus();try{n.setSelectionRange(p,p)}catch(x){}}}else if(a==='oiq'){OS.q=el.value;const l=$('oi-list');if(l)l.innerHTML=oiList()}else if(a==='bjq'){BJ.q=el.value;const l=$('bj-list');if(l)l.innerHTML=bjServerTable()}else if(a==='bjmq'){const q=el.value.toLowerCase();document.querySelectorAll('.bjrow').forEach(r=>{r.style.display=r.dataset.t.indexOf(q)>=0?'':'none'})}else if(a==='pbprev'){ptPreview()}else if(a==='pq'){PT.q=el.value;const l=$('pt-list');if(l)l.innerHTML=patchTable()}else if(a==='kbq'){KS.q=el.value;const l=$('kb-list');if(l)l.innerHTML=kbList()}else if(a==='q'){uiOf(el.dataset.sheet).q=el.value;redrawTable(el.dataset.sheet)}else if(a==='fval'||a==='fval2'){const s=el.dataset.sheet,f=uiOf(s).fl[+el.dataset.fi];if(f){f[a==='fval'?'v':'v2']=el.value;redrawTable(s)}}});
