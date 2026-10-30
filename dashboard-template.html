@@ -255,6 +255,8 @@ a.ce{text-decoration:none;cursor:pointer}a.btn{text-decoration:none;color:var(--
 .fc.on{background:var(--accent);border-color:var(--accent);color:var(--accent-ink);font-weight:500}.fc.on em{background:rgba(255,255,255,.25);color:inherit}
 .hpbox{max-height:230px;overflow:auto;border:1px solid var(--line);border-radius:8px;padding:8px 10px;background:var(--surface);display:flex;flex-direction:column;gap:10px}
 .hpl{display:flex;flex-wrap:wrap;gap:4px 16px;margin-top:4px}.hpl .chkrow{grid-column:auto}
+.dcp-box{overflow:auto;max-height:72vh;border:1px solid var(--line);border-radius:10px;background:var(--surface2)}
+#dcp-svg{display:block;touch-action:none;user-select:none;outline:none}.blk{cursor:move}.rsz{cursor:nwse-resize}
 </style>
 <div class="app">
 <aside class="side" aria-label="Navigation">
@@ -295,22 +297,23 @@ const DT_COLORS={Cyan:'#1C7C94',Purple:'#7A4FBF',Pink:'#BE3F84',Gold:'#9A6B00',S
 const sel=(k,o,req)=>({k,t:'sel',o,req});
 const SCHEMA={
 ServerMI:{key:'Hostname',label:'ServersMI',cols:[{k:'Hostname',req:1},{k:'FQDN'},{k:'vCenter name'},{k:'IP',req:1},{k:'OS'},sel('Platform',['Virtual','Physical']),sel('Env',['PROD','TEST','DEV','DR'],1),{k:'Role'},{k:'Cluster'},{k:'ESXi host'},{k:'vCPU',t:'num'},{k:'RAM GB',t:'num'},{k:'Disk GB',t:'num'},{k:'Owner',req:1},{k:'Backup'},{k:'Support end',t:'date'},sel('Status',['On','Off','Decom']),{k:'Last patched',t:'date'},{k:'Last patch CRQ'},{k:'FW patched',t:'date'},{k:'iLO URL'},{k:'Attachments',att:1},{k:'Notes',t:'area',w:1}]},
-ESXi:{key:'Hostname',label:'ESXi hosts',cols:[{k:'Hostname',req:1},sel('DC',DCS,1),sel('Rack',RACKS,1),{k:'U start',t:'num'},{k:'U size',t:'num'},{k:'Model'},{k:'Serial'},{k:'ESXi version'},{k:'vCenter'},{k:'Cluster'},{k:'CPU'},{k:'RAM GB',t:'num'},{k:'VMs',t:'num'},{k:'BMC IP'},{k:'iLO URL'},{k:'FW patched',t:'date'},{k:'Support end',t:'date'},sel('Status',['Active','Maintenance','Decom']),{k:'Enclosure'},{k:'Bay'},{k:'Attachments',att:1},{k:'Notes',t:'area',w:1}]},
-Storage:{key:'Array',label:'Storage',cols:[{k:'Array',req:1},sel('DC',DCS,1),sel('Rack',RACKS,1),{k:'U start',t:'num'},{k:'U size',t:'num'},{k:'Model'},{k:'Serial'},{k:'Firmware'},sel('Protocol',['FC','iSCSI','FC+iSCSI','NFS']),{k:'Raw TB',t:'num'},{k:'Usable TB',t:'num'},{k:'Used %',t:'num'},{k:'Controllers',t:'num'},{k:'iLO URL'},{k:'FW patched',t:'date'},{k:'Support end',t:'date'},sel('Status',['Active','Degraded','Decom']),{k:'Attachments',att:1},{k:'Notes',t:'area',w:1}]},
-Backup:{key:'Device',label:'Backup',cols:[{k:'Device',req:1},sel('DC',DCS,1),sel('Rack',RACKS,1),{k:'U start',t:'num'},{k:'U size',t:'num'},sel('Type',['Appliance','Tape library','Repository server']),{k:'Model'},{k:'Software'},{k:'Capacity TB',t:'num'},{k:'Used %',t:'num'},{k:'Retention'},{k:'Serial'},{k:'iLO URL'},{k:'FW patched',t:'date'},{k:'Support end',t:'date'},sel('Status',['Active','Degraded','Decom']),{k:'Attachments',att:1},{k:'Notes',t:'area',w:1}]},
+ESXi:{key:'Hostname',label:'ESXi hosts',cols:[{k:'Hostname',req:1},sel('DC',DCS,1),sel('Rack',RACKS,1),{k:'U start',t:'num'},{k:'U size',t:'num'},{k:'Model'},{k:'Serial'},{k:'ESXi version'},{k:'vCenter'},{k:'Cluster'},{k:'CPU'},{k:'RAM GB',t:'num'},{k:'VMs',t:'num'},{k:'BMC IP'},{k:'iLO URL'},{k:'FW patched',t:'date'},{k:'Support end',t:'date'},sel('Status',['Active','Maintenance','Decom']),{k:'Enclosure'},{k:'Bay'},{k:'Last patched',t:'date'},{k:'Last patch CRQ'},{k:'Attachments',att:1},{k:'Notes',t:'area',w:1}]},
+Storage:{key:'Array',label:'Storage',cols:[{k:'Array',req:1},sel('DC',DCS,1),sel('Rack',RACKS,1),{k:'U start',t:'num'},{k:'U size',t:'num'},{k:'Model'},{k:'Serial'},{k:'Firmware'},sel('Protocol',['FC','iSCSI','FC+iSCSI','NFS']),{k:'Raw TB',t:'num'},{k:'Usable TB',t:'num'},{k:'Used %',t:'num'},{k:'Controllers',t:'num'},{k:'iLO URL'},{k:'FW patched',t:'date'},{k:'Support end',t:'date'},sel('Status',['Active','Degraded','Decom']),{k:'Last patched',t:'date'},{k:'Last patch CRQ'},{k:'Attachments',att:1},{k:'Notes',t:'area',w:1}]},
+Backup:{key:'Device',label:'Backup',cols:[{k:'Device',req:1},sel('DC',DCS,1),sel('Rack',RACKS,1),{k:'U start',t:'num'},{k:'U size',t:'num'},sel('Type',['Appliance','Tape library','Repository server']),{k:'Model'},{k:'Software'},{k:'Capacity TB',t:'num'},{k:'Used %',t:'num'},{k:'Retention'},{k:'Serial'},{k:'iLO URL'},{k:'FW patched',t:'date'},{k:'Support end',t:'date'},sel('Status',['Active','Degraded','Decom']),{k:'Last patched',t:'date'},{k:'Last patch CRQ'},{k:'Attachments',att:1},{k:'Notes',t:'area',w:1}]},
 DCMI:{key:'Rack',label:'DCMI',cols:[sel('DC',DCS,1),sel('Rack',RACKS,1),{k:'Power kW',t:'num'},{k:'Limit kW',t:'num'},{k:'Inlet C',t:'num'},{k:'Humidity %',t:'num'},{k:'Reading time'},{k:'Notes',t:'area',w:1}]},
 DCChecks:{key:'Date',label:'DC Checks',cols:[{k:'Date',t:'date',req:1},sel('DC',DCS,1),{k:'Checked by',req:1},{k:'Temp C',t:'num'},{k:'Humidity %',t:'num'},sel('UPS',['OK','Warn','Fault']),sel('Cooling',['OK','Warn','Fault']),sel('Power',['OK','Warn','Fault']),sel('Fire/Leak',['OK','Alarm']),sel('Doors',['OK','Issue']),sel('Result',['OK','Issue'],1),{k:'Notes',t:'area',w:1},{k:'In calendar',t:'chk'}]},
 PatchEvents:{key:'ID',label:'Patching events',cols:[{k:'ID'},{k:'Date',t:'date',req:1},{k:'End date',t:'date'},{k:'Title',req:1,w:1},{k:'CRQ'},sel('Status',['Planned','In progress','Done','Cancelled'],1),{k:'Servers',t:'area',w:1},{k:'Notes',t:'area',w:1},{k:'In calendar',t:'chk'},{k:'Attachments',att:1}]},
 NetPorts:{key:'Device',label:'Ports',cols:[{k:'Device',req:1},{k:'Port',req:1},sel('Kind',['RJ45','SFP','SFP+','SFP28','QSFP+','QSFP28','FC','iLO / BMC','Management','Console','Power','Other']),{k:'Speed'},sel('State',['Free','Connected','Reserved','Down']),{k:'Remote device'},{k:'Remote port'},{k:'Cable'},{k:'VLAN / purpose'},{k:'Notes',t:'area',w:1}]},
 Disks:{key:'Device',label:'Disks',cols:[{k:'Device',req:1},{k:'Slot',req:1},sel('Type',['HDD','SSD','NVMe','NL-SAS','Tape','Other']),{k:'Size TB',t:'num'},sel('State',['OK','Spare','Predictive fail','Failed','Empty']),{k:'Model'},{k:'Serial'},{k:'Group / pool'},{k:'Notes',t:'area',w:1}]},
 ActivityLog:{key:'Time',label:'Activity log',cols:[{k:'Time',req:1},{k:'User'},sel('Action',['Added','Changed','Deleted','Saved','Note']),{k:'Sheet'},{k:'Record'},{k:'Details',t:'area',w:1}]},
+DCLayout:{key:'Block',label:'DC designer blocks',cols:[sel('DC',DCS,1),{k:'Block',req:1},sel('Kind',['Container 40 ft','Container 20 ft','Rack','Rack row','Network cabinet','Cooling unit','Chiller','UPS / batteries','Power cabinet','Generator','Door / entrance','Zone','Label'],1),{k:'X m',t:'num'},{k:'Y m',t:'num'},{k:'Width m',t:'num'},{k:'Height m',t:'num'},sel('Rotation',['0','90','180','270']),{k:'Color'},{k:'Rack'},{k:'Notes',t:'area',w:1}]},
 Issues:{key:'ID',label:'DC Open Issues',cols:[{k:'ID'},{k:'Title',req:1,w:1},sel('DC',DCS,1),sel('Rack',['—'].concat(RACKS)),sel('Priority',['Low','Medium','High','Critical']),sel('Status',['New','In progress','Waiting','Resolved']),{k:'Assignee'},{k:'Created',t:'date'},{k:'Description',t:'area',w:1}]},
 Datastores:{key:'Datastore',label:'Datastores',cols:[{k:'Datastore',req:1},sel('DC',DCS,1),{k:'vCenter'},{k:'Cluster'},sel('Type',['VMFS6','VMFS5','NFS','vSAN','vVol']),{k:'NAA ID'},{k:'LUN ID'},{k:'Capacity TB',t:'num'},{k:'Free TB',t:'num'},{k:'Used %',t:'num'},{k:'Provisioned TB',t:'num'},{k:'VMs',t:'num'},{k:'Hosts',t:'num'},{k:'vCenter read'},{k:'Array'},{k:'Array volume'},{k:'Array LUN ID'},{k:'Array NAA'},{k:'Array size TB',t:'num'},{k:'Array read'},sel('Replicated',['Yes','No']),sel('Replication type',['Synchronous','Asynchronous','Snapshot-based','Other']),{k:'Replica array'},{k:'Replica volume'},{k:'Exported to',t:'hosts',w:1},{k:'Notes',t:'area',w:1}]},
 Links:{key:'Name',label:'Links',cols:[{k:'Name',req:1},{k:'URL',req:1},{k:'Category'},{k:'Notes',t:'area',w:1}]},
 KB:{key:'ID',label:'Knowledge base',cols:[{k:'ID'},{k:'Title',req:1,w:1},sel('Type',['SOP','How-to','Known issue','Reference'],1),sel('Category',['vCenter / ESXi','Storage','Backup','Network','Windows','Facilities','Other'],1),sel('Status',['Draft','In review','Approved','Outdated'],1),{k:'Owner',req:1},{k:'Version'},{k:'Tags'},{k:'Summary',t:'area'},{k:'Content',t:'area'},{k:'Resolution',t:'area'},{k:'Files'},{k:'Last reviewed',t:'date'},{k:'Review due',t:'date'},{k:'Created',t:'date'}]},
 OpenIssues:{key:'ID',label:'Open Issues',cols:[{k:'ID'},{k:'Title',req:1,w:1},sel('Type',['Task','Problem','Request','Improvement'],1),sel('Category',['vCenter / ESXi','Storage','Backup','Network','Windows','Facilities','Other'],1),sel('Priority',['Low','Medium','High','Critical'],1),sel('Status',['New','In progress','Waiting','Resolved','Closed'],1),{k:'Assignee'},{k:'Raised by'},{k:'Due date',t:'date'},{k:'Related item'},{k:'Related KB'},{k:'Description',t:'area'},{k:'Resolution',t:'area'},{k:'Files'},{k:'Created',t:'date'},{k:'Resolved',t:'date'}]},
 DeviceTypes:{key:'Name',label:'Rack device types',cols:[{k:'Name',req:1},sel('Color',['Cyan','Purple','Pink','Gold','Slate','Rose','Lime'],1),{k:'Default U',t:'num'},sel('Active',['Yes','No'],1),{k:'Notes',t:'area',w:1}]},
-RackDevices:{key:'Name',label:'Other devices',cols:[{k:'Name',req:1},{k:'Type',req:1},sel('DC',DCS,1),sel('Rack',RACKS,1),{k:'U start',t:'num'},{k:'U size',t:'num'},{k:'Model'},{k:'Serial'},{k:'Support end',t:'date'},sel('Status',['Active','Maintenance','Decom']),{k:'Bays across',t:'num'},{k:'Bays down',t:'num'},{k:'Attachments',att:1},{k:'Notes',t:'area',w:1}]},
+RackDevices:{key:'Name',label:'Other devices',cols:[{k:'Name',req:1},{k:'Type',req:1},sel('DC',DCS,1),sel('Rack',RACKS,1),{k:'U start',t:'num'},{k:'U size',t:'num'},{k:'Model'},{k:'Serial'},{k:'Support end',t:'date'},sel('Status',['Active','Maintenance','Decom']),{k:'Bays across',t:'num'},{k:'Bays down',t:'num'},{k:'Last patched',t:'date'},{k:'Last patch CRQ'},{k:'Attachments',att:1},{k:'Notes',t:'area',w:1}]},
 ServerStatuses:{key:'Name',label:'Server statuses',cols:[{k:'Name',req:1},sel('Meaning',['Running','Stopped','Decommissioned'],1),sel('Active',['Yes','No'],1),{k:'Notes',t:'area',w:1}]},
 ActivityStatuses:{key:'Name',label:'Activity statuses',cols:[{k:'Name',req:1},sel('Actionable',['Yes','No'],1),sel('Active',['Yes','No'],1),{k:'Notes',t:'area',w:1}]},
 KBTypes:{key:'Name',label:'Knowledge base types',cols:[{k:'Name',req:1},sel('Active',['Yes','No'],1),{k:'Notes',t:'area',w:1}]},
@@ -515,13 +518,40 @@ const act=[
 {ID:'ACT-0002',Date:ds(-9),Title:'Quarterly UPS battery test',Type:'Audit',DC:'DC2A','Performed by':'Operator 1','Assignment group':'DC Facilities','Ticket / ref':'CHG0021874',Status:'Done',Details:'Load test of UPS A and B.',['Outcome / lessons']:'UPS B runtime 11 min, lower than 14 min last quarter. Watch next test.',Updated:ds(-9)},
 {ID:'ACT-0003',Date:ds(-20),Title:'Installed two new ESXi hosts in R05',Type:'Installation',DC:'DC2A','Performed by':'Operator 1','Assignment group':'',['Ticket / ref']:'CHG0021311',Status:'Done',Details:'Racked esx-a06, esx-a07, cabled to both fabrics.',['Outcome / lessons']:'',Updated:ds(-20)},
 {ID:'ACT-0004',Date:ds(6),Title:'Replace CRAC-3 compressor',Type:'Maintenance',DC:'DC1B','Performed by':'','Assignment group':'DC Facilities','Ticket / ref':'CHG0022001',Status:'Planned',Details:'Technician booked. Other CRAC units cover the load.',['Outcome / lessons']:'',Updated:ds(-2)}];
-const out={Catalyst:catalyst,ReplJobs:repljobs,KBTypes:defaultKT(),ServerStatuses:defaultSS(),ActivityStatuses:defaultAS(),ActivityTypes:defaultAT(),BackupTypes:defaultBT(),Contacts:ctc,AssignGroups:agr,DCSSActivity:act,BackupJobs:bjobs,BackupAssign:bassign,ServerMI:server,ESXi:esxi,Storage:storage,Backup:backup,Datastores:dstores,Operators:operators,Environments:defaultEnvs(),DataCenters:defaultDCs(),RackList:defaultRacks(),DeviceTypes:dtypes,RackDevices:rdev,Links:links,KB:kb,KBComments:kbc,OpenIssues:oi,OIComments:oic,DCMI:dcmi,DCChecks:checks,PatchEvents:[],ActivityLog:[],NetPorts:[],Disks:[],Issues:issues,Comments:comments};
+const pevents=[
+{ID:'PAT-0001',Date:ds(-9),'End date':ds(-8),Title:'Patching CL-NONPROD (Windows)',CRQ:'CRQ000123401',Status:'Done',Servers:'test-app-07\ndev-sql-02','In calendar':'Yes',Notes:'',Updated:ds(-8)},
+{ID:'PAT-0002',Date:ds(2),'End date':ds(4),Title:'ESXi 8.0 U3 rollout CL-PROD-A',CRQ:'CRQ000123455',Status:'Planned',Servers:'esx-a05\nesx-a06','In calendar':'Yes',Notes:'One host at a time',Updated:ds(-1)},
+{ID:'PAT-0003',Date:ds(9),'End date':'',Title:'Monthly Windows patching PROD',CRQ:'CRQ000123470',Status:'Planned',Servers:'app-prod-01\napp-prod-02\nweb-dmz-03','In calendar':'Yes',Notes:'',Updated:ds(-1)}];
+const netports=[];
+for(let n=1;n<=24;n++){const r={Device:'sw-a01',Port:'Gi1/0/'+n,Kind:'RJ45',Speed:'1G',State:'Free','Remote device':'','Remote port':'',Cable:'','VLAN / purpose':'',Updated:ds(-3)};
+if(n<=6){const h=esxi[n-1];r.State='Connected';r['Remote device']=h.Hostname;r['Remote port']='vmnic0';r.Cable='C-A'+String(n).padStart(3,'0');r['VLAN / purpose']='Management';netports.push({Device:h.Hostname,Port:'vmnic0',Kind:'RJ45',Speed:'1G',State:'Connected','Remote device':'sw-a01','Remote port':r.Port,Cable:r.Cable,'VLAN / purpose':'Management',Updated:ds(-3)})}
+else if(n===7){r.State='Reserved';r['VLAN / purpose']='Spare for new host'}else if(n===8){r.State='Down';r['VLAN / purpose']='Unused uplink'}
+netports.push(r)}
+const disks=[];
+for(let n=1;n<=24;n++){const st=n===24?'Spare':n===9?'Failed':n===15?'Predictive fail':'OK';disks.push({Device:'san-a01',Slot:String(n),Type:'SSD','Size TB':n>20?7.68:3.84,State:st,Model:'SSD model (placeholder)',Serial:'DSK'+(1000+n),'Group / pool':n>20?'Spare':'RG-'+(n<=12?'1':'2'),Notes:'',Updated:ds(-6)})}
+for(let n=1;n<=12;n++)disks.push({Device:'bkp-a01',Slot:String(n),Type:'NL-SAS','Size TB':n<=10?20:'',State:n<=10?'OK':'Empty',Model:'',Serial:'',Updated:ds(-6),'Group / pool':n<=10?'RAID6':'',Notes:''});
+const actlog=[
+{Time:ds(-2)+' 09:14',User:'Operator 1',Action:'Changed',Sheet:'ESXi hosts',Record:'esx-a04',Details:'Status: Active → Maintenance',Updated:ds(-2)},
+{Time:ds(-2)+' 09:14',User:'Operator 1',Action:'Added',Sheet:'DC Open Issues',Record:'DCI-0003',Details:'',Updated:ds(-2)},
+{Time:ds(-1)+' 16:40',User:'Operator 2',Action:'Deleted',Sheet:'ServersMI',Record:'old-test-09',Details:'',Updated:ds(-1)}];
+rdev.push({Name:'CS700-A',Type:'Blade enclosure',DC:'DC2A',Rack:'R04','U start':10,'U size':10,Model:'HPE CS700 (c7000)',Serial:'SN-CS7001','Support end':ds(500),Status:'Active','Bays across':8,'Bays down':2,Notes:'',Updated:ds(-5)});
+dtypes.push({Name:'Blade enclosure',Color:'Gold','Default U':10,Active:'Yes',Notes:'',Updated:ds(-20)});
+['blade-a01','blade-a02','blade-a03'].forEach((h,i)=>esxi.push({Hostname:h,DC:'DC2A',Rack:'R04',Model:'Blade (placeholder)',Serial:'SN-BL'+i,'ESXi version':'8.0 U3',vCenter:'vc-a.corp.example',Cluster:'CL-PROD-A',CPU:'2 × 16c','RAM GB':512,VMs:12+i,'BMC IP':'10.20.100.'+(31+i),'iLO URL':'https://ilo-'+h+'.corp.example','Support end':ds(700),Status:'Active',Enclosure:'CS700-A',Bay:String(i*2+1),Notes:'',Updated:ds(-3)}));
+const dcl=[];
+const dcB=(dc,n,k,x,y,w,h,rot,rk)=>dcl.push({DC:dc,Block:n,Kind:k,'X m':x,'Y m':y,'Width m':w,'Height m':h,Rotation:String(rot||0),Color:'',Rack:rk||'',Notes:'',Updated:ds(-4)});
+['DC2A','DC1B'].forEach((dc,di)=>{dcB(dc,dc+' site','Zone',1,1,32,18);dcB(dc,dc+' site plan','Label',2,0.3,6,0.8);
+dcB(dc,'Container '+(di?'B1':'A1'),'Container 40 ft',4,4,12.19,2.44);dcB(dc,'Container '+(di?'B2':'A2'),'Container 40 ft',4,10,12.19,2.44);
+for(let i=0;i<8;i++)dcB(dc,'R0'+(i+1),'Rack',4.6+i*1.4,4.6,0.6,1.2,0,'R0'+(i+1));
+dcB(dc,'Entrance','Door / entrance',9.5,3.9,1,0.25);
+dcB(dc,'CRAC-1','Cooling unit',2.4,4.4,1.2,0.9);dcB(dc,'CRAC-2','Cooling unit',16.6,4.4,1.2,0.9);
+dcB(dc,'UPS-1','UPS / batteries',20,4,1.5,1);dcB(dc,'Power cabinet','Power cabinet',20,6,1,0.8);dcB(dc,'Generator','Generator',23,10,3,1.5);dcB(dc,'Chiller','Chiller',22,14,3,2)});
+const out={DCLayout:dcl,PatchEvents:pevents,NetPorts:netports,Disks:disks,ActivityLog:actlog,Catalyst:catalyst,ReplJobs:repljobs,KBTypes:defaultKT(),ServerStatuses:defaultSS(),ActivityStatuses:defaultAS(),ActivityTypes:defaultAT(),BackupTypes:defaultBT(),Contacts:ctc,AssignGroups:agr,DCSSActivity:act,BackupJobs:bjobs,BackupAssign:bassign,ServerMI:server,ESXi:esxi,Storage:storage,Backup:backup,Datastores:dstores,Operators:operators,Environments:defaultEnvs(),DataCenters:defaultDCs(),RackList:defaultRacks(),DeviceTypes:dtypes,RackDevices:rdev,Links:links,KB:kb,KBComments:kbc,OpenIssues:oi,OIComments:oic,DCMI:dcmi,DCChecks:checks,Issues:issues,Comments:comments};
 if(!DEMO)Object.keys(out).forEach(k=>{out[k]=defaultsFor(k)});
 return out;
 }
 
 /* ---------- state + persistence ---------- */
-const LS=DEMO?'infra-inventory-demo-v23':'infra-inventory-v1';
+const LS=DEMO?'infra-inventory-demo-v25':'infra-inventory-v1';
 let DB=null,META={source:DEMO?'Built-in demo data':'Not loaded yet',loadedAt:nowStr(),fileModified:null,savedAt:null},dirty=0,handle=null;
 function loadState(){
 let o=null;try{const r=localStorage.getItem(LS);if(r){o=JSON.parse(r);if(!(o&&o.DB&&o.DB.ServerMI))o=null}}catch(e){o=null}
@@ -560,13 +590,14 @@ calendar:'<rect x="3" y="5" width="18" height="16" rx="2"/><path d="M3 10h18M8 3
 log:'<path d="M5 4h14v16H5z"/><path d="M8 9h8M8 13h8M8 17h5"/>',
 catalyst:'<ellipse cx="12" cy="6" rx="8" ry="3"/><path d="M4 6v12c0 1.7 3.6 3 8 3s8-1.3 8-3V6M4 12c0 1.7 3.6 3 8 3s8-1.3 8-3"/>',
 repljobs:'<path d="M4 8h13l-3-3M20 16H7l3 3"/>',
+dcdesign:'<rect x="3" y="4" width="7" height="7" rx="1"/><rect x="14" y="4" width="7" height="4" rx="1"/><rect x="3" y="15" width="18" height="5" rx="1"/>',
 settings:'<circle cx="12" cy="12" r="3"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3M4.9 4.9l2.1 2.1M17 17l2.1 2.1M19.1 4.9L17 7M7 17l-2.1 2.1"/>',
 quality:'<path d="M12 3l8 3v6c0 5-3.5 8-8 9-4.5-1-8-4-8-9V6z"/><path d="M9 12l2 2 4-4"/>',
 sources:'<path d="M10 14a4 4 0 0 0 5.7 0l3-3a4 4 0 0 0-5.7-5.7l-1 1"/><path d="M14 10a4 4 0 0 0-5.7 0l-3 3a4 4 0 0 0 5.7 5.7l1-1"/>'};
 const NAV=[
 ['',[['overview','Overview'],['calendar','Calendar'],['stuff','Stuff'],['kb','Knowledge base'],['tracker','Open Issues'],['contacts','Contacts'],['agroups','Assignment groups'],['activity','DCSS Activity']]],
 ['Inventory',[['servermi','ServersMI'],['patching','Patching'],['patchevents','Patch events'],['esxi','ESXi hosts'],['storage','Storage'],['datastores','Datastores'],['backup','Backup'],['catalyst','Catalyst stores'],['backupjobs','Backup jobs'],['repljobs','Replication jobs'],['otherdevices','Other devices']]],
-['Data center',[['dcmi','DCMI'],['racks','DC rack layout'],['ports','Ports & cabling'],['disks','Disks'],['checks','DC Checks'],['issues','DC Open Issues']]],
+['Data center',[['dcmi','DCMI'],['racks','DC rack layout'],['dcdesign','DC designer'],['ports','Ports & cabling'],['disks','Disks'],['checks','DC Checks'],['issues','DC Open Issues']]],
 ['System',[['quality','Data quality'],['sources','Data sources'],['activitylog','Activity log'],['settings','Settings']]]];
 let CUR='overview';
 function sheetUpdated(s){let m='';(DB[s]||[]).forEach(r=>{if(r.Updated&&String(r.Updated)>m)m=String(r.Updated)});return m}
@@ -685,7 +716,7 @@ kpis:d=>[{l:'Devices',v:d.length,s:new Set(d.map(r=>r.Type)).size+' types'},{l:'
 DCMI:{id:'dcmi',title:'DCMI',sub:'Data center master inventory and readings, one row per rack · sheet “DCMI”',add:'Add reading',filter:'DC',show:['DC','Rack','Power kW','Limit kW','@load','Inlet C','Humidity %','Reading time'],
 kpis:d=>{const hot=d.filter(r=>load(r)>=80).length;return[{l:'IT load',v:r1(sum(d,'Power kW'))+' kW',s:'of '+r1(sum(d,'Limit kW'))+' kW rack limits'},{l:'Avg inlet temp',v:r1(sum(d,'Inlet C')/(d.length||1))+' °C',s:d.filter(r=>num(r['Inlet C'])>=25).length+' racks ≥ 25 °C',c:d.some(r=>num(r['Inlet C'])>=25)?'w':'g'},{l:'Avg humidity',v:r1(sum(d,'Humidity %')/(d.length||1))+' %',s:'Target 40–60 %'},{l:'Racks ≥ 80% power',v:hot,s:'of '+d.length+' racks',c:hot?'w':''}]},
 pre:()=>heatHtml()},
-PatchEvents:{id:'patchevents',title:'Patching events',sub:'Planned and finished patching windows, shown in the Overview calendar · sheet “PatchEvents”',add:'Add patching event',filter:'Status',sort:['Date',-1],show:['ID','Date','End date','Title','CRQ','Status','Servers','In calendar','Notes'],
+PatchEvents:{id:'patchevents',title:'Patching events',sub:'Planned and finished patching windows, shown in the Overview calendar · sheet “PatchEvents”',add:'Add patching activity',filter:'Status',sort:['Date',-1],show:['ID','Date','End date','Title','CRQ','Status','Servers','In calendar','Notes'],
 kpis:d=>[{l:'Events',v:d.length,s:d.filter(r=>r.Status==='Done').length+' done'},{l:'Planned',v:d.filter(r=>r.Status==='Planned'||r.Status==='In progress').length,s:'upcoming or running'},{l:'In calendar',v:d.filter(r=>r['In calendar']!=='No').length,s:'shown on Overview'}]},
 NetPorts:{id:'netports',title:'Ports',sub:'All ports and cable connections · sheet “NetPorts”. Use Ports & cabling for the graphical view.',add:'Add port',filter:'State',show:['Device','Port','Kind','Speed','State','Remote device','Remote port','Cable','VLAN / purpose'],
 kpis:d=>[{l:'Ports',v:d.length,s:new Set(d.map(r=>r.Device)).size+' devices'},{l:'Connected',v:d.filter(r=>r.State==='Connected').length,s:'with a cable'},{l:'Free',v:d.filter(r=>(r.State||'Free')==='Free').length,s:'available'}]},
@@ -698,6 +729,8 @@ Catalyst:{id:'catalyst',title:'Catalyst stores',sub:'StoreOnce Catalyst stores: 
 kpis:d=>[{l:'Catalyst stores',v:d.length,s:new Set(d.map(r=>r.Appliance)).size+' appliances'},{l:'Capacity',v:r1(sum(d,'Capacity TB'))+' TB',s:'avg used '+Math.round(sum(d,'Used %')/(d.length||1))+'%'},{l:'Used 85% or more',v:d.filter(r=>num(r['Used %'])>=85).length,s:'Plan expansion',c:d.some(r=>num(r['Used %'])>=85)?'w':''},{l:'Not replicated',v:d.filter(r=>!catRepl(r).length).length,s:'no replica or copy job',c:d.some(r=>!catRepl(r).length)?'w':'g'}]},
 ReplJobs:{id:'repljobs',title:'Replication jobs',sub:'Data Protector object copy and StoreOnce replication jobs: source, target and what they copy · sheet “ReplJobs”',add:'Add replication job',filter:'Last result',show:['Job','Type','Source appliance','Source store','Target appliance','Target store','Backup jobs replicated','Schedule','Copy retention','Last run','Last result','Active'],
 kpis:d=>{const a=d.filter(r=>r.Active!=='No');return[{l:'Replication jobs',v:d.length,s:a.length+' active'},{l:'Last run failed',v:d.filter(r=>r['Last result']==='Failed').length,s:'check Data Protector',c:d.some(r=>r['Last result']==='Failed')?'b':'g'},{l:'With warnings',v:d.filter(r=>r['Last result']==='Warning').length,s:'',c:d.some(r=>r['Last result']==='Warning')?'w':'g'},{l:'Not run for 7+ days',v:a.filter(r=>{const x=daysTo(r['Last run']);return x===null||x<-7}).length,s:'or never run',c:a.some(r=>{const x=daysTo(r['Last run']);return x===null||x<-7})?'w':'g'}]}},
+DCLayout:{id:'dclayoutlist',title:'DC designer blocks',sub:'All blocks of the DC designer · sheet “DCLayout”. Use DC designer to move them around.',add:'Add block',filter:'Kind',show:['DC','Block','Kind','X m','Y m','Width m','Height m','Rotation','Rack'],
+kpis:d=>[{l:'Blocks',v:d.length,s:new Set(d.map(r=>r.DC)).size+' data centers'},{l:'Racks',v:d.filter(r=>r.Kind==='Rack'||r.Kind==='Rack row').length,s:''},{l:'Containers',v:d.filter(r=>/^Container/.test(r.Kind)).length,s:''}]},
 DCChecks:{id:'checks',title:'DC Checks',sub:'Data center check log, entered by hand when you do a check (optional) · sheet “DCChecks”',add:'New check',filter:'DC',sort:['Date',-1],show:['Date','DC','Checked by','Temp C','Humidity %','UPS','Cooling','Power','Fire/Leak','Doors','Result','Notes'],
 kpis:d=>{const last=d.slice().sort((x,y)=>String(y.Date).localeCompare(String(x.Date)))[0];return[{l:'Checks logged',v:d.length,s:'on '+(new Set(d.map(r=>String(r.Date).slice(0,10))).size)+' days'},{l:'Last check',v:last?String(last.Date).slice(0,10):'—',s:last?ago(last.Date)+' · '+(last.DC||''):'Nothing logged yet'},{l:'Checks with issues',v:d.filter(r=>r.Result==='Issue').length,s:'in the log',c:d.some(r=>r.Result==='Issue')?'w':''}]}}
 };
@@ -715,11 +748,12 @@ return '<div class="head"><div><h1>'+t.title+'</h1><p>'+t.sub+'</p></div><div cl
 +'<section class="card" style="padding:0"><div class="tools" style="padding:14px 16px;justify-content:space-between"><div class="chips" id="chips">'+chipsHtml(sheet,fo)+'</div><div class="tools"><button class="btn fbtn'+(u.open||u.fl.length?' p':'')+'" data-act="ftoggle" data-sheet="'+sheet+'" aria-expanded="'+(u.open?'true':'false')+'"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M3 5h18l-7 8v6l-4 2v-8z"/></svg>Filters'+(u.fl.length?' ('+u.fl.length+')':'')+'</button>'+(u.fl.length?'<button class="btn" data-act="fclear" data-sheet="'+sheet+'">Clear filters ✕</button>':'')+'<input class="inp srch" id="q-'+sheet+'" type="search" data-act="q" data-sheet="'+sheet+'" placeholder="Search…" aria-label="Search '+t.title+'" value="'+esc(u.q)+'"></div></div>'+'<div id="fsum">'+fsummaryHtml(sheet)+'</div>'+(u.open?fpanelHtml(sheet):'')+'<div class="tw" id="tbl">'+tableHtml(sheet)+'</div></section>'
 +'<p class="note">Click a row to edit all fields, including the ones not shown in the table. Drag a column header to move it. Export CSV saves the rows and columns you see now, with the current filter, search and sort. Changes stay in this page until you save them to Excel.'+(DEMO?' Sample data only.':'')+'</p>';
 }
-function chipsHtml(sheet,fo){const u=uiOf(sheet);return fo.map(o=>'<button class="chip'+(u.f===o?' on':'')+'" data-act="chip" data-sheet="'+sheet+'" data-v="'+esc(o)+'">'+esc(o)+'</button>').join('')}
+function fmatch(u,t,r){return u.fm&&u.fm.length?u.fm.indexOf(String(r[t.filter]))>=0:(u.f==='All'||r[t.filter]===u.f)}
+function chipsHtml(sheet,fo){const u=uiOf(sheet),fm=u.fm||[];return fo.map(o=>'<button class="chip'+((fm.length?fm.indexOf(o)>=0:u.f===o)?' on':'')+'" data-act="chip" data-sheet="'+sheet+'" data-v="'+esc(o)+'" title="Shift+click to select several">'+esc(o)+'</button>').join('')+(fo.length>2?'<span class="note" style="margin:0 0 0 4px">Shift+click: select several</span>':'')}
 function tableHtml(sheet){
 const t=TV[sheet],u=uiOf(sheet),d=DB[sheet];
 let rows=d.map((r,i)=>({r,i}));
-if(u.f!=='All')rows=rows.filter(x=>x.r[t.filter]===u.f);
+rows=rows.filter(x=>fmatch(u,t,x.r));
 rows=applyFilters(sheet,rows);
 if(u.q){const q=u.q.toLowerCase();rows=rows.filter(x=>Object.keys(x.r).some(k=>k!=='Updated'&&String(x.r[k]).toLowerCase().includes(q)))}
 if(u.sk){const k=u.sk,dir=u.sd;rows.sort((a,b)=>{const x=val(a.r,k),y=val(b.r,k);const nx=parseFloat(x),ny=parseFloat(y);const c=(!isNaN(nx)&&!isNaN(ny)&&String(nx)===String(x)&&String(ny)===String(y))?nx-ny:String(x).localeCompare(String(y));return c*dir})}
@@ -810,6 +844,7 @@ if(sheet==='Issues'&&!base.ID){const n=Math.max(0,...DB.Issues.map(x=>parseInt(S
 if(sheet==='OpenIssues'&&!base.ID){const n=Math.max(0,...DB.OpenIssues.map(x=>parseInt(String(x.ID).replace(/\D/g,''))||0))+1;base.ID='OI-'+String(n).padStart(4,'0')}
 if(sheet==='OpenIssues'){const dn=base.Status==='Resolved'||base.Status==='Closed';if(dn&&!base.Resolved)base.Resolved=ds(0);if(!dn)base.Resolved=''}
 if(sheet==='KB'&&!base.ID){const n=Math.max(0,...DB.KB.map(x=>parseInt(String(x.ID).replace(/\D/g,''))||0))+1;base.ID='KB-'+String(n).padStart(4,'0')}
+if(sheet==='PatchEvents'&&String(base.Servers||'').trim()&&form.dataset.warned!=='1'){const sc=ptScan(base.Servers);if(sc.no.length){form.dataset.warned='1';$('ferr').textContent='Not found in the inventory: '+sc.no.slice(0,15).join(', ')+'. Fix the names, or save again to keep them as typed.';return false}}
 if(sheet==='ReplJobs'){const ap=n=>{const s=DB.Catalyst.find(x=>x.Store===n);return s?s.Appliance:''};if(base['Source store']&&!base['Source appliance'])base['Source appliance']=ap(base['Source store']);if(base['Target store']&&!base['Target appliance'])base['Target appliance']=ap(base['Target store'])}
 if(!isNew&&sheet==='Catalyst'){const o=DB.Catalyst[+iStr];if(o.Store!==base.Store){DB.BackupJobs.forEach(j=>{if(j['Catalyst store']===o.Store)j['Catalyst store']=base.Store});DB.ReplJobs.forEach(j=>{if(j['Source store']===o.Store)j['Source store']=base.Store;if(j['Target store']===o.Store)j['Target store']=base.Store});DB.Catalyst.forEach(s=>{if(s['Replica store']===o.Store)s['Replica store']=base.Store})}}
 if(sheet==='NetPorts')netSync(base,isNew?null:DB.NetPorts[+iStr]);
@@ -902,7 +937,7 @@ Object.keys(TV).forEach(s=>{SCHEMA[s].cols.forEach(c=>{const sp=sm[s+'|'+c.k];if
 Object.keys(TV).forEach(s=>{const ord=[];TV[s].show.forEach(k=>{const sp=sm[s+'|'+k];const n=sp?parseInt(sp.Order):NaN;if(!isNaN(n))ord.push([n,k])});if(ord.length){ord.sort((a,b)=>a[0]-b[0]);const names=ord.map(o=>o[1]);TV[s].show=names.concat(TV[s].show.filter(k=>names.indexOf(k)<0))}});
 SHEETS.forEach(s=>{SCHEMA[s].cols.forEach(c=>{const sp=sm[s+'|'+c.k];if(!sp)return;if(sp.Label)c.label=String(sp.Label);if(CORE[s].has(c.k)&&yes(sp.Hidden)&&c.k!==SCHEMA[s].key)hideCol(s,c);if(CORE[s].has(c.k)&&sp.Required!==''&&sp.Required!=null){if(yes(sp.Required))c.req=1;else delete c.req}})});
 if(!found)return{ok:false,missing:missing};
-missing=missing.filter(x=>['BackupJobs','BackupAssign','Contacts','AssignGroups','DCSSActivity','PatchEvents','NetPorts','Disks','ActivityLog','KBTypes','Catalyst','ReplJobs'].indexOf(x)<0);
+missing=missing.filter(x=>['BackupJobs','BackupAssign','Contacts','AssignGroups','DCSSActivity','PatchEvents','NetPorts','Disks','ActivityLog','KBTypes','Catalyst','ReplJobs','DCLayout'].indexOf(x)<0);
 ['Environments','DataCenters','BackupTypes','KBTypes','ActivityTypes','ActivityStatuses','ServerStatuses'].forEach(s=>{if(!wb.Sheets[s]){nd[s]=defaultsFor(s);missing=missing.filter(x=>x!==s)}});
 if(!wb.Sheets.RackList){missing=missing.filter(x=>x!=='RackList');if(wb.Sheets.DataCenters){nd.RackList=[];XLSX.utils.sheet_to_json(wb.Sheets.DataCenters,{defval:''}).forEach(r=>{const n=parseInt(r.Racks),u=parseInt(r['U per rack']);if(r.Name)nd.RackList=nd.RackList.concat(makeRacks(String(r.Name),n>=1?n:8,u>=1?u:42,'R',1,2))})}else nd.RackList=defaultRacks()}
 DB=nd;handle=info.handle||null;dirty=0;SNAP=snap();PENDLOG=[];
@@ -1009,7 +1044,7 @@ rebuildHead();saveSchemaMeta();changed();route();openCols(sheet);toast('Column u
 function viewRows(sheet){
 const t=TV[sheet],u=uiOf(sheet);
 let rows=DB[sheet].map((r,i)=>({r:r,i:i}));
-if(u.f!=='All')rows=rows.filter(x=>x.r[t.filter]===u.f);
+rows=rows.filter(x=>fmatch(u,t,x.r));
 rows=applyFilters(sheet,rows);
 if(u.q){const q=u.q.toLowerCase();rows=rows.filter(x=>Object.keys(x.r).some(k=>k!=='Updated'&&String(x.r[k]).toLowerCase().includes(q)))}
 if(u.sk){const k=u.sk,dir=u.sd;rows.sort((a,b)=>{const x=val(a.r,k),y=val(b.r,k);const nx=parseFloat(x),ny=parseFloat(y);const c=(!isNaN(nx)&&!isNaN(ny)&&String(nx)===String(x)&&String(ny)===String(y))?nx-ny:String(x).localeCompare(String(y));return c*dir})}
@@ -1020,7 +1055,7 @@ const t=TV[sheet],u=uiOf(sheet),sep=META.csvSep||';',rows=viewRows(sheet).filter
 if(!rows.length){toast('Nothing to export. The current view has no rows.');return}
 const q=v=>{let s=v==null?'':String(v);if(/^[=+@]/.test(s)||(/^-/.test(s)&&isNaN(Number(s))))s="'"+s;return(s.indexOf(sep)>=0||/["\n\r]/.test(s))?'"'+s.replace(/"/g,'""')+'"':s};
 const lines=[cols.map(c=>q(labelOf(c))).join(sep)].concat(rows.map(x=>cols.map(c=>q(val(x.r,c))).join(sep)));
-const name=sheet+(u.f!=='All'?'_'+u.f:'')+'_'+ds(0)+'.csv',data='﻿'+lines.join('\r\n'),msg='Exported '+rows.length+' rows to '+name;
+const name=sheet+(u.fm&&u.fm.length?'_'+u.fm.join('+'):u.f!=='All'?'_'+u.f:'')+'_'+ds(0)+'.csv',data='﻿'+lines.join('\r\n'),msg='Exported '+rows.length+' rows to '+name;
 let dl=null;try{dl=window.claude&&window.claude.use?await window.claude.use('downloads'):null}catch(e){dl=null}
 if(dl){try{await dl.save({filename:name,data:data});toast(msg)}catch(e){if(!(e&&e.code==='declined'))toast('Export failed: '+((e&&(e.message||e.code))||'unknown'))}return}
 try{const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([data],{type:'text/csv;charset=utf-8'}));a.download=name;document.body.appendChild(a);a.click();a.remove();toast(msg)}catch(e){toast('Download is not available in this view')}
@@ -1464,7 +1499,7 @@ function patchView(){
 const s=patchStats(DB.ServerMI),noSla=DB.Environments.filter(e=>e.Active!=='No'&&!(parseInt(e['Patch days'])>=1)).map(e=>e.Name);
 const chips=['All','Overdue','Due soon','Compliant','Unknown','No SLA'].map(o=>'<button class="chip'+(PT.f===o?' on':'')+'" data-act="pstat" data-v="'+o+'">'+o+'</button>').join('');
 const envs=['All'].concat(DB.Environments.map(e=>e.Name)).map(o=>'<button class="chip'+(PT.env===o?' on':'')+'" data-act="penv" data-v="'+esc(o)+'">'+esc(o)+'</button>').join('');
-return head('Patching compliance','OS patching status per server. Each environment has a “patch within N days” rule (Settings → Environments). Expiry = Last patched + that rule. Decommissioned servers are not counted.','<button class="btn p" data-act="ptbulk">Patching activity</button><button class="btn" data-act="pcsv">Export CSV</button><button class="btn p" data-act="saveXlsx">Save to Excel</button>')
+return head('Patching compliance','OS patching status per server. Each environment has a “patch within N days” rule (Settings → Environments). Expiry = Last patched + that rule. Decommissioned servers are not counted.','<button class="btn" data-act="pcsv">Export CSV</button><button class="btn p" data-act="saveXlsx">Save to Excel</button>')
 +'<div class="kpis"><div class="kpi"><span>Compliance</span><b>'+(s.scored?s.pct+'%':'—')+'</b><small class="'+(s.scored&&s.pct<90?'w':'g')+'">'+(s.Compliant+s['Due soon'])+' of '+s.scored+' servers within their rule</small></div><div class="kpi"><span>Overdue</span><b>'+s.Overdue+'</b><small class="'+(s.Overdue?'b':'g')+'">patch rule exceeded</small></div><div class="kpi"><span>Expires within '+PWARN+' days</span><b>'+s['Due soon']+'</b><small class="'+(s['Due soon']?'w':'')+'">patch these next</small></div><div class="kpi"><span>No patch date</span><b>'+s.Unknown+'</b><small class="'+(s.Unknown?'w':'')+'">fill in Last patched · '+s['No SLA']+' have no rule</small></div></div>'
 +(noSla.length?'<section class="card" style="border-color:var(--warn-fg)"><b>Set the patch rule for: '+noSla.map(esc).join(', ')+'.</b> <span class="note">Servers in these environments are shown as “No SLA” until you enter Patch days in Settings → Environments.</span> <button class="btn s" data-act="goto" data-v="settings">Open Settings</button></section>':'')
 +'<section class="card"><h2>By environment</h2>'+patchEnvTable()+'</section>'
@@ -1651,23 +1686,45 @@ const name='BackupJobs_'+ds(0)+'.csv',data='﻿'+lines.join('\r\n'),msg='Exporte
 let dl=null;try{dl=window.claude&&window.claude.use?await window.claude.use('downloads'):null}catch(e){dl=null}
 if(dl){try{await dl.save({filename:name,data:data});toast(msg)}catch(e){if(!(e&&e.code==='declined'))toast('Export failed')}return}
 try{const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([data],{type:'text/csv;charset=utf-8'}));a.download=name;document.body.appendChild(a);a.click();a.remove();toast(msg)}catch(e){toast('Download is not available in this view')}}
-
+/* ---------- Patching activity (only from Patch events) ---------- */
+const PT_SRC=[['ServerMI','Hostname','Server'],['ESXi','Hostname','ESXi host'],['Storage','Array','Storage'],['Backup','Device','Backup device'],['RackDevices','Name','Other device']];
 function ptParse(txt){const seen={},out=[];String(txt||'').split(/[\r\n\t,;]+|\s+/).forEach(t=>{t=t.trim().replace(/^["']|["']$/g,'');if(t&&!seen[t.toLowerCase()]){seen[t.toLowerCase()]=1;out.push(t)}});return out}
-function ptMatch(tok){const t=tok.toLowerCase(),sh=t.split('.')[0],hits=[];DB.ServerMI.forEach((r,i)=>{const ks=[r.Hostname,r.FQDN,r['vCenter name']].map(x=>String(x||'').toLowerCase()).filter(Boolean);if(ks.indexOf(t)>=0||ks.some(k=>k.split('.')[0]===sh&&(t.indexOf('.')<0||k.indexOf('.')<0)))hits.push(i)});return hits}
-function ptPreview(){const toks=ptParse($('pb-list').value),ok=[],no=[];toks.forEach(t=>{const h=ptMatch(t);h.length?h.forEach(i=>{if(ok.indexOf(i)<0)ok.push(i)}):no.push(t)});
-$('pb-sum').innerHTML=toks.length?'<b>'+ok.length+'</b> servers matched'+(no.length?' · <span style="color:var(--bad-fg)">'+no.length+' not found: '+no.slice(0,12).map(esc).join(', ')+(no.length>12?' …':'')+'</span>':''):'<span class="note">Paste server names, one per line.</span>';return ok}
-function openPtBulk(pre){
-$('modal').innerHTML='<div class="modal" data-act="mbg"><div class="dlg" role="dialog" aria-modal="true" aria-label="Patching activity" style="width:min(560px,100%)"><h2>Patching activity</h2>'
-+'<div class="fgrid"><label for="pb-crq">CRQ number<input class="inp" id="pb-crq" placeholder="CRQ000012345"></label><label for="pb-date">Patch date<input class="inp" id="pb-date" type="date" value="'+ds(0)+'"></label>'
-+'<label class="wide" for="pb-list">Servers (paste from Notepad or Excel)<textarea class="inp" id="pb-list" data-act="pbprev" rows="9" placeholder="srv-app-01&#10;srv-db-02&#10;srv-web-03.corp.example">'+esc(pre||'')+'</textarea></label></div>'
-+'<div id="pb-sum" class="note" style="margin-top:6px"></div><p class="note" style="margin:6px 0 0">Matches Hostname, FQDN or vCenter name (case-insensitive; short name also matches). Sets Last patched and Last patch CRQ on the matched servers.</p>'
-+'<label class="chkrow" style="margin-top:8px"><input type="checkbox" id="pb-cal" checked> Also add a patching event to the Overview calendar</label>'+'<div id="pb-err" class="note" style="color:var(--bad-fg)" role="alert"></div>'
-+'<div class="acts"><span></span><div class="tools"><button class="btn" data-act="mclose">Cancel</button><button class="btn p" data-act="ptbulkgo">Update servers</button></div></div></div></div>';ptPreview();setTimeout(()=>{const c=$('pb-crq');if(c)c.focus()},30)}
-function doPtBulk(){const crq=$('pb-crq').value.trim(),d=$('pb-date').value;if(!crq){$('pb-err').textContent='Enter the CRQ number';return}if(!d){$('pb-err').textContent='Enter the patch date';return}
-const ok=ptPreview();if(!ok.length){$('pb-err').textContent='No servers matched';return}
-ok.forEach(i=>{const r=DB.ServerMI[i];r['Last patched']=d;r['Last patch CRQ']=crq;r.Updated=ds(0)});
-if($('pb-cal')&&$('pb-cal').checked){const n=Math.max(0,...DB.PatchEvents.map(x=>parseInt(String(x.ID).replace(/\D/g,''))||0))+1;DB.PatchEvents.push({ID:'PAT-'+String(n).padStart(4,'0'),Date:d,Title:'Patching '+crq,CRQ:crq,Status:'Done',Servers:ok.map(i=>DB.ServerMI[i].Hostname).join('\n'),'In calendar':'Yes',Updated:ds(0)})}
-closeForm();changed();route();toast(ok.length+' servers updated with '+crq)}
+/* Servers are named <hostname>-<role>-<node>: the part before the first dash is the real hostname, so a pasted short name matches. */
+function ptMatch(tok){
+const t=tok.toLowerCase(),sh=t.split('.')[0],hits=[];
+PT_SRC.forEach(s=>DB[s[0]].forEach((r,i)=>{
+const ks=(s[0]==='ServerMI'?[r.Hostname,r.FQDN,r['vCenter name']]:[r[s[1]]]).map(x=>String(x||'').toLowerCase()).filter(Boolean);
+let ok=ks.indexOf(t)>=0||ks.some(k=>k.split('.')[0]===sh&&(t.indexOf('.')<0||k.indexOf('.')<0));
+if(!ok&&s[0]==='ServerMI'&&sh.indexOf('-')<0)ok=ks.some(k=>k.split('.')[0].split('-')[0]===sh);
+if(ok)hits.push({sheet:s[0],i:i,name:String(r[s[1]])})}));
+return hits}
+function ptScan(txt){const toks=ptParse(txt),ok=[],no=[],multi=[],seen={};
+toks.forEach(t=>{const h=ptMatch(t);if(!h.length){no.push(t);return}if(h.length>1)multi.push([t,h.length]);h.forEach(x=>{const k=x.sheet+'|'+x.i;if(!seen[k]){seen[k]=1;ok.push(x)}})});
+return{toks:toks,ok:ok,no:no,multi:multi}}
+function ptPreview(){const sc=ptScan($('pb-list').value),by={};sc.ok.forEach(x=>by[x.sheet]=(by[x.sheet]||0)+1);
+$('pb-sum').innerHTML=sc.toks.length?'<b>'+sc.ok.length+'</b> matched'+(sc.ok.length?' ('+PT_SRC.filter(s=>by[s[0]]).map(s=>by[s[0]]+' '+s[2].toLowerCase()+(by[s[0]]>1?'s':'')).join(', ')+')':'')+(sc.no.length?' · <span style="color:var(--bad-fg)">'+sc.no.length+' not found: '+sc.no.slice(0,12).map(esc).join(', ')+(sc.no.length>12?' …':'')+'</span>':'')+(sc.multi.length?'<br><span class="note">Short names that matched several records: '+sc.multi.slice(0,6).map(m=>esc(m[0])+' ('+m[1]+')').join(', ')+'. All of them are updated.</span>':''):'<span class="note">Paste device names, one per line.</span>';
+const b=$('pb-err');if(b)b.textContent='';const g=$('pb-go');if(g){g.dataset.ok='';g.textContent='Save patching activity'}return sc}
+function openPtBulk(pre,date){
+$('modal').innerHTML='<div class="modal" data-act="mbg"><div class="dlg" role="dialog" aria-modal="true" aria-label="Add patching activity" style="width:min(600px,100%)"><h2>Add patching activity</h2>'
++'<div class="fgrid"><label for="pb-crq">CRQ number<input class="inp" id="pb-crq" placeholder="CRQ000012345"></label><label for="pb-title">Title (optional)<input class="inp" id="pb-title" placeholder="Monthly patching PROD"></label>'
++'<label for="pb-date">Start date<input class="inp" id="pb-date" type="date" value="'+(date||ds(0))+'"></label><label for="pb-end">End date (optional)<input class="inp" id="pb-end" type="date"></label>'
++'<label for="pb-status">Status<select class="inp" id="pb-status"><option>Done</option><option>In progress</option><option>Planned</option></select></label>'
++'<label class="wide" for="pb-list">Devices (paste from Notepad or Excel)<textarea class="inp" id="pb-list" data-act="pbprev" rows="9" placeholder="server01&#10;server02-APP-NodeA&#10;esx-a01&#10;san-a01">'+esc(pre||'')+'</textarea></label></div>'
++'<div id="pb-sum" class="note" style="margin-top:6px"></div>'
++'<label class="chkrow" style="margin-top:6px"><input type="checkbox" id="pb-fw"> Firmware update (also set FW patched)</label><label class="chkrow"><input type="checkbox" id="pb-cal" checked> Show in the calendar</label>'
++'<p class="note" style="margin:6px 0 0">Searches ServersMI, ESXi hosts, Storage, Backup and Other devices. For servers the part of the name before the first dash is the hostname, so “server01” matches “server01-APP-NodeA”; FQDN and vCenter name match too. Status Done sets Last patched and Last patch CRQ on every matched device; Planned and In progress only create the calendar event.</p>'
++'<div id="pb-err" class="note" style="color:var(--bad-fg)" role="alert"></div>'
++'<div class="acts"><span></span><div class="tools"><button class="btn" data-act="mclose">Cancel</button><button class="btn p" data-act="ptbulkgo" id="pb-go">Save patching activity</button></div></div></div></div>';ptPreview();setTimeout(()=>{const c=$('pb-crq');if(c)c.focus()},30)}
+function doPtBulk(){const crq=$('pb-crq').value.trim(),d=$('pb-date').value,e=$('pb-end').value,st=$('pb-status').value;
+if(!crq){$('pb-err').textContent='Enter the CRQ number';return}if(!d){$('pb-err').textContent='Enter the start date';return}
+if(e&&e<d){$('pb-err').textContent='End date is before the start date';return}
+const sc=ptScan($('pb-list').value);if(!sc.ok.length){$('pb-err').textContent='No device matched the inventory';return}
+const go=$('pb-go');if(sc.no.length&&go.dataset.ok!=='1'){go.dataset.ok='1';go.textContent='Continue without the '+sc.no.length+' not found';$('pb-err').textContent='Not found in the inventory: '+sc.no.slice(0,15).join(', ')+(sc.no.length>15?' …':'')+'. Fix the names, or click again to continue without them.';return}
+const fw=$('pb-fw').checked,when=e||d;
+if(st==='Done')sc.ok.forEach(x=>{const r=DB[x.sheet][x.i];r['Last patched']=when;r['Last patch CRQ']=crq;if(fw)r['FW patched']=when;r.Updated=ds(0)});
+const n=Math.max(0,...DB.PatchEvents.map(x=>parseInt(String(x.ID).replace(/\D/g,''))||0))+1;
+DB.PatchEvents.push({ID:'PAT-'+String(n).padStart(4,'0'),Date:d,'End date':e&&e>d?e:'',Title:$('pb-title').value.trim()||'Patching '+crq,CRQ:crq,Status:st,Servers:sc.ok.map(x=>x.name).join('\n'),'In calendar':$('pb-cal').checked?'Yes':'No',Notes:fw?'Firmware update':'',Updated:ds(0)});
+closeForm();changed();route();toast(st==='Done'?sc.ok.length+' devices updated with '+crq:'Event saved ('+sc.ok.length+' devices)')}
 
 /* ---------- attachments on records (Attachments/<Sheet>/<record>/<file>) ---------- */
 const ATT={q:[]},ATT_SHEETS=['ServerMI','ESXi','Storage','Backup','RackDevices','DCSSActivity','PatchEvents'];
@@ -1711,7 +1768,7 @@ function bulkBar(sheet){
 selPrune(sheet);const n=selSet(sheet).size;if(!n)return '';
 const sv=sheet==='ServerMI';
 return '<div class="bulkbar" role="status"><b>'+n+' selected</b><button class="btn s" data-act="bset" data-sheet="'+sheet+'">Set a field…</button>'
-+(sv?'<button class="btn s" data-act="bpatch">Patching activity…</button>':'')
+
 +'<button class="btn s" data-act="bcsv" data-sheet="'+sheet+'">Export selected CSV</button><button class="btn s d" data-act="bdel" data-sheet="'+sheet+'">Delete</button><button class="btn s" data-act="bclear" data-sheet="'+sheet+'">Clear selection</button></div>'}
 function selRows(sheet){selPrune(sheet);return DB[sheet].filter(r=>selSet(sheet).has(r))}
 function bulkFields(sheet){return SCHEMA[sheet].cols.filter(c=>!c.hidden&&!c.att&&c.k!==SCHEMA[sheet].key&&!(sheet==='DCSSActivity'&&c.k==='ID'))}
@@ -1804,7 +1861,7 @@ calmode(el){CAL.mode=el.dataset.v;calRedraw()},
 calday(el){const d=el.dataset.d;CAL.sel=d||null;if(d)CAL.a=d;calRedraw()},
 calflt(el){CAL.off[el.dataset.k]=!CAL.off[el.dataset.k];calRedraw()},
 calopen(el){const s=CAL_SRC.find(x=>x.k===el.dataset.k);openForm(s.sheet,+el.dataset.i)},
-caladd(el){const s=CAL_SRC.find(x=>x.k===el.dataset.k);openForm(s.sheet,null,{Date:el.dataset.d})}};
+caladd(el){const s=CAL_SRC.find(x=>x.k===el.dataset.k);if(s.sheet==='PatchEvents'){openPtBulk('',el.dataset.d);return}openForm(s.sheet,null,{Date:el.dataset.d})}};
 /* ---------- Ports & cabling, disks ---------- */
 const DEV_SRC=[['ESXi','Hostname','ESXi host'],['Storage','Array','Storage'],['Backup','Device','Backup'],['RackDevices','Name','Other device'],['ServerMI','Hostname','Server']];
 function devList(){const out=[],seen=new Set();DEV_SRC.forEach(s=>(DB[s[0]]||[]).forEach(r=>{if(s[0]==='ServerMI'&&r.Platform!=='Physical')return;const n=String(r[s[1]]||'');if(!n||seen.has(n))return;seen.add(n);out.push({n:n,sheet:s[0],kind:s[2],dc:r.DC||'',rack:r.Rack||''})}));return out}
@@ -1829,8 +1886,8 @@ function netUnlink(r){if(!r['Remote device'])return;const r2=DB.NetPorts.find(x=
 function portsView(){
 const devs=devList(),known=new Set(devs.map(d=>d.n));
 const extra=Array.from(new Set(DB.NetPorts.map(r=>String(r.Device)).filter(n=>n&&!known.has(n))));
-if(!PV.dev||(!known.has(PV.dev)&&extra.indexOf(PV.dev)<0))PV.dev=((devs.find(d=>DB.NetPorts.some(r=>r.Device===d.n))||devs[0]||{}).n)||extra[0]||'';
 const cnt=n=>DB.NetPorts.filter(r=>r.Device===n).length;
+if(!PV.dev||(!known.has(PV.dev)&&extra.indexOf(PV.dev)<0)){const best=devs.slice().sort((x,y)=>cnt(y.n)-cnt(x.n))[0];PV.dev=(best&&cnt(best.n)?best.n:(devs[0]||{}).n)||extra[0]||''}
 const rows=DB.NetPorts.map((r,i)=>[r,i]).filter(x=>x[0].Device===PV.dev).sort((a,b)=>natc(a[0].Port,b[0].Port));
 const per=PV.per||(rows.length>24?24:12);
 const st=s=>rows.filter(x=>(x[0].State||'Free')===s).length;
@@ -1955,6 +2012,91 @@ logtrim(el){if(!el.dataset.arm){el.dataset.arm='1';el.textContent='Click again t
 const days=parseInt($('log-days').value);if(!(days>=1)){el.dataset.arm='';el.textContent='Delete';return}
 const cut=ds(-days),n0=DB.ActivityLog.length;DB.ActivityLog=DB.ActivityLog.filter(r=>String(r.Time||'').slice(0,10)>=cut);
 const n=n0-DB.ActivityLog.length;if(n)changed();route();toast(n+' log entr'+(n===1?'y':'ies')+' deleted')}};
+/* ---------- DC designer (container data centers: drag blocks around a floor plan) ---------- */
+const DKIND={'Container 40 ft':{w:12.19,h:2.44,c:'#5B6B82'},'Container 20 ft':{w:6.06,h:2.44,c:'#6B7B92'},'Rack':{w:0.6,h:1.2,c:'#2F66C4'},'Rack row':{w:6,h:1.2,c:'#3F7BDB'},'Network cabinet':{w:0.8,h:0.8,c:'#1C7C94'},'Cooling unit':{w:1.2,h:0.9,c:'#0F9D9A'},'Chiller':{w:3,h:2,c:'#2B8F8C'},'UPS / batteries':{w:1.5,h:1,c:'#4E7F1E'},'Power cabinet':{w:1,h:0.8,c:'#B85C00'},'Generator':{w:3,h:1.5,c:'#9A6B00'},'Door / entrance':{w:1,h:0.25,c:'#A3221B'},'Zone':{w:8,h:6,c:'#8FA3C0'},'Label':{w:3,h:0.8,c:'#5B6B82'}};
+const DPS={dc:'',sel:null,snap:0.5,z:1,heat:false};
+let DRAG=null;
+const dn=(r,k)=>{const v=parseFloat(r[k]);return isNaN(v)?0:v};
+const dkc=r=>r.Color||(DKIND[r.Kind]||{c:'#5B6B82'}).c;
+const dsnap=v=>{const s=DPS.snap;v=s?Math.round(v/s)*s:v;return Math.round(v*100)/100};
+function dcpRows(){return DB.DCLayout.map((r,i)=>({r:r,i:i})).filter(x=>x.r.DC===DPS.dc)}
+function dcpSvg(){
+const S=24*DPS.z,rows=dcpRows();let W=60,H=36;
+rows.forEach(x=>{const m=Math.max(dn(x.r,'Width m'),dn(x.r,'Height m'));W=Math.max(W,dn(x.r,'X m')+m+6);H=Math.max(H,dn(x.r,'Y m')+m+6)});
+const order=k=>k==='Zone'?0:/^Container/.test(k)?1:k==='Label'?3:2;
+const sorted=rows.slice().sort((a,b)=>order(a.r.Kind)-order(b.r.Kind));
+let g='';
+sorted.forEach(x=>{const r=x.r,w=dn(r,'Width m')*S,h=dn(r,'Height m')*S,px=dn(r,'X m')*S,py=dn(r,'Y m')*S,rot=parseInt(r.Rotation)||0,sel=DPS.sel===x.i;
+let fill=dkc(r),extra='',txt=String(r.Block||''),sub='';
+if((r.Kind==='Rack'||r.Kind==='Rack row')&&r.Rack){const pr=DB.DCMI.find(q=>q.DC===DPS.dc&&q.Rack===r.Rack);if(pr){const l=load(pr);sub=l+'%';if(DPS.heat)fill=l>=80?'#cf3b3b':l>=60?'#d98a1c':l>=40?'#2F66C4':'#7C9BD6'}}
+const zone=r.Kind==='Zone',lab=r.Kind==='Label';
+const fs=Math.max(8,Math.min(13*DPS.z,Math.min(w,h)*.6,w/Math.max(4,txt.length)*1.6));
+const showTxt=(w>=22&&h>=10)||lab||zone;
+g+='<g class="blk" data-i="'+x.i+'" transform="rotate('+rot+' '+(px+w/2)+' '+(py+h/2)+')"><title>'+esc((r.Block||'')+' · '+r.Kind+' · '+dn(r,'Width m')+' × '+dn(r,'Height m')+' m'+(r.Rack?' · rack '+r.Rack:''))+'</title>'
++(lab?'<rect x="'+px+'" y="'+py+'" width="'+w+'" height="'+h+'" fill="transparent"'+(sel?' stroke="var(--accent)" stroke-dasharray="4 3"':'')+'/>':'<rect x="'+px+'" y="'+py+'" width="'+w+'" height="'+h+'" rx="'+(zone?6:2)+'" fill="'+fill+'" fill-opacity="'+(zone?.18:1)+'"'+(zone?' stroke="'+fill+'" stroke-dasharray="6 4"':' stroke="'+(sel?'var(--accent)':'rgba(0,0,0,.35)')+'"')+' stroke-width="'+(sel?2.5:1)+'"/>')
++(showTxt?'<text x="'+(lab||zone?px+6:px+w/2)+'" y="'+(lab||zone?py+fs+3:py+h/2+(sub?-1:fs*.35))+'" text-anchor="'+(lab||zone?'start':'middle')+'" font-size="'+fs+'" fill="'+(lab||zone?'var(--ink)':'#fff')+'" pointer-events="none">'+esc(txt)+'</text>':'')
++(showTxt&&sub&&!lab&&!zone?'<text x="'+(px+w/2)+'" y="'+(py+h/2+fs*.95)+'" text-anchor="middle" font-size="'+Math.max(7,fs*.75)+'" fill="#fff" fill-opacity=".85" pointer-events="none">'+sub+'</text>':'')
++(sel&&rot===0?'<rect class="rsz" x="'+(px+w-6)+'" y="'+(py+h-6)+'" width="9" height="9" fill="var(--accent)" stroke="#fff"/>':'')+'</g>'});
+return '<svg id="dcp-svg" width="'+W*S+'" height="'+H*S+'" viewBox="0 0 '+W*S+' '+H*S+'" tabindex="0" role="img" aria-label="Floor plan of '+esc(DPS.dc)+'"><defs><pattern id="dcg1" width="'+S+'" height="'+S+'" patternUnits="userSpaceOnUse"><path d="M '+S+' 0 L 0 0 0 '+S+'" fill="none" stroke="var(--line2)" stroke-width="1"/></pattern><pattern id="dcg5" width="'+S*5+'" height="'+S*5+'" patternUnits="userSpaceOnUse"><rect width="'+S*5+'" height="'+S*5+'" fill="url(#dcg1)"/><path d="M '+S*5+' 0 L 0 0 0 '+S*5+'" fill="none" stroke="var(--line)" stroke-width="1"/></pattern></defs><rect width="100%" height="100%" fill="url(#dcg5)"/>'+g+'</svg>'}
+function dcpPanel(){
+const r=DPS.sel!=null?DB.DCLayout[DPS.sel]:null;
+if(!r){const by={};dcpRows().forEach(x=>by[x.r.Kind]=(by[x.r.Kind]||0)+1);return '<h2>Block</h2><p class="note" style="margin:0 0 10px">Drag a block to move it. Drag the square corner to resize it. Arrow keys nudge the selected block.</p>'+(Object.keys(by).length?'<div class="legend">'+Object.keys(by).map(k=>'<span><i style="background:'+(DKIND[k]||{c:'#888'}).c+'"></i>'+esc(k)+'<b>'+by[k]+'</b></span>').join('')+'</div>':'<p class="note">This data center has no blocks yet. Pick a type above and click Add block.</p>')}
+const rackLink=r.Kind==='Rack'||r.Kind==='Rack row',pr=rackLink&&r.Rack?DB.DCMI.find(q=>q.DC===r.DC&&q.Rack===r.Rack):null;
+const f=(k,l,t,step)=>'<label>'+l+'<input class="inp" data-act="dcpf" data-f="'+k+'" type="'+(t||'text')+'"'+(step?' step="'+step+'"':'')+' value="'+esc(r[k]==null?'':r[k])+'"></label>';
+return '<h2>'+esc(r.Block||'Block')+'</h2><div class="fgrid" style="grid-template-columns:repeat(2,minmax(0,1fr))">'
++'<label class="wide">Name<input class="inp" data-act="dcpf" data-f="Block" value="'+esc(r.Block||'')+'"></label>'
++'<label class="wide">Type<select class="inp" data-act="dcpf" data-f="Kind">'+Object.keys(DKIND).map(k=>'<option'+(r.Kind===k?' selected':'')+'>'+esc(k)+'</option>').join('')+'</select></label>'
++f('X m','X (m)','number','0.1')+f('Y m','Y (m)','number','0.1')+f('Width m','Width (m)','number','0.1')+f('Height m','Height (m)','number','0.1')
++'<label>Rotation<select class="inp" data-act="dcpf" data-f="Rotation">'+['0','90','180','270'].map(o=>'<option'+(String(parseInt(r.Rotation)||0)===o?' selected':'')+'>'+o+'</option>').join('')+'</select></label>'
++'<label>Color<input class="inp" type="color" data-act="dcpf" data-f="Color" value="'+(/^#[0-9a-f]{6}$/i.test(dkc(r))?dkc(r):'#5b6b82')+'" style="padding:2px;height:40px"></label>'
++(rackLink?'<label class="wide">Linked rack (from Settings → Racks)<select class="inp" data-act="dcpf" data-f="Rack"><option value=""></option>'+dcRacks(r.DC).map(x=>'<option'+(r.Rack===x?' selected':'')+'>'+esc(x)+'</option>').join('')+'</select></label>':'')
++'<label class="wide">Notes<textarea class="inp" rows="3" data-act="dcpf" data-f="Notes">'+esc(r.Notes||'')+'</textarea></label></div>'
++(pr?'<p class="note" style="margin:8px 0 0">Power '+esc(pr['Power kW'])+' kW of '+esc(pr['Limit kW'])+' kW ('+load(pr)+'%) · inlet '+esc(pr['Inlet C'])+' °C. <a href="#racks">Open rack layout</a></p>':'')
++'<div class="tools" style="margin-top:12px"><button class="btn s" data-act="dcprot">Rotate 90°</button><button class="btn s" data-act="dcpdup">Duplicate</button><button class="btn s d" data-act="dcpdel">Delete</button><button class="btn s" data-act="dcpsel0">Deselect</button></div>'}
+function dcpDraw(){const b=$('dcp-svgbox');if(b)b.innerHTML=dcpSvg()}
+function dcpFull(){dcpDraw();const p=$('dcp-panel');if(p)p.innerHTML=dcpPanel()}
+function dcdesignView(){
+if(!DPS.dc||DCS.indexOf(DPS.dc)<0)DPS.dc=DCS[0]||'';
+if(DPS.sel!=null&&(!DB.DCLayout[DPS.sel]||DB.DCLayout[DPS.sel].DC!==DPS.dc))DPS.sel=null;
+const rows=dcpRows(),cont=rows.filter(x=>/^Container/.test(x.r.Kind)),area=cont.reduce((a,x)=>a+dn(x.r,'Width m')*dn(x.r,'Height m'),0),racks=rows.filter(x=>x.r.Kind==='Rack').length+rows.filter(x=>x.r.Kind==='Rack row').length;
+return head('DC designer','Floor plan of a container data center. Add blocks (containers, racks, cooling, UPS…), drag them around, resize and rotate them. Saved in the sheet “DCLayout”.','<div class="chips">'+DCS.map(dc=>'<button class="chip'+(DPS.dc===dc?' on':'')+'" data-act="dcpdc" data-v="'+esc(dc)+'">'+esc(dc)+'</button>').join('')+'</div>')
++'<div class="kpis"><div class="kpi"><span>Blocks</span><b>'+rows.length+'</b><small>&nbsp;</small></div><div class="kpi"><span>Containers</span><b>'+cont.length+'</b><small>'+r1(area)+' m² of containers</small></div><div class="kpi"><span>Racks</span><b>'+racks+'</b><small>on the floor plan</small></div></div>'
++'<section class="card"><div class="tools" style="margin-bottom:10px"><select class="inp" id="dcp-kind" style="width:auto" aria-label="Block type">'+Object.keys(DKIND).map(k=>'<option>'+esc(k)+'</option>').join('')+'</select><button class="btn p" data-act="dcpadd">+ Add block</button>'
++'<span class="tools" style="margin-left:auto"><label class="chkrow" style="grid-column:auto"><input type="checkbox" data-act="dcpopt" data-o="heat"'+(DPS.heat?' checked':'')+'> Color racks by power load</label>'
++'<select class="inp" data-act="dcpopt" data-o="snap" style="width:auto" aria-label="Snap to grid">'+[['0.1','Snap 0.1 m'],['0.5','Snap 0.5 m'],['1','Snap 1 m'],['0','No snap']].map(o=>'<option value="'+o[0]+'"'+(String(DPS.snap)===o[0]?' selected':'')+'>'+o[1]+'</option>').join('')+'</select>'
++'<button class="btn s" data-act="dcpzoom" data-d="-1" aria-label="Zoom out">−</button><span class="note" style="margin:0">'+Math.round(DPS.z*100)+'%</span><button class="btn s" data-act="dcpzoom" data-d="1" aria-label="Zoom in">+</button></span></div>'
++'<div class="row" style="align-items:flex-start;flex-wrap:wrap"><div style="flex:3 1 560px;min-width:0"><div class="dcp-box" id="dcp-svgbox">'+dcpSvg()+'</div><p class="note" style="margin:8px 0 0">1 grid square = 1 m, heavy lines every 5 m. A 40 ft container is 12.19 × 2.44 m.</p></div><div style="flex:1 1 280px;min-width:0" id="dcp-panel">'+dcpPanel()+'</div></div></section>'}
+function dcpMoveTo(i,x,y){const r=DB.DCLayout[i];r['X m']=dsnap(x);r['Y m']=dsnap(y)}
+document.addEventListener('pointerdown',e=>{
+const svg=e.target.closest&&e.target.closest('#dcp-svg');if(!svg)return;
+const g=e.target.closest('.blk');
+if(!g){if(DPS.sel!=null){DPS.sel=null;dcpFull()}return}
+const i=+g.dataset.i,r=DB.DCLayout[i];if(!r)return;e.preventDefault();
+const was=DPS.sel;DPS.sel=i;
+DRAG={i:i,mode:e.target.classList.contains('rsz')?'size':'move',sx:e.clientX,sy:e.clientY,ox:dn(r,'X m'),oy:dn(r,'Y m'),ow:dn(r,'Width m'),oh:dn(r,'Height m'),moved:false};
+if(was!==i)dcpFull();else dcpDraw();
+try{svg.focus({preventScroll:true})}catch(x){}});
+document.addEventListener('pointermove',e=>{if(!DRAG)return;const S=24*DPS.z,dx=(e.clientX-DRAG.sx)/S,dy=(e.clientY-DRAG.sy)/S;if(!DRAG.moved&&Math.abs(dx)+Math.abs(dy)<.05)return;DRAG.moved=true;const r=DB.DCLayout[DRAG.i];
+if(DRAG.mode==='move')dcpMoveTo(DRAG.i,Math.max(0,DRAG.ox+dx),Math.max(0,DRAG.oy+dy));else{r['Width m']=Math.max(.1,dsnap(DRAG.ow+dx));r['Height m']=Math.max(.1,dsnap(DRAG.oh+dy))}
+dcpDraw()});
+document.addEventListener('pointerup',()=>{if(!DRAG)return;const m=DRAG.moved,i=DRAG.i;DRAG=null;if(m){const r=DB.DCLayout[i];r.Updated=ds(0);changed();dcpFull()}});
+document.addEventListener('keydown',e=>{if(CUR!=='dcdesign'||DPS.sel==null)return;const t=e.target;if(!(t.id==='dcp-svg'||t===document.body))return;
+const st=DPS.snap||0.1,r=DB.DCLayout[DPS.sel];if(!r)return;let dx=0,dy=0;
+if(e.key==='ArrowLeft')dx=-st;else if(e.key==='ArrowRight')dx=st;else if(e.key==='ArrowUp')dy=-st;else if(e.key==='ArrowDown')dy=st;else return;
+e.preventDefault();dcpMoveTo(DPS.sel,Math.max(0,dn(r,'X m')+dx),Math.max(0,dn(r,'Y m')+dy));r.Updated=ds(0);changed();dcpFull()});
+function dcpField(el){const r=DB.DCLayout[DPS.sel];if(!r)return;const f=el.dataset.f;let v=el.value;
+if(f==='X m'||f==='Y m'||f==='Width m'||f==='Height m'){v=parseFloat(v);if(isNaN(v))v='';}
+r[f]=v;r.Updated=ds(0);changed();if(f==='Block'||f==='Kind'||f==='Rack')dcpFull();else dcpDraw()}
+const DCPACT={
+dcpdc(el){DPS.dc=el.dataset.v;DPS.sel=null;route()},
+dcpadd(){const k=$('dcp-kind').value,d=DKIND[k],n=dcpRows().filter(x=>x.r.Kind===k).length+1;
+const r={DC:DPS.dc,Block:k+' '+n,Kind:k,'X m':dsnap(3+(n%8)*1.5),'Y m':dsnap(3+(n%5)*1.5),'Width m':d.w,'Height m':d.h,Rotation:'0',Color:'',Rack:'',Notes:'',Updated:ds(0)};
+DB.DCLayout.push(r);DPS.sel=DB.DCLayout.length-1;changed();dcpFull()},
+dcprot(){const r=DB.DCLayout[DPS.sel];if(!r)return;r.Rotation=String(((parseInt(r.Rotation)||0)+90)%360);r.Updated=ds(0);changed();dcpFull()},
+dcpdup(){const r=DB.DCLayout[DPS.sel];if(!r)return;const c=Object.assign({},r,{Block:r.Block+' copy','X m':dsnap(dn(r,'X m')+1),'Y m':dsnap(dn(r,'Y m')+1),Updated:ds(0)});DB.DCLayout.push(c);DPS.sel=DB.DCLayout.length-1;changed();dcpFull()},
+dcpdel(el){if(!el.dataset.arm){el.dataset.arm='1';el.textContent='Click again to delete';return}DB.DCLayout.splice(DPS.sel,1);DPS.sel=null;changed();dcpFull()},
+dcpsel0(){DPS.sel=null;dcpFull()},
+dcpzoom(el){DPS.z=Math.max(.5,Math.min(2.5,Math.round((DPS.z+(+el.dataset.d)*.25)*100)/100));route()}};
 
 /* ---------- data quality (computed from the data) ---------- */
 function sevN(s){return s==='high'?0:s==='medium'?1:2}
@@ -2231,7 +2373,7 @@ return head('Stuff','Files from the Stuff folder and the links you go through on
 }
 
 /* ---------- router + events ---------- */
-const VIEWDEF={overview:overview,calendar:calendarView,servermi:()=>tableView('ServerMI'),patching:patchView,patchevents:()=>tableView('PatchEvents'),catalyst:()=>tableView('Catalyst'),repljobs:()=>tableView('ReplJobs'),activitylog:()=>tableView('ActivityLog'),ports:portsView,disks:disksView,netports:()=>tableView('NetPorts'),disklist:()=>tableView('Disks'),contacts:()=>tableView('Contacts'),agroups:()=>tableView('AssignGroups'),activity:()=>tableView('DCSSActivity'),backupjobs:bjView,esxi:()=>tableView('ESXi'),storage:()=>tableView('Storage'),backup:()=>tableView('Backup'),dcmi:()=>tableView('DCMI'),racks:racksView,checks:()=>tableView('DCChecks'),issues:issuesView,stuff:stuffView,kb:kbView,otherdevices:()=>tableView('RackDevices'),tracker:oiView,quality:qualityView,sources:sourcesView,datastores:()=>tableView('Datastores'),settings:settingsView};
+const VIEWDEF={overview:overview,calendar:calendarView,servermi:()=>tableView('ServerMI'),patching:patchView,patchevents:()=>tableView('PatchEvents'),catalyst:()=>tableView('Catalyst'),repljobs:()=>tableView('ReplJobs'),activitylog:()=>tableView('ActivityLog'),ports:portsView,disks:disksView,netports:()=>tableView('NetPorts'),disklist:()=>tableView('Disks'),contacts:()=>tableView('Contacts'),agroups:()=>tableView('AssignGroups'),activity:()=>tableView('DCSSActivity'),backupjobs:bjView,esxi:()=>tableView('ESXi'),storage:()=>tableView('Storage'),backup:()=>tableView('Backup'),dcmi:()=>tableView('DCMI'),racks:racksView,dcdesign:dcdesignView,dclayoutlist:()=>tableView('DCLayout'),checks:()=>tableView('DCChecks'),issues:issuesView,stuff:stuffView,kb:kbView,otherdevices:()=>tableView('RackDevices'),tracker:oiView,quality:qualityView,sources:sourcesView,datastores:()=>tableView('Datastores'),settings:settingsView};
 function route(){
 const id=(location.hash||'#overview').slice(1);CUR=VIEWDEF[id]?id:'overview';
 syncEnvOptions();syncBackupTypes();syncActivityTypes();syncKBTypes();syncActivityStatuses();syncServerStatuses();syncLayout();renderSide();renderPending();$('view').innerHTML=VIEWDEF[CUR]();
@@ -2239,9 +2381,9 @@ if(CUR==='issues'){drawDraft();loadPics()}
 }
 const ACT={
 sort(el){const u=uiOf(el.dataset.sheet),c=el.dataset.col;if(u.sk===c)u.sd=-u.sd;else{u.sk=c;u.sd=1}route()},
-chip(el){uiOf(el.dataset.sheet).f=el.dataset.v;route()},
+chip(el,e){const u=uiOf(el.dataset.sheet),v=el.dataset.v;if(e&&(e.shiftKey||e.ctrlKey||e.metaKey)&&v!=='All'){let fm=(u.fm||[]).slice();if(!fm.length&&u.f!=='All')fm=[u.f];const k=fm.indexOf(v);if(k>=0)fm.splice(k,1);else fm.push(v);u.fm=fm;u.f=fm.length?'__multi':'All'}else{u.fm=[];u.f=v}route()},
 edit(el){openForm(el.dataset.sheet,+el.dataset.i)},
-add(el){const s=el.dataset.sheet,u=uiOf(s),p={};if(u.f!=='All')p[TV[s].filter]=u.f;openForm(s,null,p)},
+add(el){const s=el.dataset.sheet,u=uiOf(s),p={};if(s==='PatchEvents'){openPtBulk();return}if(u.fm&&u.fm.length===1)p[TV[s].filter]=u.fm[0];else if(u.f!=='All'&&u.f!=='__multi')p[TV[s].filter]=u.f;openForm(s,null,p)},
 mclose(){closeForm()},
 oisel(el){OS.sel=el.dataset.id;route()},
 oif(el){OS[el.dataset.k]=el.dataset.v;route()},
@@ -2304,7 +2446,7 @@ bset(el){openBulkSet(el.dataset.sheet)},
 bsgo(el){bsApply(el.dataset.sheet)},
 bdel(el){bulkDelete(el.dataset.sheet,el)},
 bcsv(el){exportCsv(el.dataset.sheet,true)},
-bpatch(){openPtBulk(selRows('ServerMI').map(r=>r.Hostname).join('\n'))},
+
 attdel(el){attRemove(el.dataset.sheet,el.dataset.n,el)},
 attq(el){ATT.q.splice(+el.dataset.k,1);const fm=$('frm');if(fm)$('att-box').innerHTML=attInner(fm.dataset.sheet,{},fm.dataset.i==='')},
 mvrow(el){const sh=el.dataset.sheet,i=+el.dataset.i,d=+el.dataset.dir,a=DB[sh],j=i+d;if(j<0||j>=a.length)return;const t=a[i];a[i]=a[j];a[j]=t;changed();route()},
@@ -2359,7 +2501,7 @@ const fallback=()=>{const r=document.createRange();r.selectNodeContents(node);co
 if(navigator.clipboard&&navigator.clipboard.writeText)navigator.clipboard.writeText(t).then(()=>toast('Copied'),fallback);else fallback();
 }
 };
-Object.assign(ACT,CALACT,PORTACT,ENCLACT,LOGACT,HPACT);
+Object.assign(ACT,CALACT,PORTACT,ENCLACT,LOGACT,HPACT,DCPACT);
 document.addEventListener('click',e=>{const el=e.target.closest('[data-act]');if(!el)return;if(el.tagName==='A'&&el.getAttribute('href')==='#')e.preventDefault();const f=ACT[el.dataset.act];if(f)f(el,e)});
 document.addEventListener('submit',e=>{if(e.target.id!=='frm')return;e.preventDefault();const sheet=e.target.dataset.sheet;const r=submitForm(e.target);if(r&&sheet==='Issues'&&r.ID){IS.sel=r.ID;route()}});
 document.addEventListener('input',e=>{const el=e.target,a=el.dataset&&el.dataset.act;if(a==='pvq'){PV.q=el.value;const p=el.selectionStart;route();const n=document.querySelector('[data-act=pvq]');if(n){n.focus();try{n.setSelectionRange(p,p)}catch(x){}}}else if(a==='oiq'){OS.q=el.value;const l=$('oi-list');if(l)l.innerHTML=oiList()}else if(a==='bjq'){BJ.q=el.value;const l=$('bj-list');if(l)l.innerHTML=bjServerTable()}else if(a==='bjmq'){const q=el.value.toLowerCase();document.querySelectorAll('.bjrow').forEach(r=>{r.style.display=r.dataset.t.indexOf(q)>=0?'':'none'})}else if(a==='pbprev'){ptPreview()}else if(a==='pq'){PT.q=el.value;const l=$('pt-list');if(l)l.innerHTML=patchTable()}else if(a==='kbq'){KS.q=el.value;const l=$('kb-list');if(l)l.innerHTML=kbList()}else if(a==='q'){uiOf(el.dataset.sheet).q=el.value;redrawTable(el.dataset.sheet)}else if(a==='fval'||a==='fval2'){const s=el.dataset.sheet,f=uiOf(s).fl[+el.dataset.fi];if(f){f[a==='fval'?'v':'v2']=el.value;redrawTable(s)}}});
@@ -2368,6 +2510,8 @@ const el=e.target;
 if(el.dataset&&el.dataset.act==='devsel'){const o=el.dataset.v==='ports'?PV:DV;o[el.dataset.f]=el.dataset.f==='per'?+el.value:el.value;route();return}
 if(el.dataset&&el.dataset.act==='caljumpx'){calJump(el);return}
 if(el.classList&&el.classList.contains('hpc')){hpSync(el);return}
+if(el.dataset&&el.dataset.act==='dcpf'){dcpField(el);return}
+if(el.dataset&&el.dataset.act==='dcpopt'){if(el.dataset.o==='heat')DPS.heat=el.checked;else DPS.snap=parseFloat(el.value);dcpFull();return}
 if(el.id==='csv-sep'){META.csvSep=el.value;persist();return}
 if(el.dataset&&el.dataset.act==='bscol'){bsRender(el.dataset.sheet);return}
 if(el.id==='pl-dc'){$('pl-rack').innerHTML=dcRacks(el.value).map(x=>'<option>'+esc(x)+'</option>').join('');return}
