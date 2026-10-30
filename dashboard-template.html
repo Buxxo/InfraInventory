@@ -245,6 +245,14 @@ a.ce{text-decoration:none;cursor:pointer}a.btn{text-decoration:none;color:var(--
 .agd{border-top:1px solid var(--line2);padding:10px 0}.agd:first-child{border-top:0}.agh{margin-bottom:4px}
 @media(max-width:900px){.weekgrid{grid-template-columns:1fr}.weekgrid.tall .wd{min-height:0}}
 .ce.cont{opacity:.72}
+.fpn{display:flex;flex-direction:column;gap:10px;margin-top:12px;padding:12px;background:var(--surface2);border:1px solid var(--line2);border-radius:10px}
+.fgp{display:flex;flex-direction:column;gap:6px}
+.fgl{font-size:11px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+.fgc{display:flex;flex-wrap:wrap;gap:6px}
+.fc{display:inline-flex;align-items:center;gap:6px;min-height:30px;padding:0 11px;border-radius:15px;border:1px solid var(--line);background:var(--surface);cursor:pointer;font-size:13px}
+.fc em{font-style:normal;font-size:11px;color:var(--muted);background:var(--line2);border-radius:9px;padding:0 6px;min-width:18px;text-align:center}
+.fc:hover{border-color:var(--accent)}
+.fc.on{background:var(--accent);border-color:var(--accent);color:var(--accent-ink);font-weight:500}.fc.on em{background:rgba(255,255,255,.25);color:inherit}
 </style>
 <div class="app">
 <aside class="side" aria-label="Navigation">
@@ -303,6 +311,7 @@ DeviceTypes:{key:'Name',label:'Rack device types',cols:[{k:'Name',req:1},sel('Co
 RackDevices:{key:'Name',label:'Other devices',cols:[{k:'Name',req:1},{k:'Type',req:1},sel('DC',DCS,1),sel('Rack',RACKS,1),{k:'U start',t:'num'},{k:'U size',t:'num'},{k:'Model'},{k:'Serial'},{k:'Support end',t:'date'},sel('Status',['Active','Maintenance','Decom']),{k:'Bays across',t:'num'},{k:'Bays down',t:'num'},{k:'Attachments',att:1},{k:'Notes',t:'area',w:1}]},
 ServerStatuses:{key:'Name',label:'Server statuses',cols:[{k:'Name',req:1},sel('Meaning',['Running','Stopped','Decommissioned'],1),sel('Active',['Yes','No'],1),{k:'Notes',t:'area',w:1}]},
 ActivityStatuses:{key:'Name',label:'Activity statuses',cols:[{k:'Name',req:1},sel('Actionable',['Yes','No'],1),sel('Active',['Yes','No'],1),{k:'Notes',t:'area',w:1}]},
+KBTypes:{key:'Name',label:'Knowledge base types',cols:[{k:'Name',req:1},sel('Active',['Yes','No'],1),{k:'Notes',t:'area',w:1}]},
 ActivityTypes:{key:'Name',label:'Activity types',cols:[{k:'Name',req:1},sel('Active',['Yes','No'],1),{k:'Notes',t:'area',w:1}]},
 BackupTypes:{key:'Name',label:'Backup job categories',cols:[{k:'Name',req:1},sel('Counts as backup',['Yes','No'],1),sel('Cloud',['Yes','No'],1),sel('Active',['Yes','No'],1),{k:'Notes',t:'area',w:1}]},
 Contacts:{key:'Name',label:'Contacts',cols:[{k:'Name',req:1},{k:'Company / team'},{k:'Role'},{k:'Email'},{k:'Phone'},{k:'Mobile'},{k:'Assignment group'},sel('Active',['Yes','No'],1),{k:'Notes',t:'area',w:1}]},
@@ -331,7 +340,8 @@ function defaultBT(){return [['Image-level (VM)','Yes','No'],['Agent / file','Ye
 function defaultAT(){return ['Change','Maintenance','Incident','Installation','Audit','Visit','Other'].map(n=>({Name:n,Active:'Yes',Notes:'',Updated:ds(0)}))}
 function defaultAS(){return [['Planned','Yes'],['In progress','Yes'],['Done','No'],['Cancelled','No']].map(a=>({Name:a[0],Actionable:a[1],Active:'Yes',Notes:'',Updated:ds(0)}))}
 function defaultSS(){return [['On','Running'],['Off','Stopped'],['Decom','Decommissioned']].map(a=>({Name:a[0],Meaning:a[1],Active:'Yes',Notes:'',Updated:ds(0)}))}
-function defaultsFor(s){return s==='ServerStatuses'?defaultSS():s==='ActivityStatuses'?defaultAS():s==='ActivityTypes'?defaultAT():s==='BackupTypes'?defaultBT():s==='Environments'?defaultEnvs():s==='DataCenters'?defaultDCs():s==='RackList'?defaultRacks():s==='DeviceTypes'?defaultDT():[]}
+function defaultKT(){return ['SOP','How-to','Known issue','Reference'].map(n=>({Name:n,Active:'Yes',Notes:'',Updated:ds(0)}))}
+function defaultsFor(s){return s==='KBTypes'?defaultKT():s==='ServerStatuses'?defaultSS():s==='ActivityStatuses'?defaultAS():s==='ActivityTypes'?defaultAT():s==='BackupTypes'?defaultBT():s==='Environments'?defaultEnvs():s==='DataCenters'?defaultDCs():s==='RackList'?defaultRacks():s==='DeviceTypes'?defaultDT():[]}
 function defaultEnvs(){return[['PROD','Blue','Yes',30],['TEST','Green','No',45],['DEV','Grey','No',60],['DR','Amber','No',30]].map(e=>({Name:e[0],Color:e[1],Production:e[2],Active:'Yes','Patch days':e[3],Notes:'',Updated:ds(0)}))}
 function seed(){
 const S=(h,ip,os,env,role,cl,esx,cpu,ram,disk,own,bk,sup,st,n,upd)=>({Hostname:h,IP:ip,OS:os,Env:env,Role:role,Cluster:cl,'ESXi host':esx,vCPU:cpu,'RAM GB':ram,'Disk GB':disk,Owner:own,Backup:bk,'Support end':sup,Status:st,Notes:n||'',Updated:ds(upd)});
@@ -491,7 +501,7 @@ const act=[
 {ID:'ACT-0002',Date:ds(-9),Title:'Quarterly UPS battery test',Type:'Audit',DC:'DC2A','Performed by':'Operator 1','Assignment group':'DC Facilities','Ticket / ref':'CHG0021874',Status:'Done',Details:'Load test of UPS A and B.',['Outcome / lessons']:'UPS B runtime 11 min, lower than 14 min last quarter. Watch next test.',Updated:ds(-9)},
 {ID:'ACT-0003',Date:ds(-20),Title:'Installed two new ESXi hosts in R05',Type:'Installation',DC:'DC2A','Performed by':'Operator 1','Assignment group':'',['Ticket / ref']:'CHG0021311',Status:'Done',Details:'Racked esx-a06, esx-a07, cabled to both fabrics.',['Outcome / lessons']:'',Updated:ds(-20)},
 {ID:'ACT-0004',Date:ds(6),Title:'Replace CRAC-3 compressor',Type:'Maintenance',DC:'DC1B','Performed by':'','Assignment group':'DC Facilities','Ticket / ref':'CHG0022001',Status:'Planned',Details:'Technician booked. Other CRAC units cover the load.',['Outcome / lessons']:'',Updated:ds(-2)}];
-const out={ServerStatuses:defaultSS(),ActivityStatuses:defaultAS(),ActivityTypes:defaultAT(),BackupTypes:defaultBT(),Contacts:ctc,AssignGroups:agr,DCSSActivity:act,BackupJobs:bjobs,BackupAssign:bassign,ServerMI:server,ESXi:esxi,Storage:storage,Backup:backup,Datastores:dstores,Operators:operators,Environments:defaultEnvs(),DataCenters:defaultDCs(),RackList:defaultRacks(),DeviceTypes:dtypes,RackDevices:rdev,Links:links,KB:kb,KBComments:kbc,OpenIssues:oi,OIComments:oic,DCMI:dcmi,DCChecks:checks,PatchEvents:[],ActivityLog:[],NetPorts:[],Disks:[],Issues:issues,Comments:comments};
+const out={KBTypes:defaultKT(),ServerStatuses:defaultSS(),ActivityStatuses:defaultAS(),ActivityTypes:defaultAT(),BackupTypes:defaultBT(),Contacts:ctc,AssignGroups:agr,DCSSActivity:act,BackupJobs:bjobs,BackupAssign:bassign,ServerMI:server,ESXi:esxi,Storage:storage,Backup:backup,Datastores:dstores,Operators:operators,Environments:defaultEnvs(),DataCenters:defaultDCs(),RackList:defaultRacks(),DeviceTypes:dtypes,RackDevices:rdev,Links:links,KB:kb,KBComments:kbc,OpenIssues:oi,OIComments:oic,DCMI:dcmi,DCChecks:checks,PatchEvents:[],ActivityLog:[],NetPorts:[],Disks:[],Issues:issues,Comments:comments};
 if(!DEMO)Object.keys(out).forEach(k=>{out[k]=defaultsFor(k)});
 return out;
 }
@@ -595,6 +605,7 @@ function srvKind(r){const s=DB.ServerStatuses.find(x=>x.Name===r.Status);if(s)re
 function syncServerStatuses(){const col=SCHEMA.ServerMI.cols.find(c=>c.k==='Status');if(!col)return;const names=DB.ServerStatuses.filter(t=>t.Active!=='No').map(t=>String(t.Name));DB.ServerMI.forEach(a=>{const v=String(a.Status||'');if(v&&names.indexOf(v)<0)names.push(v)});col.o=names}
 function actionable(a){const s=DB.ActivityStatuses.find(x=>x.Name===a.Status);return !!s&&s.Actionable==='Yes'}
 function syncActivityStatuses(){const col=SCHEMA.DCSSActivity.cols.find(c=>c.k==='Status');if(!col)return;const names=DB.ActivityStatuses.filter(t=>t.Active!=='No').map(t=>String(t.Name));DB.DCSSActivity.forEach(a=>{const v=String(a.Status||'');if(v&&names.indexOf(v)<0)names.push(v)});col.o=names}
+function syncKBTypes(){const col=SCHEMA.KB.cols.find(c=>c.k==='Type');if(!col)return;const names=DB.KBTypes.filter(t=>t.Active!=='No').map(t=>String(t.Name));DB.KB.forEach(a=>{const v=String(a.Type||'');if(v&&names.indexOf(v)<0)names.push(v)});col.o=names;KB_TYPES.length=0;names.forEach(n=>KB_TYPES.push(n))}
 function syncActivityTypes(){const col=SCHEMA.DCSSActivity.cols.find(c=>c.k==='Type');if(!col)return;const names=DB.ActivityTypes.filter(t=>t.Active!=='No').map(t=>String(t.Name));DB.DCSSActivity.forEach(a=>{const v=String(a.Type||'');if(v&&names.indexOf(v)<0)names.push(v)});col.o=names}
 function syncBackupTypes(){const col=SCHEMA.BackupJobs.cols.find(c=>c.k==='Type');if(!col)return;const names=DB.BackupTypes.filter(t=>t.Active!=='No').map(t=>String(t.Name));DB.BackupJobs.forEach(j=>{const v=String(j.Type||'');if(v&&names.indexOf(v)<0)names.push(v)});col.o=names}
 function syncEnvOptions(){const col=SCHEMA.ServerMI.cols.find(c=>c.k==='Env');if(!col)return;const names=DB.Environments.filter(e=>e.Active!=='No').map(e=>String(e.Name));DB.ServerMI.forEach(r=>{const v=String(r.Env||'');if(v&&names.indexOf(v)<0)names.push(v)});col.o=names}
@@ -723,7 +734,7 @@ if(isNew&&sheet==='BackupJobs'){row.Type=(SCHEMA.BackupJobs.cols.find(c=>c.k==='
 if(isNew&&sheet==='BackupTypes'){row.Active='Yes';row['Counts as backup']='Yes';row.Cloud='No'}
 if(isNew&&sheet==='Contacts')row.Active='Yes'
 if(isNew&&sheet==='AssignGroups')row.Active='Yes'
-if(isNew&&sheet==='ActivityTypes')row.Active='Yes';
+if(isNew&&(sheet==='ActivityTypes'||sheet==='KBTypes'))row.Active='Yes';
 if(isNew&&sheet==='ServerStatuses'){row.Active='Yes';row.Meaning='Running'}
 if(isNew&&sheet==='ActivityStatuses'){row.Active='Yes';row.Actionable='No'}
 if(isNew&&sheet==='DCSSActivity'){row.Date=row.Date||ds(0);row.Status=(DB.ActivityStatuses.find(x=>x.Name==='Done'&&x.Active!=='No')?'Done':(SCHEMA.DCSSActivity.cols.find(c=>c.k==='Status').o||[''])[0]);row.Type=(SCHEMA.DCSSActivity.cols.find(c=>c.k==='Type').o||[''])[0];row.DC=RK.dc||''}
@@ -731,7 +742,7 @@ if(isNew&&sheet==='RackList'){row.DC=RK.dc||DCS[0];row['U count']=42}
 if(isNew&&sheet==='DeviceTypes'){row.Color='Slate';row['Default U']=1}
 if(isNew&&sheet==='OpenIssues'){row.Created=ds(0);row.Status='New';row.Priority='Medium';row.Type='Task'}
 if(isNew&&sheet==='KB'){row.Created=ds(0);row.Status='Draft';row.Version='1.0';row['Review due']=ds(180)}
-const name=isNew?'New '+(TV[sheet]?TV[sheet].add.replace(/^Add |^New /,''):sheet==='Operators'?'operator':sheet==='DeviceTypes'?'device type':sheet==='Environments'?'environment':sheet==='DataCenters'?'data center':sheet==='BackupJobs'?'backup job':sheet==='BackupTypes'?'backup category':sheet==='ActivityTypes'?'activity type':sheet==='ActivityStatuses'?'activity status':sheet==='ServerStatuses'?'server status':sheet==='RackDevices'?'device':sheet==='Links'?'link':sheet==='KB'?'article':'issue'):'Edit '+(row[S.key]||'');
+const name=isNew?'New '+(TV[sheet]?TV[sheet].add.replace(/^Add |^New /,''):sheet==='Operators'?'operator':sheet==='DeviceTypes'?'device type':sheet==='Environments'?'environment':sheet==='DataCenters'?'data center':sheet==='BackupJobs'?'backup job':sheet==='BackupTypes'?'backup category':sheet==='ActivityTypes'?'activity type':sheet==='KBTypes'?'article type':sheet==='ActivityStatuses'?'activity status':sheet==='ServerStatuses'?'server status':sheet==='RackDevices'?'device':sheet==='Links'?'link':sheet==='KB'?'article':'issue'):'Edit '+(row[S.key]||'');
 $('modal').innerHTML='<div class="modal" data-act="mbg"><form class="dlg" id="frm" role="dialog" aria-modal="true" aria-label="'+esc(name)+'" data-sheet="'+sheet+'" data-i="'+(isNew?'':i)+'"><h2>'+esc(name)+'</h2><div class="fgrid">'+formCols(sheet).map(c=>fieldHtml(sheet,c,row,(sheet==='Issues'&&c.k==='ID')||((sheet==='KB'||sheet==='OpenIssues')&&(c.k==='ID'||c.k==='Files')))).join('')+'</div>'+attBlock(sheet,row,isNew)+'<div id="ferr" class="note" style="color:var(--bad-fg)" role="alert"></div><div class="acts"><div>'+(isNew?'':'<button type="button" class="btn d" data-act="del">Delete</button>')+'</div><div class="tools"><button type="button" class="btn" data-act="mclose">Cancel</button><button type="submit" class="btn p">Save</button></div></div></form></div>';
 const f=$('frm').querySelector('input:not([readonly]),select');if(f)f.focus();
 }
@@ -745,6 +756,7 @@ if(miss.length){$('ferr').textContent='Fill in: '+miss.join(', ');return false}
 if(base['End date']&&base.Date&&String(base['End date'])<String(base.Date)){$('ferr').textContent='End date is before the start date';return false}
 if(sheet==='Environments'){const nm=String(base.Name),dup=DB.Environments.some((x,i)=>String(x.Name).toLowerCase()===nm.toLowerCase()&&(isNew||i!==+iStr));if(dup){$('ferr').textContent='This environment already exists';return false}}
 if(sheet==='DataCenters'){const nm=String(base.Name),dup=DB.DataCenters.some((x,i)=>String(x.Name).toLowerCase()===nm.toLowerCase()&&(isNew||i!==+iStr));if(dup){$('ferr').textContent='This data center already exists';return false}}
+if(sheet==='KBTypes'){const nm=String(base.Name),dup=DB.KBTypes.some((x,i)=>String(x.Name).toLowerCase()===nm.toLowerCase()&&(isNew||i!==+iStr));if(dup){$('ferr').textContent='This article type already exists';return false}}
 if(sheet==='ActivityTypes'){const nm=String(base.Name),dup=DB.ActivityTypes.some((x,i)=>String(x.Name).toLowerCase()===nm.toLowerCase()&&(isNew||i!==+iStr));if(dup){$('ferr').textContent='This activity type already exists';return false}}
 if(sheet==='BackupTypes'){const nm=String(base.Name),dup=DB.BackupTypes.some((x,i)=>String(x.Name).toLowerCase()===nm.toLowerCase()&&(isNew||i!==+iStr));if(dup){$('ferr').textContent='This category already exists';return false}}
 if(sheet==='ServerStatuses'){const nm=String(base.Name),dup=DB.ServerStatuses.some((x,i)=>String(x.Name).toLowerCase()===nm.toLowerCase()&&(isNew||i!==+iStr));if(dup){$('ferr').textContent='This status already exists';return false}}
@@ -759,6 +771,7 @@ base.Updated=ds(0);
 if(!isNew&&sheet==='RackList'){const o=DB.RackList[+iStr];if(o.DC!==base.DC||String(o.Rack)!==String(base.Rack))cascadeRack(o.DC,o.Rack,base.DC,base.Rack)}
 if(!isNew&&sheet==='ServerStatuses'){const o=DB.ServerStatuses[+iStr];if(o.Name!==base.Name)DB.ServerMI.forEach(a=>{if(a.Status===o.Name)a.Status=base.Name})}
 if(!isNew&&sheet==='ActivityStatuses'){const o=DB.ActivityStatuses[+iStr];if(o.Name!==base.Name)DB.DCSSActivity.forEach(a=>{if(a.Status===o.Name)a.Status=base.Name})}
+if(!isNew&&sheet==='KBTypes'){const o=DB.KBTypes[+iStr];if(o.Name!==base.Name)DB.KB.forEach(a=>{if(a.Type===o.Name)a.Type=base.Name})}
 if(!isNew&&sheet==='ActivityTypes'){const o=DB.ActivityTypes[+iStr];if(o.Name!==base.Name)DB.DCSSActivity.forEach(a=>{if(a.Type===o.Name)a.Type=base.Name})}
 if(!isNew&&sheet==='BackupTypes'){const o=DB.BackupTypes[+iStr];if(o.Name!==base.Name)DB.BackupJobs.forEach(j=>{if(j.Type===o.Name)j.Type=base.Name})}
 if(!isNew&&sheet==='AssignGroups'){const o=DB.AssignGroups[+iStr];if(o.Group!==base.Group){DB.Contacts.forEach(c=>{if(c['Assignment group']===o.Group)c['Assignment group']=base.Group});DB.DCSSActivity.forEach(c=>{if(c['Assignment group']===o.Group)c['Assignment group']=base.Group})}}
@@ -782,6 +795,7 @@ if(!btn.dataset.arm){btn.dataset.arm='1';btn.textContent='Click again to delete'
 const sheet=form.dataset.sheet,i=+form.dataset.i;const r=DB[sheet][i];
 if(sheet==='ServerStatuses'&&DB.ServerMI.some(a=>a.Status===r.Name)){btn.dataset.arm='';btn.textContent='Delete';$('ferr').textContent='Servers still use this status. Set it to inactive instead.';return}
 if(sheet==='ActivityStatuses'&&DB.DCSSActivity.some(a=>a.Status===r.Name)){btn.dataset.arm='';btn.textContent='Delete';$('ferr').textContent='Logged activities still use this status. Set it to inactive instead.';return}
+if(sheet==='KBTypes'&&DB.KB.some(a=>a.Type===r.Name)){btn.dataset.arm='';btn.textContent='Delete';$('ferr').textContent='Articles still use this type. Set it to inactive instead.';return}
 if(sheet==='ActivityTypes'&&DB.DCSSActivity.some(a=>a.Type===r.Name)){btn.dataset.arm='';btn.textContent='Delete';$('ferr').textContent='Logged activities still use this type. Set it to inactive instead.';return}
 if(sheet==='BackupTypes'&&DB.BackupJobs.some(j=>j.Type===r.Name)){btn.dataset.arm='';btn.textContent='Delete';$('ferr').textContent='Backup jobs still use this category. Change them first, or set the category to inactive.';return}
 if(sheet==='NetPorts')netUnlink(r);
@@ -860,8 +874,8 @@ Object.keys(TV).forEach(s=>{SCHEMA[s].cols.forEach(c=>{const sp=sm[s+'|'+c.k];if
 Object.keys(TV).forEach(s=>{const ord=[];TV[s].show.forEach(k=>{const sp=sm[s+'|'+k];const n=sp?parseInt(sp.Order):NaN;if(!isNaN(n))ord.push([n,k])});if(ord.length){ord.sort((a,b)=>a[0]-b[0]);const names=ord.map(o=>o[1]);TV[s].show=names.concat(TV[s].show.filter(k=>names.indexOf(k)<0))}});
 SHEETS.forEach(s=>{SCHEMA[s].cols.forEach(c=>{const sp=sm[s+'|'+c.k];if(!sp)return;if(sp.Label)c.label=String(sp.Label);if(CORE[s].has(c.k)&&yes(sp.Hidden)&&c.k!==SCHEMA[s].key)hideCol(s,c);if(CORE[s].has(c.k)&&sp.Required!==''&&sp.Required!=null){if(yes(sp.Required))c.req=1;else delete c.req}})});
 if(!found)return{ok:false,missing:missing};
-missing=missing.filter(x=>['BackupJobs','BackupAssign','Contacts','AssignGroups','DCSSActivity','PatchEvents','NetPorts','Disks','ActivityLog'].indexOf(x)<0);
-['Environments','DataCenters','BackupTypes','ActivityTypes','ActivityStatuses','ServerStatuses'].forEach(s=>{if(!wb.Sheets[s]){nd[s]=defaultsFor(s);missing=missing.filter(x=>x!==s)}});
+missing=missing.filter(x=>['BackupJobs','BackupAssign','Contacts','AssignGroups','DCSSActivity','PatchEvents','NetPorts','Disks','ActivityLog','KBTypes'].indexOf(x)<0);
+['Environments','DataCenters','BackupTypes','KBTypes','ActivityTypes','ActivityStatuses','ServerStatuses'].forEach(s=>{if(!wb.Sheets[s]){nd[s]=defaultsFor(s);missing=missing.filter(x=>x!==s)}});
 if(!wb.Sheets.RackList){missing=missing.filter(x=>x!=='RackList');if(wb.Sheets.DataCenters){nd.RackList=[];XLSX.utils.sheet_to_json(wb.Sheets.DataCenters,{defval:''}).forEach(r=>{const n=parseInt(r.Racks),u=parseInt(r['U per rack']);if(r.Name)nd.RackList=nd.RackList.concat(makeRacks(String(r.Name),n>=1?n:8,u>=1?u:42,'R',1,2))})}else nd.RackList=defaultRacks()}
 DB=nd;handle=info.handle||null;dirty=0;SNAP=snap();PENDLOG=[];
 META={stuff:META.stuff,source:info.name,fileName:info.name,loadedAt:nowStr(),fileModified:info.modified||null,savedAt:null,generated:info.generated||''};
@@ -1219,7 +1233,7 @@ detail='<div class="tools" style="justify-content:space-between"><div><span clas
 }
 return head('DC Open Issues','A small case tracker for the data centers, modelled on an ITLM portal: one case per issue, with comments, photos and status.','<button class="btn" data-act="cols" data-sheet="Issues">Columns</button><button class="btn p" data-act="isnew">+ New case</button>')
 +'<div class="kpis"><div class="kpi"><span>Open cases</span><b>'+openIssues().length+'</b><small>'+DB.Issues.filter(i=>i.Status==='New').length+' new</small></div><div class="kpi"><span>High or critical</span><b>'+DB.Issues.filter(i=>i.Status!=='Resolved'&&(i.Priority==='High'||i.Priority==='Critical')).length+'</b><small>open</small></div><div class="kpi"><span>Waiting</span><b>'+DB.Issues.filter(i=>i.Status==='Waiting').length+'</b><small>on vendor or other team</small></div><div class="kpi"><span>Resolved</span><b>'+DB.Issues.filter(i=>i.Status==='Resolved').length+'</b><small>in the log</small></div></div>'
-+'<div class="row" style="align-items:flex-start"><section class="card" style="flex:1 1 300px;max-width:420px"><div class="chips" style="margin-bottom:12px">'+['Open','New','In progress','Waiting','Resolved','All'].map(f=>'<button class="chip'+(IS.f===f?' on':'')+'" data-act="isf" data-v="'+f+'">'+f+'</button>').join('')+'</div><div style="display:flex;flex-direction:column;gap:8px">'+cases+'</div></section><section class="card" style="flex:2 1 460px">'+detail+'</section></div>';
++'<div class="row" style="align-items:flex-start"><section class="card" style="flex:1 1 300px;max-width:420px">'+fpanel([fgrp('Status',['Open','New','In progress','Waiting','Resolved','All'].map(f=>({v:f,n:f==='Open'?DB.Issues.filter(x=>x.Status!=='Resolved').length:f==='All'?DB.Issues.length:DB.Issues.filter(x=>x.Status===f).length,on:IS.f===f,act:'isf'})))])+'<div class="note" style="margin:12px 0 8px">'+list.length+' case'+(list.length===1?'':'s')+' shown</div><div style="display:flex;flex-direction:column;gap:8px">'+cases+'</div></section><section class="card" style="flex:2 1 460px">'+detail+'</section></div>';
 }
 function drawDraft(){const el=$('cm-pics');if(!el)return;el.innerHTML=DRAFT.pics.map((p,i)=>'<span style="position:relative"><img src="'+p+'" alt="Photo to attach"><button class="btn s" style="position:absolute;top:4px;right:4px;min-height:24px;padding:0 6px" data-act="rmpic" data-i="'+i+'" aria-label="Remove photo">×</button></span>').join('')}
 function shrink(file){return new Promise((res,rej)=>{const fr=new FileReader();fr.onload=()=>{const im=new Image();im.onload=()=>{const m=1000,s=Math.min(1,m/Math.max(im.width,im.height));const c=document.createElement('canvas');c.width=Math.max(1,Math.round(im.width*s));c.height=Math.max(1,Math.round(im.height*s));c.getContext('2d').drawImage(im,0,0,c.width,c.height);res(c.toDataURL('image/jpeg',0.8))};im.onerror=()=>rej(new Error('image'));im.src=fr.result};fr.onerror=()=>rej(new Error('read'));fr.readAsDataURL(file)})}
@@ -1314,13 +1328,15 @@ return '<div class="tools" style="justify-content:space-between"><div><span clas
 +(cm.length?cm.map((c,i)=>'<div class="cmt"><div><b>'+esc(c.Author)+'</b> <span class="badge '+cmCls(c.Type)+'">'+esc(c.Type)+'</span> <small>'+esc(c.Time)+'</small></div><div style="white-space:pre-wrap">'+esc(c.Text)+'</div>'+(c.Type==='Resolution'||c.Type==='Comment'?'<div style="margin-top:6px"><button class="btn s" data-act="kbres" data-ci="'+DB.KBComments.indexOf(c)+'">Use as resolution</button></div>':'')+'</div>').join(''):'<div class="note">No comments yet.</div>')
 +'<div class="cmt"><label class="note" for="kc-text">Add a comment</label><textarea class="inp" id="kc-text" rows="3" placeholder="Question, remark, proposed change or a working resolution"></textarea><div class="tools"><select class="inp" id="kc-type" style="width:auto" aria-label="Comment type">'+CM_TYPES.map(t=>'<option>'+t+'</option>').join('')+'</select><select class="inp" id="kc-author" style="width:auto" aria-label="Comment author">'+DB.Operators.filter(o=>o.Active!=='No').map(o=>'<option>'+esc(o.Name)+'</option>').concat(['<option>Team</option>']).join('')+'</select><button class="btn p" data-act="kbcomment">Add comment</button></div></div>';
 }
+function fgrp(label,items){return '<div class="fgp"><span class="fgl">'+esc(label)+'</span><div class="fgc">'+items.map(i=>'<button class="fc'+(i.on?' on':'')+'" data-act="'+i.act+'" '+(i.k?'data-k="'+i.k+'" ':'')+'data-v="'+esc(i.v)+'">'+esc(i.v)+(i.n==null?'':'<em>'+i.n+'</em>')+'</button>').join('')+'</div></div>'}
+function fpanel(gs){return '<div class="fpn">'+gs.join('')+'</div>'}
 function kbView(){
 if(!KS.sel||!DB.KB.some(r=>r.ID===KS.sel))KS.sel=(kbRows()[0]||DB.KB[0]||{}).ID||null;
 const od=DB.KB.filter(r=>{const d=daysTo(r['Review due']);return d!==null&&d<0}).length,ap=DB.KB.filter(r=>r.Status==='Approved').length;
 const chips=(arr,k)=>['All'].concat(arr).map(o=>'<button class="chip'+(KS[k]===o?' on':'')+'" data-act="kbf" data-k="'+k+'" data-v="'+esc(o)+'">'+esc(o)+'</button>').join('');
 return head('Knowledge base','Internal SOPs, how-tos, known issues and reference notes, with comments and resolutions. Files live in Stuff/KnowledgeBase/<article ID>/.','<button class="btn" data-act="cols" data-sheet="KB">Columns</button><button class="btn p" data-act="kbnew">+ New article</button>')
 +'<div class="kpis"><div class="kpi"><span>Articles</span><b>'+DB.KB.length+'</b><small>'+ap+' approved</small></div><div class="kpi"><span>SOPs</span><b>'+DB.KB.filter(r=>r.Type==='SOP').length+'</b><small>&nbsp;</small></div><div class="kpi"><span>Known issues</span><b>'+DB.KB.filter(r=>r.Type==='Known issue').length+'</b><small>'+DB.KB.filter(r=>r.Type==='Known issue'&&!r.Resolution).length+' without resolution</small></div><div class="kpi"><span>Review overdue</span><b>'+od+'</b><small class="'+(od?'w':'g')+'">'+(od?'Needs a review':'All reviewed in time')+'</small></div></div>'
-+'<div class="row" style="align-items:flex-start"><section class="card" style="flex:1 1 320px;max-width:440px"><input class="inp" id="kb-q" type="search" data-act="kbq" placeholder="Search title, tags, text" value="'+esc(KS.q)+'" aria-label="Search the knowledge base"><div class="chips" style="margin-top:10px">'+chips(KB_TYPES,'type')+'</div><div class="chips" style="margin-top:6px">'+chips(KB_STATUS,'status')+'</div><div id="kb-list" style="margin-top:6px">'+kbList()+'</div></section>'
++'<div class="row" style="align-items:flex-start"><section class="card" style="flex:1 1 320px;max-width:440px"><input class="inp" id="kb-q" type="search" data-act="kbq" placeholder="Search title, tags, text" value="'+esc(KS.q)+'" aria-label="Search the knowledge base">'+fpanel([fgrp('Type',['All'].concat(KB_TYPES).map(o=>({v:o,n:o==='All'?DB.KB.length:DB.KB.filter(r=>r.Type===o).length,on:KS.type===o,act:'kbf',k:'type'}))),fgrp('Status',['All'].concat(KB_STATUS).map(o=>({v:o,n:o==='All'?DB.KB.length:DB.KB.filter(r=>r.Status===o).length,on:KS.status===o,act:'kbf',k:'status'})))])+'<div id="kb-list" style="margin-top:6px">'+kbList()+'</div></section>'
 +'<section class="card" style="flex:2 1 520px" id="kb-detail">'+kbDetail()+'</section></div>';
 }
 async function kbAttach(files){
@@ -1374,7 +1390,7 @@ const op=DB.OpenIssues.filter(r=>!oiDone(r)),hi=op.filter(r=>r.Priority==='High'
 const chips=(arr,k)=>['All'].concat(arr).map(o=>'<button class="chip'+(OS[k]===o?' on':'')+'" data-act="oif" data-k="'+k+'" data-v="'+esc(o)+'">'+esc(o)+'</button>').join('');
 return head('Open Issues','Anything the team has to do or follow up: raise it here, comment, attach files and record the resolution. Files live in Stuff/OpenIssues/<issue ID>/.','<button class="btn" data-act="cols" data-sheet="OpenIssues">Columns</button><button class="btn p" data-act="oinew">+ Raise issue</button>')
 +'<div class="kpis"><div class="kpi"><span>Open</span><b>'+op.length+'</b><small>'+DB.OpenIssues.filter(oiDone).length+' resolved or closed</small></div><div class="kpi"><span>High or critical</span><b>'+hi+'</b><small class="'+(hi?'w':'g')+'">&nbsp;</small></div><div class="kpi"><span>Overdue</span><b>'+od+'</b><small class="'+(od?'w':'g')+'">'+(od?'Past the due date':'Nothing overdue')+'</small></div><div class="kpi"><span>Unassigned</span><b>'+un+'</b><small class="'+(un?'w':'g')+'">'+(un?'Needs an owner':'All assigned')+'</small></div></div>'
-+'<div class="row" style="align-items:flex-start"><section class="card" style="flex:1 1 320px;max-width:440px"><input class="inp" id="oi-q" type="search" data-act="oiq" placeholder="Search title, text, assignee" value="'+esc(OS.q)+'" aria-label="Search open issues"><div class="chips" style="margin-top:10px">'+['Open','All'].concat(OI_STATUS).map(o=>'<button class="chip'+(OS.status===o?' on':'')+'" data-act="oif" data-k="status" data-v="'+o+'">'+o+'</button>').join('')+'</div><div class="chips" style="margin-top:6px">'+chips(OI_PRIO,'prio')+'</div><div id="oi-list" style="margin-top:12px">'+oiList()+'</div></section>'
++'<div class="row" style="align-items:flex-start"><section class="card" style="flex:1 1 320px;max-width:440px"><input class="inp" id="oi-q" type="search" data-act="oiq" placeholder="Search title, text, assignee" value="'+esc(OS.q)+'" aria-label="Search open issues">'+fpanel([fgrp('Status',['Open','All'].concat(OI_STATUS).map(o=>({v:o,n:o==='Open'?op.length:o==='All'?DB.OpenIssues.length:DB.OpenIssues.filter(r=>r.Status===o).length,on:OS.status===o,act:'oif',k:'status'}))),fgrp('Priority',['All'].concat(OI_PRIO).map(o=>({v:o,n:o==='All'?DB.OpenIssues.length:DB.OpenIssues.filter(r=>r.Priority===o).length,on:OS.prio===o,act:'oif',k:'prio'})))])+'<div id="oi-list" style="margin-top:12px">'+oiList()+'</div></section>'
 +'<section class="card" style="flex:2 1 520px" id="oi-detail">'+oiDetail()+'</section></div>';
 }
 async function oiAttach(files){
@@ -2035,7 +2051,7 @@ return head('Settings','Lists used by the data entry forms. More settings will b
 +'</section>'
 +dcCard()
 +btCard()
-+atCard()
++atCard()+ktCard()
 +ssCard()
 +asCard()
 +agCard()
@@ -2094,6 +2110,12 @@ return '<section class="card" style="margin-top:16px"><div class="tools" style="
 +(DB.AssignGroups.length?'<div class="tw"><table><thead><tr><th>Group</th><th>Active</th><th>Used by</th><th></th></tr></thead><tbody>'+DB.AssignGroups.map((t,i)=>'<tr><td><b>'+esc(t.Group)+'</b></td><td>'+(t.Active==='No'?'<span class="badge b-off">Inactive</span>':'<span class="badge b-ok">Active</span>')+'</td><td class="mono">'+cnt(t.Group)+'</td><td>'+mvB('AssignGroups',i)+'<button class="btn s" data-act="edit" data-sheet="AssignGroups" data-i="'+i+'">Edit</button></td></tr>').join('')+'</tbody></table></div>':'<div class="empty">No groups yet.</div>')
 +'</section>';
 }
+function ktCard(){
+const cnt=n=>DB.KB.filter(a=>a.Type===n).length;
+return '<section class="card" style="margin-top:16px"><div class="tools" style="justify-content:space-between;margin-bottom:6px"><h2 style="margin:0">Knowledge base types</h2><span class="tools"><button class="btn" data-act="sortaz" data-sheet="KBTypes" title="Sort the list A to Z. The dropdown follows this order.">Sort A–Z</button><button class="btn p" data-act="ktadd">+ Add type</button></span></div>'
++'<p class="note" style="margin:0 0 12px">The document types of the Knowledge base (SOP, How-to, Known issue…). Set a type to inactive instead of deleting it, so old articles keep it. Renaming updates the articles.</p>'
++(DB.KBTypes.length?'<div class="tw"><table><thead><tr><th>Type</th><th>Status</th><th>Articles</th><th>Notes</th><th></th></tr></thead><tbody>'+DB.KBTypes.map((t,i)=>'<tr><td><b>'+esc(t.Name)+'</b></td><td><span class="badge '+(t.Active==='No'?'b-off':'b-ok')+'">'+(t.Active==='No'?'Inactive':'Active')+'</span></td><td class="mono">'+cnt(t.Name)+'</td><td style="white-space:normal">'+esc(t.Notes)+'</td><td>'+mvB('KBTypes',i)+'<button class="btn s" data-act="edit" data-sheet="KBTypes" data-i="'+i+'">Edit</button></td></tr>').join('')+'</tbody></table></div>':'<div class="empty">No types yet. Add at least one.</div>')
++'</section>'}
 function atCard(){
 const cnt=n=>DB.DCSSActivity.filter(a=>a.Type===n).length;
 return '<section class="card" style="margin-top:16px"><div class="tools" style="justify-content:space-between;margin-bottom:6px"><h2 style="margin:0">DCSS activity types</h2><button class="btn" data-act="sortaz" data-sheet="ActivityTypes" title="Sort the list A to Z. The dropdown follows this order.">Sort A–Z</button> <button class="btn p" data-act="atadd">+ Add type</button></div>'
@@ -2170,7 +2192,7 @@ return head('Stuff','Files from the Stuff folder and the links you go through on
 const VIEWDEF={overview:overview,calendar:calendarView,servermi:()=>tableView('ServerMI'),patching:patchView,patchevents:()=>tableView('PatchEvents'),activitylog:()=>tableView('ActivityLog'),ports:portsView,disks:disksView,netports:()=>tableView('NetPorts'),disklist:()=>tableView('Disks'),contacts:()=>tableView('Contacts'),agroups:()=>tableView('AssignGroups'),activity:()=>tableView('DCSSActivity'),backupjobs:bjView,esxi:()=>tableView('ESXi'),storage:()=>tableView('Storage'),backup:()=>tableView('Backup'),dcmi:()=>tableView('DCMI'),racks:racksView,checks:()=>tableView('DCChecks'),issues:issuesView,stuff:stuffView,kb:kbView,otherdevices:()=>tableView('RackDevices'),tracker:oiView,quality:qualityView,sources:sourcesView,datastores:()=>tableView('Datastores'),settings:settingsView};
 function route(){
 const id=(location.hash||'#overview').slice(1);CUR=VIEWDEF[id]?id:'overview';
-syncEnvOptions();syncBackupTypes();syncActivityTypes();syncActivityStatuses();syncServerStatuses();syncLayout();renderSide();renderPending();$('view').innerHTML=VIEWDEF[CUR]();
+syncEnvOptions();syncBackupTypes();syncActivityTypes();syncKBTypes();syncActivityStatuses();syncServerStatuses();syncLayout();renderSide();renderPending();$('view').innerHTML=VIEWDEF[CUR]();
 if(CUR==='issues'){drawDraft();loadPics()}
 }
 const ACT={
@@ -2206,6 +2228,7 @@ dtadd(){openForm('DeviceTypes',null)},
 envadd(){openForm('Environments',null)},
 btadd(){openForm('BackupTypes',null)},
 atadd(){openForm('ActivityTypes',null)},
+ktadd(){openForm('KBTypes',null)},
 asadd(){openForm('ActivityStatuses',null)},
 ssadd(){openForm('ServerStatuses',null)},
 agadd(){openForm('AssignGroups',null)},
