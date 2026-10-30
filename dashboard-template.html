@@ -296,8 +296,8 @@ const DT_COLORS={Cyan:'#1C7C94',Purple:'#7A4FBF',Pink:'#BE3F84',Gold:'#9A6B00',S
 /* ---------- schema (sheet = Excel sheet name; cols = Excel headers) ---------- */
 const sel=(k,o,req)=>({k,t:'sel',o,req});
 const SCHEMA={
-ServerMI:{key:'Hostname',label:'ServersMI',cols:[{k:'Hostname',req:1},{k:'FQDN'},{k:'vCenter name'},{k:'IP',req:1},{k:'OS'},sel('Platform',['Virtual','Physical']),sel('Env',['PROD','TEST','DEV','DR'],1),{k:'Role'},{k:'Cluster'},{k:'ESXi host'},{k:'vCPU',t:'num'},{k:'RAM GB',t:'num'},{k:'Disk GB',t:'num'},{k:'Owner',req:1},{k:'Backup'},{k:'Support end',t:'date'},sel('Status',['On','Off','Decom']),{k:'Last patched',t:'date'},{k:'Last patch CRQ'},{k:'FW patched',t:'date'},{k:'iLO URL'},{k:'Attachments',att:1},{k:'Notes',t:'area',w:1}]},
-ESXi:{key:'Hostname',label:'ESXi hosts',cols:[{k:'Hostname',req:1},sel('DC',DCS,1),sel('Rack',RACKS,1),{k:'U start',t:'num'},{k:'U size',t:'num'},{k:'Model'},{k:'Serial'},{k:'ESXi version'},{k:'vCenter'},{k:'Cluster'},{k:'CPU'},{k:'RAM GB',t:'num'},{k:'VMs',t:'num'},{k:'BMC IP'},{k:'iLO URL'},{k:'FW patched',t:'date'},{k:'Support end',t:'date'},sel('Status',['Active','Maintenance','Decom']),{k:'Enclosure'},{k:'Bay'},{k:'Last patched',t:'date'},{k:'Last patch CRQ'},{k:'Attachments',att:1},{k:'Notes',t:'area',w:1}]},
+ServerMI:{key:'Hostname',label:'ServersMI',cols:[{k:'Hostname',req:1},{k:'FQDN'},{k:'vCenter name'},{k:'IP',req:1},{k:'OS'},sel('Platform',['Virtual','Physical']),sel('Env',['PROD','TEST','DEV','DR'],1),{k:'Role'},{k:'Cluster'},{k:'ESXi host'},{k:'vCPU',t:'num'},{k:'RAM GB',t:'num'},{k:'Disk GB',t:'num'},{k:'Owner',req:1},{k:'Backup'},{k:'Support end',t:'date'},sel('Status',['On','Off','Decom']),{k:'Last patched',t:'date'},{k:'Last patch CRQ'},{k:'FW patched',t:'date'},{k:'iLO URL'},{k:'Blade',t:'chk',off:1,label:'Blade server'},{k:'Enclosure'},{k:'Bay'},{k:'Attachments',att:1},{k:'Notes',t:'area',w:1}]},
+ESXi:{key:'Hostname',label:'ESXi hosts',cols:[{k:'Hostname',req:1},sel('DC',DCS,1),sel('Rack',RACKS,1),{k:'U start',t:'num'},{k:'U size',t:'num'},{k:'Model'},{k:'Serial'},{k:'ESXi version'},{k:'vCenter'},{k:'Cluster'},{k:'CPU'},{k:'RAM GB',t:'num'},{k:'VMs',t:'num'},{k:'BMC IP'},{k:'iLO URL'},{k:'FW patched',t:'date'},{k:'Support end',t:'date'},sel('Status',['Active','Maintenance','Decom']),{k:'Blade',t:'chk',off:1,label:'Blade server'},{k:'Enclosure'},{k:'Bay'},{k:'Last patched',t:'date'},{k:'Last patch CRQ'},{k:'Attachments',att:1},{k:'Notes',t:'area',w:1}]},
 Storage:{key:'Array',label:'Storage',cols:[{k:'Array',req:1},sel('DC',DCS,1),sel('Rack',RACKS,1),{k:'U start',t:'num'},{k:'U size',t:'num'},{k:'Model'},{k:'Serial'},{k:'Firmware'},sel('Protocol',['FC','iSCSI','FC+iSCSI','NFS']),{k:'Raw TB',t:'num'},{k:'Usable TB',t:'num'},{k:'Used %',t:'num'},{k:'Controllers',t:'num'},{k:'iLO URL'},{k:'FW patched',t:'date'},{k:'Support end',t:'date'},sel('Status',['Active','Degraded','Decom']),{k:'Last patched',t:'date'},{k:'Last patch CRQ'},{k:'Attachments',att:1},{k:'Notes',t:'area',w:1}]},
 Backup:{key:'Device',label:'Backup',cols:[{k:'Device',req:1},sel('DC',DCS,1),sel('Rack',RACKS,1),{k:'U start',t:'num'},{k:'U size',t:'num'},sel('Type',['Appliance','Tape library','Repository server']),{k:'Model'},{k:'Software'},{k:'Capacity TB',t:'num'},{k:'Used %',t:'num'},{k:'Retention'},{k:'Serial'},{k:'iLO URL'},{k:'FW patched',t:'date'},{k:'Support end',t:'date'},sel('Status',['Active','Degraded','Decom']),{k:'Last patched',t:'date'},{k:'Last patch CRQ'},{k:'Attachments',att:1},{k:'Notes',t:'area',w:1}]},
 DCMI:{key:'Rack',label:'DCMI',cols:[sel('DC',DCS,1),sel('Rack',RACKS,1),{k:'Power kW',t:'num'},{k:'Limit kW',t:'num'},{k:'Inlet C',t:'num'},{k:'Humidity %',t:'num'},{k:'Reading time'},{k:'Notes',t:'area',w:1}]},
@@ -536,7 +536,8 @@ const actlog=[
 {Time:ds(-1)+' 16:40',User:'Operator 2',Action:'Deleted',Sheet:'ServersMI',Record:'old-test-09',Details:'',Updated:ds(-1)}];
 rdev.push({Name:'CS700-A',Type:'Blade enclosure',DC:'DC2A',Rack:'R04','U start':10,'U size':10,Model:'HPE CS700 (c7000)',Serial:'SN-CS7001','Support end':ds(500),Status:'Active','Bays across':8,'Bays down':2,Notes:'',Updated:ds(-5)});
 dtypes.push({Name:'Blade enclosure',Color:'Gold','Default U':10,Active:'Yes',Notes:'',Updated:ds(-20)});
-['blade-a01','blade-a02','blade-a03'].forEach((h,i)=>esxi.push({Hostname:h,DC:'DC2A',Rack:'R04',Model:'Blade (placeholder)',Serial:'SN-BL'+i,'ESXi version':'8.0 U3',vCenter:'vc-a.corp.example',Cluster:'CL-PROD-A',CPU:'2 × 16c','RAM GB':512,VMs:12+i,'BMC IP':'10.20.100.'+(31+i),'iLO URL':'https://ilo-'+h+'.corp.example','Support end':ds(700),Status:'Active',Enclosure:'CS700-A',Bay:String(i*2+1),Notes:'',Updated:ds(-3)}));
+['blade-a01','blade-a02','blade-a03'].forEach((h,i)=>esxi.push({Hostname:h,DC:'DC2A',Rack:'R04',Model:'Blade (placeholder)',Serial:'SN-BL'+i,'ESXi version':'8.0 U3',vCenter:'vc-a.corp.example',Cluster:'CL-PROD-A',CPU:'2 × 16c','RAM GB':512,VMs:12+i,'BMC IP':'10.20.100.'+(31+i),'iLO URL':'https://ilo-'+h+'.corp.example','Support end':ds(700),Status:'Active',Blade:'Yes',Enclosure:'CS700-A',Bay:String(i*2+1),Notes:'',Updated:ds(-3)}));
+['bl-sa-01','bl-sa-02'].forEach((h,i)=>server.push({Hostname:h,IP:'10.20.100.'+(41+i),OS:'Windows Server 2022',Platform:'Physical',Env:'PROD',Role:'Standalone blade (not ESXi)',Owner:'Team Infra',Status:'On','Support end':ds(700),Blade:'Yes',Enclosure:'CS700-A',Bay:String(7+i),Notes:'',Updated:ds(-2)}));
 const dcl=[];
 const dcB=(dc,n,k,x,y,w,h,rot,rk)=>dcl.push({DC:dc,Block:n,Kind:k,'X m':x,'Y m':y,'Width m':w,'Height m':h,Rotation:String(rot||0),Color:'',Rack:rk||'',Notes:'',Updated:ds(-4)});
 ['DC2A','DC1B'].forEach((dc,di)=>{dcB(dc,dc+' site','Zone',1,1,32,18);dcB(dc,dc+' site plan','Label',2,0.3,6,0.8);
@@ -551,7 +552,7 @@ return out;
 }
 
 /* ---------- state + persistence ---------- */
-const LS=DEMO?'infra-inventory-demo-v25':'infra-inventory-v1';
+const LS=DEMO?'infra-inventory-demo-v26':'infra-inventory-v1';
 let DB=null,META={source:DEMO?'Built-in demo data':'Not loaded yet',loadedAt:nowStr(),fileModified:null,savedAt:null},dirty=0,handle=null;
 function loadState(){
 let o=null;try{const r=localStorage.getItem(LS);if(r){o=JSON.parse(r);if(!(o&&o.DB&&o.DB.ServerMI))o=null}}catch(e){o=null}
@@ -764,7 +765,7 @@ return bulkBar(sheet)+'<table class="hasSel"><thead><tr><th class="selc"><input 
 function redrawTable(sheet){const el=$('tbl');if(el)el.innerHTML=tableHtml(sheet);const fs=$('fsum');if(fs)fs.innerHTML=fsummaryHtml(sheet)}
 
 /* ---------- edit form ---------- */
-function nameOpts(sheet,k){return sheet==='Contacts'&&k==='Assignment group'||sheet==='DCSSActivity'&&k==='Assignment group'?DB.AssignGroups.filter(o=>o.Active!=='No').map(o=>String(o.Group)):sheet==='AssignGroups'&&k==='Manager'?DB.Contacts.filter(o=>o.Active!=='No').map(o=>String(o.Name)):sheet==='ESXi'&&k==='Enclosure'?enclNames():(sheet==='Catalyst'&&(k==='Appliance'||k==='Replica appliance'))?DB.Backup.map(r=>String(r.Device)):(sheet==='Catalyst'&&k==='Replica store')||(sheet==='ReplJobs'&&(k==='Source store'||k==='Target store'))||(sheet==='BackupJobs'&&k==='Catalyst store')?DB.Catalyst.map(r=>String(r.Store)):(sheet==='NetPorts'&&(k==='Device'||k==='Remote device'))||(sheet==='Disks'&&k==='Device')?devList().map(d=>d.n):sheet==='DCSSActivity'&&k==='Performed by'?DB.Operators.filter(o=>o.Active!=='No').map(o=>String(o.Name)):null}
+function nameOpts(sheet,k){return sheet==='Contacts'&&k==='Assignment group'||sheet==='DCSSActivity'&&k==='Assignment group'?DB.AssignGroups.filter(o=>o.Active!=='No').map(o=>String(o.Group)):sheet==='AssignGroups'&&k==='Manager'?DB.Contacts.filter(o=>o.Active!=='No').map(o=>String(o.Name)):(sheet==='ESXi'||sheet==='ServerMI')&&k==='Enclosure'?enclNames():(sheet==='Catalyst'&&(k==='Appliance'||k==='Replica appliance'))?DB.Backup.map(r=>String(r.Device)):(sheet==='Catalyst'&&k==='Replica store')||(sheet==='ReplJobs'&&(k==='Source store'||k==='Target store'))||(sheet==='BackupJobs'&&k==='Catalyst store')?DB.Catalyst.map(r=>String(r.Store)):(sheet==='NetPorts'&&(k==='Device'||k==='Remote device'))||(sheet==='Disks'&&k==='Device')?devList().map(d=>d.n):sheet==='DCSSActivity'&&k==='Performed by'?DB.Operators.filter(o=>o.Active!=='No').map(o=>String(o.Name)):null}
 function fieldHtml(sheet,c,row,ro){
 const id='f-'+sheet+'-'+c.k.replace(/[^A-Za-z0-9]/g,'_');const v=row[c.k]==null?'':row[c.k];
 const cls=(c.req?'req':'')+(c.w?' wide':'')+(c.t==='area'?' wide':'');
@@ -772,7 +773,7 @@ if(c.t==='hosts')return hostPick(c,v);
 let inp;const nopts=nameOpts(sheet,c.k);
 if(nopts){const names=nopts.slice();if(v!==''&&names.indexOf(String(v))<0)names.push(String(v));inp='<select class="inp" id="'+id+'" name="'+esc(c.k)+'"><option value=""></option>'+names.map(o=>'<option'+(String(v)===o?' selected':'')+'>'+esc(o)+'</option>').join('')+'</select>'}
 else if((sheet==='DCChecks'&&c.k==='Checked by')||(sheet==='OpenIssues'&&(c.k==='Assignee'||c.k==='Raised by'))||(sheet==='RackDevices'&&c.k==='Type')){const names=(sheet==='RackDevices'?DB.DeviceTypes:DB.Operators).filter(o=>o.Active!=='No').map(o=>String(o.Name));if(v!==''&&names.indexOf(String(v))<0)names.push(String(v));inp='<select class="inp" id="'+id+'" name="'+esc(c.k)+'"><option value="">'+(names.length?'':(sheet==='RackDevices'?'Add device types in Settings first':'Add operators in Settings first'))+'</option>'+names.map(o=>'<option'+(String(v)===o?' selected':'')+'>'+esc(o)+'</option>').join('')+'</select>'}
-else if(c.t==='chk')return '<label class="chkrow" for="'+id+'"><input type="checkbox" id="'+id+'" name="'+esc(c.k)+'" value="Yes"'+(String(v)!=='No'?' checked':'')+'> '+esc(c.label||c.k)+'</label>';
+else if(c.t==='chk')return '<label class="chkrow" for="'+id+'"><input type="checkbox" id="'+id+'" name="'+esc(c.k)+'" value="Yes"'+((c.off?(String(v)==='Yes'||(c.k==='Blade'&&row&&row.Enclosure)):String(v)!=='No')?' checked':'')+'> '+esc(c.label||c.k)+'</label>';
 else if(c.t==='sel')inp='<select class="inp" id="'+id+'" name="'+esc(c.k)+'">'+'<option value=""></option>'+c.o.map(o=>'<option'+(String(v)===o?' selected':'')+'>'+esc(o)+'</option>').join('')+'</select>';
 else if(c.t==='area')inp='<textarea class="inp" rows="'+(c.k==='Notes'?7:3)+'" id="'+id+'" name="'+esc(c.k)+'">'+esc(v)+'</textarea>';
 else inp='<input class="inp" id="'+id+'" name="'+esc(c.k)+'" type="'+(c.t==='num'?'number':c.t==='date'?'date':'text')+'"'+(c.t==='num'?' step="any"':'')+' value="'+esc(v)+'"'+(ro?' readonly':'')+'>';
@@ -803,7 +804,7 @@ if(isNew&&sheet==='DeviceTypes'){row.Color='Slate';row['Default U']=1}
 if(isNew&&sheet==='OpenIssues'){row.Created=ds(0);row.Status='New';row.Priority='Medium';row.Type='Task'}
 if(isNew&&sheet==='KB'){row.Created=ds(0);row.Status='Draft';row.Version='1.0';row['Review due']=ds(180)}
 const name=isNew?'New '+(TV[sheet]?TV[sheet].add.replace(/^Add |^New /,''):sheet==='Operators'?'operator':sheet==='DeviceTypes'?'device type':sheet==='Environments'?'environment':sheet==='DataCenters'?'data center':sheet==='BackupJobs'?'backup job':sheet==='BackupTypes'?'backup category':sheet==='ActivityTypes'?'activity type':sheet==='KBTypes'?'article type':sheet==='ActivityStatuses'?'activity status':sheet==='ServerStatuses'?'server status':sheet==='RackDevices'?'device':sheet==='Links'?'link':sheet==='KB'?'article':'issue'):'Edit '+(row[S.key]||'');
-$('modal').innerHTML='<div class="modal" data-act="mbg"><form class="dlg" id="frm" role="dialog" aria-modal="true" aria-label="'+esc(name)+'" data-sheet="'+sheet+'" data-i="'+(isNew?'':i)+'"><h2>'+esc(name)+'</h2><div class="fgrid">'+formCols(sheet).map(c=>fieldHtml(sheet,c,row,(sheet==='Issues'&&c.k==='ID')||((sheet==='KB'||sheet==='OpenIssues')&&(c.k==='ID'||c.k==='Files')))).join('')+'</div>'+attBlock(sheet,row,isNew)+'<div id="ferr" class="note" style="color:var(--bad-fg)" role="alert"></div><div class="acts"><div>'+(isNew?'':'<button type="button" class="btn d" data-act="del">Delete</button>')+(!isNew&&sheet==='PatchEvents'&&row.Status!=='Done'?' <button type="button" class="btn" data-act="ptdone" data-i="'+i+'">Mark as done…</button>':'')+'</div><div class="tools"><button type="button" class="btn" data-act="mclose">Cancel</button><button type="submit" class="btn p">Save</button></div></div></form></div>';
+$('modal').innerHTML='<div class="modal" data-act="mbg"><form class="dlg" id="frm" role="dialog" aria-modal="true" aria-label="'+esc(name)+'" data-sheet="'+sheet+'" data-i="'+(isNew?'':i)+'"><h2>'+esc(name)+'</h2><div class="fgrid">'+formCols(sheet).map(c=>fieldHtml(sheet,c,row,(sheet==='Issues'&&c.k==='ID')||((sheet==='KB'||sheet==='OpenIssues')&&(c.k==='ID'||c.k==='Files')))).join('')+'</div>'+attBlock(sheet,row,isNew)+'<div id="ferr" class="note" style="color:var(--bad-fg)" role="alert"></div><div class="acts"><div>'+(isNew?'':'<button type="button" class="btn d" data-act="del">Delete</button>')+(!isNew&&sheet==='PatchEvents'&&row.Status!=='Done'?' <button type="button" class="btn" data-act="ptdone" data-i="'+i+'">Mark as done…</button>':'')+'</div><div class="tools"><button type="button" class="btn" data-act="mclose">Cancel</button><button type="submit" class="btn p">Save</button></div></div></form></div>';bladeSync($('frm'));
 const f=$('frm').querySelector('input:not([readonly]),select');if(f)f.focus();
 }
 function closeForm(){$('modal').innerHTML=''}
@@ -844,6 +845,7 @@ if(sheet==='Issues'&&!base.ID){const n=Math.max(0,...DB.Issues.map(x=>parseInt(S
 if(sheet==='OpenIssues'&&!base.ID){const n=Math.max(0,...DB.OpenIssues.map(x=>parseInt(String(x.ID).replace(/\D/g,''))||0))+1;base.ID='OI-'+String(n).padStart(4,'0')}
 if(sheet==='OpenIssues'){const dn=base.Status==='Resolved'||base.Status==='Closed';if(dn&&!base.Resolved)base.Resolved=ds(0);if(!dn)base.Resolved=''}
 if(sheet==='KB'&&!base.ID){const n=Math.max(0,...DB.KB.map(x=>parseInt(String(x.ID).replace(/\D/g,''))||0))+1;base.ID='KB-'+String(n).padStart(4,'0')}
+{const be=bladeCheck(sheet,base,isNew?-1:+iStr);if(be){$('ferr').textContent=be;return false}}
 if(sheet==='PatchEvents'&&String(base.Servers||'').trim()&&form.dataset.warned!=='1'){const sc=ptScan(base.Servers);if(sc.no.length){form.dataset.warned='1';$('ferr').textContent='Not found in the inventory: '+sc.no.slice(0,15).join(', ')+'. Fix the names, or save again to keep them as typed.';return false}}
 if(sheet==='PatchEvents'&&base.Status==='Done'&&base.CRQ&&String(base.Servers||'').trim()){const rs=ptApply(String(base.CRQ).trim(),String(base['End date']||base.Date).slice(0,10),/firmware/i.test(base.Notes||''),base.Servers,false);if(rs.n||rs.skip.length)setTimeout(()=>toast(ptMsg(rs,base.CRQ)),50)}
 if(sheet==='ReplJobs'){const ap=n=>{const s=DB.Catalyst.find(x=>x.Store===n);return s?s.Appliance:''};if(base['Source store']&&!base['Source appliance'])base['Source appliance']=ap(base['Source store']);if(base['Target store']&&!base['Target appliance'])base['Target appliance']=ap(base['Target store'])}
@@ -1251,7 +1253,7 @@ function valid(d){return !isNaN(d.u)&&!isNaN(d.sz)&&d.sz>=1&&d.u>=1&&d.u+d.sz-1<
 function overlaps(all){const hit=new Set(),pairs=[];const ok=all.filter(valid);for(let a=0;a<ok.length;a++)for(let b=a+1;b<ok.length;b++){const x=ok[a],y=ok[b];if(x.dc===y.dc&&x.rack===y.rack&&x.u<=y.u+y.sz-1&&y.u<=x.u+x.sz-1){hit.add(x.sheet+x.i);hit.add(y.sheet+y.i);pairs.push([x,y])}}return{hit:hit,pairs:pairs}}
 const RK={dc:'DC2A',sel:null};
 const TYPE_LABEL={esxi:'ESXi host',stor:'Storage array',back:'Backup device'};
-function devLabel(d){return d.t==='cust'?String(d.r.Type||'Other device'):TYPE_LABEL[d.t]}
+function devLabel(d){return d.t==='srv'?'Blade server':d.t==='cust'?String(d.r.Type||'Other device'):TYPE_LABEL[d.t]}
 function typeColor(name){const t=DB.DeviceTypes.find(x=>x.Name===name);return DT_COLORS[(t&&t.Color)||'Slate']||DT_COLORS.Slate}
 function devColor(d){return typeColor(d.r.Type)}
 function typeDefU(name){const t=DB.DeviceTypes.find(x=>x.Name===name),n=t?parseInt(t['Default U']):NaN;return n>=1?n:1}
@@ -1267,7 +1269,7 @@ ok.forEach(d=>{const ln=lane[devKey(d)];if(d.sheet==='RackDevices'&&isEncl(d.r))
 return '<div class="rack"><h3><span><span class="mono">'+rk+'</span> <button class="btn s" style="min-height:24px;padding:0 8px" data-act="rkplace" data-rack="'+rk+'" aria-label="Place a device in '+rk+'">+</button></span><span class="note">'+used+'/'+UH+' U'+(pr?' · '+load(pr)+'% power':'')+'</span></h3><div class="rk">'+cells+'</div>'+(bad.length?'<div class="note" style="color:var(--bad-fg);margin-top:4px">Not placed: '+bad.map(d=>esc(d.name)).join(', ')+'</div>':'')+(!ds_.length?'<div class="note" style="margin-top:4px">Empty rack. Click a U slot to place a device.</div>':'')+'</div>';
 }).join('');
 let detail='<p class="note">Select a device in a rack to see its details.</p>';
-if(RK.sel&&DB[RK.sel.sheet]&&DB[RK.sel.sheet][RK.sel.i]){const d=all.find(x=>x.sheet===RK.sel.sheet&&x.i===RK.sel.i)||bladeDev(RK.sel);if(d){const r=d.r;detail='<div class="tools" style="justify-content:space-between"><div><span class="badge b-info">'+devLabel(d)+'</span> <a href="#" class="mono" data-act="rkfull" data-sheet="'+d.sheet+'" data-i="'+d.i+'" style="font-size:16px;font-weight:600" title="Open the full details">'+esc(d.name)+'</a></div><div class="tools"><button class="btn s p" data-act="rkfull" data-sheet="'+d.sheet+'" data-i="'+d.i+'">Full details →</button><button class="btn s" data-act="edit" data-sheet="'+d.sheet+'" data-i="'+d.i+'">Edit</button><button class="btn s" data-act="rkmove" data-sheet="'+d.sheet+'" data-i="'+d.i+'">Move…</button><button class="btn s d" data-act="rkremove" data-sheet="'+d.sheet+'" data-i="'+d.i+'">Remove from rack</button></div></div><div class="fgrid" style="margin-top:12px">'+[['Location',d.blade?(d.dc+' · '+d.rack+' · '+r.Enclosure+' · bay '+r.Bay):d.dc+' · '+d.rack+' · U'+d.u+(d.sz>1?'–U'+(d.u+d.sz-1):'')],['Model',r.Model],['Serial',r.Serial],['Status',r.Status],['Support end',r['Support end']],['Detail',d.t==='esxi'?(r['ESXi version']+' · '+r.Cluster):d.t==='stor'?(r.Protocol+' · '+r['Usable TB']+' TB usable'):d.t==='cust'?(r.Type+(r.Model?' · '+r.Model:'')):(r.Type+' · '+r['Capacity TB']+' TB')]].map(x=>'<label>'+x[0]+'<span style="color:var(--ink);font-size:14px">'+esc(x[1]||'—')+'</span></label>').join('')+(r['iLO URL']?'<label>iLO<span style="font-size:14px">'+ilo(r['iLO URL'])+'</span></label>':'')+'</div>'+(d.t==='cust'&&isEncl(r)?enclDetail(r):'')}}
+if(RK.sel&&DB[RK.sel.sheet]&&DB[RK.sel.sheet][RK.sel.i]){const d=all.find(x=>x.sheet===RK.sel.sheet&&x.i===RK.sel.i)||bladeDev(RK.sel);if(d){const r=d.r;detail='<div class="tools" style="justify-content:space-between"><div><span class="badge b-info">'+devLabel(d)+'</span> <a href="#" class="mono" data-act="rkfull" data-sheet="'+d.sheet+'" data-i="'+d.i+'" style="font-size:16px;font-weight:600" title="Open the full details">'+esc(d.name)+'</a></div><div class="tools"><button class="btn s p" data-act="rkfull" data-sheet="'+d.sheet+'" data-i="'+d.i+'">Full details →</button><button class="btn s" data-act="edit" data-sheet="'+d.sheet+'" data-i="'+d.i+'">Edit</button>'+(d.blade?'<button class="btn s d" data-act="bprm" data-sheet="'+d.sheet+'" data-i="'+d.i+'">Remove from bay</button>':'<button class="btn s" data-act="rkmove" data-sheet="'+d.sheet+'" data-i="'+d.i+'">Move…</button><button class="btn s d" data-act="rkremove" data-sheet="'+d.sheet+'" data-i="'+d.i+'">Remove from rack</button>')+'</div></div><div class="fgrid" style="margin-top:12px">'+[['Location',d.blade?(d.dc+' · '+d.rack+' · '+r.Enclosure+' · bay '+r.Bay):d.dc+' · '+d.rack+' · U'+d.u+(d.sz>1?'–U'+(d.u+d.sz-1):'')],['Model',r.Model],['Serial',r.Serial],['Status',r.Status],['Support end',r['Support end']],['Detail',d.t==='srv'?(r.OS+' · '+r.Env):d.t==='esxi'?(r['ESXi version']+' · '+r.Cluster):d.t==='stor'?(r.Protocol+' · '+r['Usable TB']+' TB usable'):d.t==='cust'?(r.Type+(r.Model?' · '+r.Model:'')):(r.Type+' · '+r['Capacity TB']+' TB')]].map(x=>'<label>'+x[0]+'<span style="color:var(--ink);font-size:14px">'+esc(x[1]||'—')+'</span></label>').join('')+(r['iLO URL']?'<label>iLO<span style="font-size:14px">'+ilo(r['iLO URL'])+'</span></label>':'')+'</div>'+(d.t==='cust'&&isEncl(r)?enclDetail(r):'')}}
 const used=all.filter(d=>d.dc===RK.dc&&valid(d)).reduce((s,d)=>s+d.sz,0);
 const un=unplaced();
 const unHtml='<section class="card"><h2>Unplaced devices</h2>'+(un.length?'<div class="tw"><table><thead><tr><th>Device</th><th>Type</th><th>DC</th><th></th></tr></thead><tbody>'+un.map(d=>'<tr><td class="mono">'+esc(d.name)+'</td><td>'+devLabel(d)+'</td><td>'+esc(d.dc||'—')+'</td><td><button class="btn s" data-act="rkmove" data-sheet="'+d.sheet+'" data-i="'+d.i+'">Place…</button></td></tr>').join('')+'</tbody></table></div>':'<p class="note" style="margin:0">Every device in the inventory has a position.</p>')+'</section>';
@@ -1993,20 +1995,43 @@ function isEncl(r){return parseInt(r['Bays across'])>=1&&parseInt(r['Bays down']
 function enclNames(){return DB.RackDevices.filter(isEncl).map(r=>String(r.Name))}
 function inEncl(r){return !!r.Enclosure&&enclNames().indexOf(String(r.Enclosure))>=0}
 function bayList(v){return String(v==null?'':v).split(/[,;+ ]+/).map(x=>parseInt(x)).filter(x=>x>=1)}
-function bladeAt(enc,n){for(let i=0;i<DB.ESXi.length;i++){const h=DB.ESXi[i];if(h.Enclosure===enc&&bayList(h.Bay).indexOf(n)>=0)return i}return -1}
-function bladeDev(sel){if(!sel||sel.sheet!=='ESXi')return null;const r=DB.ESXi[sel.i];if(!r||!inEncl(r))return null;return{sheet:'ESXi',i:sel.i,name:r.Hostname,t:'esxi',dc:r.DC,rack:r.Rack,u:NaN,sz:NaN,r:r,blade:1}}
+const BSRC=['ESXi','ServerMI'];
+function isBlade(r){return r.Blade==='Yes'||inEncl(r)}
+function bladeAt(enc,n){for(const sh of BSRC)for(let i=0;i<DB[sh].length;i++){const h=DB[sh][i];if(h.Enclosure===enc&&bayList(h.Bay).indexOf(n)>=0)return{sheet:sh,i:i,r:h}}return null}
+function bladeDev(sel){if(!sel||BSRC.indexOf(sel.sheet)<0)return null;const r=DB[sel.sheet][sel.i];if(!r||!inEncl(r))return null;const e=DB.RackDevices.find(x=>x.Name===r.Enclosure)||{};return{sheet:sel.sheet,i:sel.i,name:r.Hostname,t:sel.sheet==='ESXi'?'esxi':'srv',dc:r.DC||e.DC,rack:r.Rack||e.Rack,u:NaN,sz:NaN,r:r,blade:1}}
+function bladeCheck(sheet,base,self){if(BSRC.indexOf(sheet)<0)return '';
+const enc=String(base.Enclosure||'').trim(),bay=String(base.Bay||'').trim(),bl=base.Blade==='Yes';
+if(!bl&&(enc||bay))return 'Only blade servers can be placed in an enclosure. Tick “Blade server”, or clear Enclosure and Bay.';
+if(!enc&&!bay)return '';
+const e=DB.RackDevices.find(x=>x.Name===enc&&isEncl(x));if(!e)return 'Choose an existing blade enclosure (Rack layout → Add blade enclosure).';
+const N=parseInt(e['Bays across'])*parseInt(e['Bays down']),bays=bayList(bay);
+if(!bays.length)return 'Enter the bay number (1–'+N+') for '+enc;
+if(bays.some(n=>n>N))return enc+' has bays 1–'+N;
+for(const sh of BSRC)for(let i=0;i<DB[sh].length;i++){if(sh===sheet&&i===self)continue;const h=DB[sh][i];if(h.Enclosure===enc){const c=bayList(h.Bay).filter(n=>bays.indexOf(n)>=0);if(c.length)return 'Bay '+c[0]+' of '+enc+' is already used by '+h.Hostname}}
+return ''}
+function bladeSync(f){if(!f||!f.elements||!f.elements.Blade||BSRC.indexOf(f.dataset.sheet)<0)return;const on=f.elements.Blade.checked;['Enclosure','Bay'].forEach(k=>{const e=f.elements[k];if(e){e.disabled=!on;if(!on)e.value=''}})}
+function bladeFree(){const o=[];BSRC.forEach(sh=>DB[sh].forEach((r,i)=>{if(isBlade(r)&&!inEncl(r))o.push({sheet:sh,i:i,r:r})}));return o}
+function openBayPick(enc,n){const e=DB.RackDevices.find(x=>x.Name===enc)||{},L=bladeFree();BP={enc:enc,n:n};
+$('modal').innerHTML='<div class="modal" data-act="mbg"><div class="dlg" role="dialog" aria-modal="true" aria-label="Put a blade into bay '+n+'" style="width:min(520px,100%)"><h2>'+esc(enc)+' · bay '+n+'</h2>'
++(L.length?'<label for="bp-sel">Blade to put in this bay<select class="inp" id="bp-sel">'+L.map((x,j)=>'<option value="'+j+'">'+esc(x.r.Hostname)+' · '+(x.sheet==='ESXi'?'ESXi host':'server')+'</option>').join('')+'</select></label><p class="note" style="margin:6px 0 0">Only hosts and servers marked “Blade server” are offered. Tick Blade on a host or server to make it appear here.</p>':'<p class="note">No unassigned blades yet. Tick “Blade server” on an existing ESXi host or server (Edit), or create a new blade below.</p>')
++'<div id="bp-err" class="note" style="color:var(--bad-fg)" role="alert"></div><div class="acts"><div class="tools"><button class="btn" data-act="bpnew" data-s="ESXi">New ESXi blade…</button><button class="btn" data-act="bpnew" data-s="ServerMI">New standalone blade server…</button></div><div class="tools"><button class="btn" data-act="mclose">Cancel</button>'+(L.length?'<button class="btn p" data-act="bpgo">Put in bay '+n+'</button>':'')+'</div></div></div></div>';BPL=L}
+let BP=null,BPL=[];
 function enclCell(d,UH,hit,ln){
 const r=d.r,A=parseInt(r['Bays across']),D=parseInt(r['Bays down']);let b='';
-for(let n=1;n<=A*D;n++){const hi=bladeAt(r.Name,n),h=hi>=0?DB.ESXi[hi]:null;b+='<button class="bay'+(h?' on':'')+'" data-act="rkbay" data-enc="'+esc(r.Name)+'" data-b="'+n+'" title="'+esc('Bay '+n+': '+(h?h.Hostname:'empty — click to add a host'))+'">'+(h?'':n)+'</button>'}
+for(let n=1;n<=A*D;n++){const hh=bladeAt(r.Name,n),h=hh?hh.r:null;b+='<button class="bay'+(h?' on':'')+'" data-act="rkbay" data-enc="'+esc(r.Name)+'" data-b="'+n+'" title="'+esc('Bay '+n+': '+(h?h.Hostname:'empty — click to put a blade in'))+'">'+(h?'':n)+'</button>'}
 return '<div class="dev encl'+(hit?' hit':'')+'" style="grid-row:'+(UH+2-d.u-d.sz)+' / span '+d.sz+';background:'+devColor(d)+(ln===undefined?'':';width:50%;justify-self:'+(ln?'end':'start'))+'" data-act="rkdev" data-sheet="'+d.sheet+'" data-i="'+d.i+'" title="'+esc(d.name)+' · U'+d.u+(d.sz>1?'–U'+(d.u+d.sz-1):'')+'"><span class="en">'+esc(d.name)+'</span><div class="bays" style="--a:'+A+';--d:'+D+'">'+b+'</div></div>'}
 function enclDetail(r){
 const A=parseInt(r['Bays across']),D=parseInt(r['Bays down']);let rows='';
-for(let n=1;n<=A*D;n++){const hi=bladeAt(r.Name,n);rows+='<tr><td class="mono">'+n+'</td><td>'+(hi>=0?'<a href="#" data-act="rkbay" data-enc="'+esc(r.Name)+'" data-b="'+n+'">'+esc(DB.ESXi[hi].Hostname)+'</a>':'<span class="note" style="margin:0">empty</span>')+'</td></tr>'}
-return '<h3 style="font-size:14px;margin:14px 0 6px">Bays ('+A+' across × '+D+' down)</h3><div class="tw"><table><thead><tr><th>Bay</th><th>Host</th></tr></thead><tbody>'+rows+'</tbody></table></div>'}
+for(let n=1;n<=A*D;n++){const hh=bladeAt(r.Name,n);rows+='<tr><td class="mono">'+n+'</td><td>'+(hh?'<a href="#" data-act="rkbay" data-enc="'+esc(r.Name)+'" data-b="'+n+'">'+esc(hh.r.Hostname)+'</a> <span class="note">'+(hh.sheet==='ESXi'?'ESXi host':'server')+'</span>':'<span class="note" style="margin:0">empty</span>')+'</td><td style="text-align:right">'+(hh?'<button class="btn s" data-act="bprm" data-sheet="'+hh.sheet+'" data-i="'+hh.i+'">Remove from bay</button>':'<button class="btn s" data-act="rkbay" data-enc="'+esc(r.Name)+'" data-b="'+n+'">Put a blade here…</button>')+'</td></tr>'}
+return '<h3 style="font-size:14px;margin:14px 0 6px">Bays ('+A+' across × '+D+' down)</h3><div class="tw"><table><thead><tr><th>Bay</th><th>Blade</th><th></th></tr></thead><tbody>'+rows+'</tbody></table></div>'}
 const ENCLACT={
-rkbay(el){const enc=el.dataset.enc,n=+el.dataset.b,hi=bladeAt(enc,n);
-if(hi>=0){RK.sel={sheet:'ESXi',i:hi};route();return}
-const e=DB.RackDevices.find(x=>x.Name===enc)||{};openForm('ESXi',null,{Enclosure:enc,Bay:String(n),DC:e.DC||RK.dc,Rack:e.Rack||''})},
+rkbay(el,e){const enc=el.dataset.enc,n=+el.dataset.b,hh=bladeAt(enc,n);
+if(hh){RK.sel={sheet:hh.sheet,i:hh.i};route();return}openBayPick(enc,n)},
+bpgo(){const x=BPL[+$('bp-sel').value];if(!x)return;const e=DB.RackDevices.find(y=>y.Name===BP.enc)||{};const t=Object.assign({},x.r,{Enclosure:BP.enc,Bay:String(BP.n),Blade:'Yes'});if(x.sheet==='ESXi'){t.DC=e.DC||t.DC;t.Rack=e.Rack||t.Rack}
+const er=bladeCheck(x.sheet,t,x.i);if(er){$('bp-err').textContent=er;return}
+Object.assign(x.r,t);x.r.Updated=ds(0);RK.sel={sheet:x.sheet,i:x.i};closeForm();changed();route();toast(x.r.Hostname+' put in '+BP.enc+', bay '+BP.n)},
+bpnew(el){const e=DB.RackDevices.find(x=>x.Name===BP.enc)||{},s=el.dataset.s;openForm(s,null,s==='ESXi'?{Blade:'Yes',Enclosure:BP.enc,Bay:String(BP.n),DC:e.DC||RK.dc,Rack:e.Rack||''}:{Blade:'Yes',Platform:'Physical',Enclosure:BP.enc,Bay:String(BP.n)})},
+bprm(el){const r=DB[el.dataset.sheet][+el.dataset.i];if(!r)return;r.Enclosure='';r.Bay='';r.Updated=ds(0);if(RK.sel&&RK.sel.sheet===el.dataset.sheet&&RK.sel.i===+el.dataset.i)RK.sel=null;changed();route();toast(r.Hostname+' removed from the enclosure')},
 rkencl(){if(!DB.DeviceTypes.some(t=>t.Name==='Blade enclosure'))DB.DeviceTypes.push({Name:'Blade enclosure',Color:'Gold','Default U':10,Active:'Yes',Notes:'Blade chassis with bays, e.g. HPE CS700 / c7000',Updated:ds(0)});
 openForm('RackDevices',null,{Name:'',Type:'Blade enclosure',DC:RK.dc,Model:'HPE CS700 (c7000)','U size':10,'Bays across':8,'Bays down':2})}};
 /* ---------- Activity log (who changed what, written to the workbook on every save) ---------- */
@@ -2128,6 +2153,108 @@ dcpdup(){const r=DB.DCLayout[DPS.sel];if(!r)return;const c=Object.assign({},r,{B
 dcpdel(el){if(!el.dataset.arm){el.dataset.arm='1';el.textContent='Click again to delete';return}DB.DCLayout.splice(DPS.sel,1);DPS.sel=null;changed();dcpFull()},
 dcpsel0(){DPS.sel=null;dcpFull()},
 dcpzoom(el){DPS.z=Math.max(.5,Math.min(2.5,Math.round((DPS.z+(+el.dataset.d)*.25)*100)/100));route()}};
+/* ---------- Settings: sort & clean up sheet data, with consistency check and undo ---------- */
+const SRT={sheet:'ServerMI',k1:'',d1:1,k2:'',d2:1,trim:false,empty:false},SUNDO={};
+const sName=s=>(TV[s]&&TV[s].title)||s;
+function sCols(s){return SCHEMA[s].cols.map(c=>c.k).filter(k=>k!=='Attachments'&&k.charAt(0)!=='@')}
+function sCmp(k1,d1,k2,d2){const f=(a,b,k,d)=>{const x=String(a[k]==null?'':a[k]).trim(),y=String(b[k]==null?'':b[k]).trim();if(!x&&!y)return 0;if(!x)return 1;if(!y)return -1;return d*x.localeCompare(y,undefined,{numeric:true,sensitivity:'base'})};return (a,b)=>(k1?f(a,b,k1,d1):0)||(k2?f(a,b,k2,d2):0)}
+function sSig(rows){return rows.map(r=>JSON.stringify(r)).sort()}
+function sQual(){try{const o={};quality().forEach(q=>o[q.id]=q.count);return o}catch(e){return null}}
+function sBlank(r){return Object.keys(r).every(k=>String(r[k]==null?'':r[k]).trim()==='')}
+/* links between sheets: every cell token that equals a key value of another sheet, counted per source column and target sheet */
+function sLinks(){const keys={};SHEETS.forEach(sh=>{const k=SCHEMA[sh].key;if(!k)return;DB[sh].forEach(r=>{const v=String(r[k]==null?'':r[k]).trim().toLowerCase();if(v.length>1){(keys[v]=keys[v]||new Set()).add(sh)}})});
+const out={};SHEETS.forEach(sh=>{const cols=sCols(sh);DB[sh].forEach(r=>cols.forEach(c=>{const raw=r[c];if(raw==null||raw==='')return;String(raw).split(/[\n,;]+/).forEach(t=>{const v=t.trim().toLowerCase();const hit=v.length>1&&keys[v];if(hit)hit.forEach(tg=>{if(tg!==sh){const id=sName(sh)+' · '+c+' → '+sName(tg);out[id]=(out[id]||0)+1}})})}))});return out}
+function sPages(){const o={},keep=CUR;Object.keys(VIEWDEF).forEach(id=>{try{CUR=id;o[id]=String(VIEWDEF[id]()).replace(/<[^>]*>/g,' ').replace(/[,;·|]/g,' ').split(/\s+/).filter(Boolean).sort().join(' ')}catch(e){o[id]=null}});CUR=keep;return o}
+function sRun(commit){const s=SRT.sheet,objs=DB[s].slice(),vals=objs.map(o=>Object.assign({},o)),lk0=sLinks(),pg0=sPages(),q0=sQual();
+let trimmed=0,dropped=0,list=objs.map((o,i)=>({o:o,i:i,v:Object.assign({},vals[i])}));
+if(SRT.trim)list.forEach(x=>Object.keys(x.v).forEach(k=>{if(typeof x.v[k]==='string'&&x.v[k]!==x.v[k].trim()){x.v[k]=x.v[k].trim();trimmed++}}));
+if(SRT.empty){const n=list.length;list=list.filter(x=>!sBlank(x.v));dropped=n-list.length}
+if(SRT.k1||SRT.k2){const c=sCmp(SRT.k1,SRT.d1,SRT.k2,SRT.d2);list.sort((a,b)=>c(a.v,b.v)||a.i-b.i)}
+const before=vals.map(v=>Object.assign({},v));
+list.forEach(x=>{Object.keys(x.o).forEach(k=>delete x.o[k]);Object.assign(x.o,x.v)});DB[s].splice(0,DB[s].length,...list.map(x=>x.o));
+const after=DB[s].map(r=>Object.assign({},r)),lk1=sLinks(),pg1=sPages(),q1=sQual(),pure=!trimmed&&!dropped,ck=[];
+ck.push([before.length-dropped===after.length,'Row count: '+before.length+' before, '+after.length+' after'+(dropped?' ('+dropped+' empty rows removed)':'')]);
+const tr=r=>{const o={};Object.keys(r).forEach(k=>o[k]=typeof r[k]==='string'&&SRT.trim?r[k].trim():r[k]);return o};
+const exp=before.filter(r=>!(SRT.empty&&sBlank(tr(r)))).map(tr),same=JSON.stringify(sSig(exp))===JSON.stringify(sSig(after));
+ck.push([same,same?'Every row is still present with identical content'+(trimmed?' ('+trimmed+' cells trimmed)':''):'Row content differs']);
+const kk=a=>{const t=new Set();a.forEach(r=>Object.keys(r).forEach(k=>t.add(k)));return [...t].sort().join('|')};ck.push([kk(before)===kk(after),'Columns unchanged']);
+const key=SCHEMA[s].key;if(key){const dup=l=>{const m={};let d=0;l.forEach(r=>{const v=String(r[key]||'').trim().toLowerCase();if(!v)return;if(m[v])d++;m[v]=1});return d};const d0=dup(before),d1=dup(after);ck.push([d1<=d0,'Duplicate '+key+' values: '+d0+' before, '+d1+' after'])}
+const ids=Object.keys(Object.assign({},lk0,lk1)),badL=ids.filter(i=>pure?(lk0[i]||0)!==(lk1[i]||0):(lk1[i]||0)<(lk0[i]||0)),tot=ids.reduce((a,i)=>a+(lk0[i]||0),0);
+ck.push([!badL.length,badL.length?'Links between sheets changed: '+badL.slice(0,4).join('; '):'Links between sheets intact: '+tot+' references across '+ids.length+' columns resolve exactly as before'+(pure?'':' (or better)')]);
+const cntOf=t=>t===null?-1:t.split(' ').length,np=Object.keys(pg0).filter(i=>pg0[i]!==null).length,badP=Object.keys(pg0).filter(i=>pg0[i]!==null&&cntOf(pg0[i])!==cntOf(pg1[i])),difP=Object.keys(pg0).filter(i=>pg0[i]!==null&&pg0[i]!==pg1[i]);
+ck.push([pure?!badP.length:true,pure?(badP.length?'Pages show different amounts of data: '+badP.slice(0,5).join(', '):'All '+np+' pages show the same data as before'+(difP.length?' ('+difP.length+' list the same items in a different order or cut-off)':'')):'Pages are re-rendered after clean-up ('+difP.length+' of '+np+' changed, expected for trim/remove)']);
+if(q0&&q1){const bd=Object.keys(q0).filter(k=>q0[k]!==q1[k]);ck.push([pure?!bd.length:true,bd.length?'Data-quality results changed: '+bd.join(', ')+(pure?'':' (expected for clean-up)'):'Data-quality results unchanged'])}
+const sample={old:before.slice(0,8),nw:after.slice(0,8)},ok=ck.every(c=>c[0]);
+if(!(commit&&ok)){DB[s].splice(0,DB[s].length,...objs);objs.forEach((o,i)=>{Object.keys(o).forEach(k=>delete o[k]);Object.assign(o,vals[i])})}
+else{SUNDO[s]={objs:objs,vals:vals};RK.sel=null;DPS.sel=null;closeForm()}
+return {ck:ck,ok:ok,sample:sample}}
+function sUndo(s){const u=SUNDO[s];if(!u)return;DB[s].splice(0,DB[s].length,...u.objs);u.objs.forEach((o,i)=>{Object.keys(o).forEach(k=>delete o[k]);Object.assign(o,u.vals[i])});delete SUNDO[s];RK.sel=null;DPS.sel=null}
+function sortCard(){const s=SRT.sheet,cols=sCols(s),opt=(sel,all)=>(all?'<option value="">(none)</option>':'')+cols.map(c=>'<option'+(c===sel?' selected':'')+'>'+esc(c)+'</option>').join('');
+if(cols.indexOf(SRT.k1)<0)SRT.k1='';if(cols.indexOf(SRT.k2)<0)SRT.k2='';
+const dir=(k,d)=>'<select class="inp" data-act="srtf" data-f="'+k+'" aria-label="Direction"><option value="1"'+(d===1?' selected':'')+'>A → Z</option><option value="-1"'+(d===-1?' selected':'')+'>Z → A</option></select>';
+return '<section class="card" style="margin-top:16px"><div class="tools" style="justify-content:space-between;margin-bottom:6px"><h2 style="margin:0">Sort &amp; clean up data</h2></div>'
++'<p class="note" style="margin:0 0 12px">Reorders the rows stored in a sheet (what you see first in the Excel file). Before anything is applied the dashboard does a trial run and checks that no row is lost or changed, the links between sheets (servers ↔ backup jobs, racks, hosts, ports …) resolve exactly as before, every page shows the same data and the data-quality results did not move. If a check fails nothing is changed. The last sort of each sheet can be undone until you reload.</p>'
++'<div class="fgrid"><label class="wide">Sheet<select class="inp" data-act="srtf" data-f="sheet">'+SHEETS.map(x=>'<option value="'+x+'"'+(x===s?' selected':'')+'>'+esc(sName(x))+' ('+DB[x].length+')</option>').join('')+'</select></label>'
++'<label>Sort by<select class="inp" data-act="srtf" data-f="k1">'+opt(SRT.k1,true)+'</select></label><label>Direction'+dir('d1',SRT.d1)+'</label>'
++'<label>Then by<select class="inp" data-act="srtf" data-f="k2">'+opt(SRT.k2,true)+'</select></label><label>Direction'+dir('d2',SRT.d2)+'</label></div>'
++'<label class="chkrow" style="margin-top:6px"><input type="checkbox" data-act="srtf" data-f="trim"'+(SRT.trim?' checked':'')+'> Trim leading and trailing spaces in all cells</label><label class="chkrow"><input type="checkbox" data-act="srtf" data-f="empty"'+(SRT.empty?' checked':'')+'> Remove rows that are completely empty</label>'
++'<div class="tools" style="margin-top:10px"><button class="btn p" data-act="srtprev">Check and preview</button>'+(SUNDO[s]?'<button class="btn" data-act="srtundo">Undo last sort of this sheet</button>':'')+'</div><div id="srt-out" style="margin-top:10px"></div>'+ucCard()+'</section>'}
+function sPreview(){const s=SRT.sheet;if(!SRT.k1&&!SRT.k2&&!SRT.trim&&!SRT.empty){$('srt-out').innerHTML='<p class="note">Choose a column to sort by, or tick a clean-up option.</p>';return}
+const r=sRun(false),show=SRT.k1||SRT.k2||'',kc=SCHEMA[s].key||sCols(s)[0],cs=[kc].concat(show&&show!==kc?[show]:[]);
+const tbl=l=>'<table><tbody>'+l.map(x=>'<tr>'+cs.map(c=>'<td>'+esc(x[c])+'</td>').join('')+'</tr>').join('')+'</tbody></table>';
+$('srt-out').innerHTML='<div>'+r.ck.map(c=>'<div>'+(c[0]?'<span class="badge b-ok">OK</span>':'<span class="badge b-bad">Failed</span>')+' '+esc(c[1])+'</div>').join('')+'</div>'
++'<div class="row" style="gap:16px;margin-top:8px;flex-wrap:wrap"><div class="tw" style="flex:1 1 220px"><b class="note">Now (first 8)</b>'+tbl(r.sample.old)+'</div><div class="tw" style="flex:1 1 220px"><b class="note">After (first 8)</b>'+tbl(r.sample.nw)+'</div></div>'
++'<div class="tools" style="margin-top:10px"><button class="btn p" data-act="srtgo"'+(r.ok?'':' disabled')+'>Apply to '+esc(sName(s))+'</button></div>'}
+const SRTACT={
+srtprev(){sPreview()},
+srtgo(){const r=sRun(true);if(r.ok){changed();route();toast(sName(SRT.sheet)+': rows sorted and checked')}else{$('srt-out').insertAdjacentHTML('afterbegin','<div class="badge b-bad">A check failed, nothing was changed</div>')}},
+srtundo(){if(!SUNDO[SRT.sheet])return;sUndo(SRT.sheet);changed();route();toast('Previous order restored')}};
+
+/* ---------- unused (completely empty) columns: remove custom ones, hide built-in ones ---------- */
+const UCF={core:false,sel:{}},UCUNDO=[];
+let SRC_TXT=null;
+function ucMentions(k){if(SRC_TXT==null){const sc=[...document.scripts].filter(x=>!x.src).map(x=>x.textContent).join('\n');SRC_TXT=sc}let n=0,i=-1;const q=["'"+k+"'",'"'+k+'"'];q.forEach(t=>{i=-1;while((i=SRC_TXT.indexOf(t,i+1))>=0)n++});return n}
+function ucList(){const out=[];SHEETS.forEach(s=>{const S=SCHEMA[s];if(!DB[s].length)return;S.cols.forEach(c=>{if(c.hidden||c.att||c.computed||c.k===S.key||c.req)return;if(!c.custom&&!UCF.core)return;if(TV[s]&&TV[s].filter===c.k)return;if(DB[s].every(r=>String(r[c.k]==null?'':r[c.k]).trim()===''))out.push({s:s,k:c.k,custom:!!c.custom})})});return out}
+function ucTrial(sel,commit){const lk0=sLinks(),pg0=sPages(),q0=sQual(),ck=[],snap=[];
+const rowsSig=(s,k)=>JSON.stringify(DB[s].map(r=>{const o=Object.assign({},r);delete o[k];return o}));
+const pre={};sel.forEach(x=>pre[x.s+'|'+x.k]=rowsSig(x.s,x.k));
+const blank=sel.every(x=>DB[x.s].every(r=>String(r[x.k]==null?'':r[x.k]).trim()===''));
+sel.forEach(x=>{const S=SCHEMA[x.s],c=S.cols.find(y=>y.k===x.k),t=TV[x.s];snap.push({s:x.s,k:x.k,c:c,idx:S.cols.indexOf(c),show:t?t.show.slice():null,had:DB[x.s].map(r=>x.k in r),ui:UI[x.s]?{sk:UI[x.s].sk,fl:UI[x.s].fl.slice()}:null,hid:!!c.hidden,req:c.req,reqWas:c.reqWas})});
+const restore=()=>{snap.slice().reverse().forEach(z=>{const S=SCHEMA[z.s];if(S.cols.indexOf(z.c)<0)S.cols.splice(Math.min(z.idx,S.cols.length),0,z.c);if(z.hid)z.c.hidden=1;else delete z.c.hidden;if(z.req)z.c.req=z.req;else delete z.c.req;if(z.reqWas)z.c.reqWas=z.reqWas;else delete z.c.reqWas;if(TV[z.s]&&z.show)TV[z.s].show=z.show.slice();if(UI[z.s]&&z.ui){UI[z.s].sk=z.ui.sk;UI[z.s].fl=z.ui.fl}DB[z.s].forEach((r,i)=>{if(z.had[i]&&!(z.k in r))r[z.k]=''});});rebuildHead()};
+ck.push([blank,blank?'All '+sel.length+' selected columns are empty in every row':'A selected column contains data. Nothing will be changed']);
+if(blank){sel.forEach(x=>{const S=SCHEMA[x.s],c=S.cols.find(y=>y.k===x.k);
+if(x.custom){S.cols=S.cols.filter(y=>y.k!==x.k);if(TV[x.s])TV[x.s].show=TV[x.s].show.filter(y=>y!==x.k);DB[x.s].forEach(r=>{delete r[x.k]})}
+else{hideCol(x.s,c)}
+if(UI[x.s]){if(UI[x.s].sk===x.k)UI[x.s].sk=TV[x.s]?TV[x.s].show[0]:null;UI[x.s].fl=UI[x.s].fl.filter(f=>f.k!==x.k)}});rebuildHead();
+const rowsOk=sel.every(x=>pre[x.s+'|'+x.k]===rowsSig(x.s,x.k));ck.push([rowsOk,rowsOk?'All other data in those sheets is identical':'Other data changed']);
+const hd=sel.every(x=>x.custom?HEAD[x.s].indexOf(x.k)<0:true)&&sel.every(x=>formCols(x.s).every(c=>c.k!==x.k));ck.push([hd,'Forms, tables and the Excel header no longer contain the column'+(sel.some(x=>!x.custom)?' (built-in ones are hidden, data and header kept)':'')]);
+const lk1=sLinks(),ids=Object.keys(Object.assign({},lk0,lk1)),bad=ids.filter(i=>(lk0[i]||0)!==(lk1[i]||0));
+ck.push([!bad.length,bad.length?'Links between sheets changed: '+bad.slice(0,3).join('; '):'Links between sheets intact: '+ids.reduce((a,i)=>a+(lk0[i]||0),0)+' references resolve exactly as before']);
+const pg1=sPages(),words=new Set();sel.forEach(x=>{const c=snap.find(z=>z.s===x.s&&z.k===x.k).c;(String(x.k)+' '+(c.label||'')).split(/[\s,;·|]+/).forEach(w=>w&&words.add(w))});words.add('(custom)');
+const cnt=t=>{const m={};(t||'').split(' ').forEach(w=>{if(w)m[w]=(m[w]||0)+1});return m};let badP=[];
+Object.keys(pg0).forEach(id=>{if(pg0[id]===null||id==='settings')return;const stat=id==='quality'||id==='sources',num=w=>stat&&/^[\d.,%]+$/.test(w),a=cnt(pg0[id]),b=cnt(pg1[id]);let added=0,lost=0;Object.keys(b).forEach(w=>{if((b[w]||0)>(a[w]||0)&&!num(w))added++});Object.keys(a).forEach(w=>{if((a[w]||0)>(b[w]||0)&&!words.has(w)&&!num(w))lost++});if(added||lost){const ex=[];Object.keys(b).forEach(w=>{if((b[w]||0)>(a[w]||0)&&!num(w))ex.push('+'+w)});Object.keys(a).forEach(w=>{if((a[w]||0)>(b[w]||0)&&!words.has(w)&&!num(w))ex.push('-'+w)});badP.push(id+' ['+ex.slice(0,6).join(' ')+']')}});
+ck.push([!badP.length,badP.length?'These pages lost something other than the column header: '+badP.slice(0,5).join(', '):'All pages show the same data, only the empty column is gone (counts of columns and completeness percentages on the Data quality and Data sources pages move, as expected)']);
+const q1=sQual();if(q0&&q1){const bd=Object.keys(q0).filter(k=>q0[k]!==q1[k]);ck.push([!bd.length,bd.length?'Data-quality results changed: '+bd.join(', '):'Data-quality results unchanged'])}}
+const ok=ck.every(c=>c[0]);
+if(commit&&ok){UCUNDO.push(snap);saveSchemaMeta();return {ck:ck,ok:ok,snap:snap,commit:true}}
+restore();return {ck:ck,ok:ok}}
+function ucCard(){const L=ucList(),key=x=>x.s+'|'+x.k;
+return '<div style="border-top:1px solid var(--line2);margin-top:18px;padding-top:14px"><h2 style="margin:0 0 6px;font-size:1.05em">Unused columns</h2><p class="note" style="margin:0 0 10px">Lists columns that are empty in every row. Custom columns you added are removed. Built-in columns are only hidden (data and Excel header are kept, you can restore them under Columns), because pages in the dashboard may read them. Key and required columns are never offered. Everything goes through the same trial run: links between sheets, all pages and data-quality results must stay identical.</p>'
++'<label class="chkrow"><input type="checkbox" data-act="ucopt"'+(UCF.core?' checked':'')+'> Also list built-in columns</label>'
++(L.length?'<div class="tw" style="margin-top:8px;max-height:320px"><table><thead><tr><th></th><th>Sheet</th><th>Column</th><th>Kind</th><th>Action</th></tr></thead><tbody>'+L.map(x=>'<tr><td><input type="checkbox" data-act="ucsel" data-k="'+esc(key(x))+'" aria-label="Select '+esc(x.k)+'"'+(UCF.sel[key(x)]?' checked':'')+'></td><td>'+esc(sName(x.s))+'</td><td><b>'+esc(x.k)+'</b></td><td>'+(x.custom?'<span class="badge b-info">custom</span>':'<span class="badge b-off">built-in · named '+ucMentions(x.k)+'× in the dashboard code</span>')+'</td><td>'+(x.custom?'Remove':'Hide')+'</td></tr>').join('')+'</tbody></table></div>'
++'<div class="tools" style="margin-top:10px"><button class="btn p" data-act="ucprev">Check selected columns</button>'+(UCUNDO.length?'<button class="btn" data-act="ucundo">Undo last removal</button>':'')+'</div>':'<p class="note" style="margin-top:8px">No empty columns found'+(UCF.core?'.':' among your custom columns. Tick the box above to include built-in columns.')+'</p>'+(UCUNDO.length?'<div class="tools"><button class="btn" data-act="ucundo">Undo last removal</button></div>':''))
++'<div id="uc-out" style="margin-top:10px"></div></div>'}
+function ucSel(){const L=ucList();return L.filter(x=>UCF.sel[x.s+'|'+x.k])}
+const UCACT={
+ucopt(el){UCF.core=el.checked;const y=window.scrollY;route();window.scrollTo(0,y)},
+ucsel(el){UCF.sel[el.dataset.k]=el.checked},
+ucprev(){const sel=ucSel();if(!sel.length){$('uc-out').innerHTML='<p class="note">Tick the columns first.</p>';return}const r=ucTrial(sel,false);
+$('uc-out').innerHTML=r.ck.map(c=>'<div>'+(c[0]?'<span class="badge b-ok">OK</span>':'<span class="badge b-bad">Failed</span>')+' '+esc(c[1])+'</div>').join('')+'<div class="tools" style="margin-top:10px"><button class="btn p" data-act="ucgo"'+(r.ok?'':' disabled')+'>Apply to '+sel.length+' column'+(sel.length===1?'':'s')+'</button></div>'},
+ucgo(){const sel=ucSel(),r=ucTrial(sel,true);if(r.ok){UCF.sel={};changed();route();toast(sel.length+' column'+(sel.length===1?'':'s')+' removed or hidden, all checks passed')}else $('uc-out').insertAdjacentHTML('afterbegin','<div class="badge b-bad">A check failed, nothing was changed</div>')},
+ucundo(){const snap=UCUNDO.pop();if(!snap)return;snap.slice().reverse().forEach(z=>{const S=SCHEMA[z.s];if(S.cols.indexOf(z.c)<0)S.cols.splice(Math.min(z.idx,S.cols.length),0,z.c);if(z.hid)z.c.hidden=1;else delete z.c.hidden;if(z.req)z.c.req=z.req;else delete z.c.req;if(z.reqWas)z.c.reqWas=z.reqWas;else delete z.c.reqWas;if(TV[z.s]&&z.show)TV[z.s].show=z.show.slice();DB[z.s].forEach((r,i)=>{if(z.had[i]&&!(z.k in r))r[z.k]=''})});rebuildHead();saveSchemaMeta();changed();route();toast('Columns restored')}};
+Object.assign(SRTACT,UCACT);
+
+function srtField(el){const f=el.dataset.f;if(f==='trim'||f==='empty')SRT[f]=el.checked;else if(f==='d1'||f==='d2')SRT[f]=parseInt(el.value);else SRT[f]=el.value;if(f==='sheet'){SRT.k1='';SRT.k2=''}const y=window.scrollY;route();window.scrollTo(0,y)}
 
 /* ---------- data quality (computed from the data) ---------- */
 function sevN(s){return s==='high'?0:s==='medium'?1:2}
@@ -2266,7 +2393,7 @@ return head('Settings','Lists used by the data entry forms. More settings will b
 +'</section>'
 +dcCard()
 +btCard()
-+atCard()+ktCard()
++atCard()+ktCard()+sortCard()
 +ssCard()
 +asCard()
 +agCard()
@@ -2535,7 +2662,7 @@ const fallback=()=>{const r=document.createRange();r.selectNodeContents(node);co
 if(navigator.clipboard&&navigator.clipboard.writeText)navigator.clipboard.writeText(t).then(()=>toast('Copied'),fallback);else fallback();
 }
 };
-Object.assign(ACT,CALACT,PORTACT,ENCLACT,LOGACT,HPACT,DCPACT);
+Object.assign(ACT,CALACT,PORTACT,ENCLACT,LOGACT,HPACT,DCPACT,SRTACT);
 document.addEventListener('click',e=>{const el=e.target.closest('[data-act]');if(!el)return;if(el.tagName==='A'&&el.getAttribute('href')==='#')e.preventDefault();const f=ACT[el.dataset.act];if(f)f(el,e)});
 document.addEventListener('submit',e=>{if(e.target.id!=='frm')return;e.preventDefault();const sheet=e.target.dataset.sheet;const r=submitForm(e.target);if(r&&sheet==='Issues'&&r.ID){IS.sel=r.ID;route()}});
 document.addEventListener('input',e=>{const el=e.target,a=el.dataset&&el.dataset.act;if(a==='pvq'){PV.q=el.value;const p=el.selectionStart;route();const n=document.querySelector('[data-act=pvq]');if(n){n.focus();try{n.setSelectionRange(p,p)}catch(x){}}}else if(a==='oiq'){OS.q=el.value;const l=$('oi-list');if(l)l.innerHTML=oiList()}else if(a==='bjq'){BJ.q=el.value;const l=$('bj-list');if(l)l.innerHTML=bjServerTable()}else if(a==='bjmq'){const q=el.value.toLowerCase();document.querySelectorAll('.bjrow').forEach(r=>{r.style.display=r.dataset.t.indexOf(q)>=0?'':'none'})}else if(a==='pbprev'){ptPreview()}else if(a==='pq'){PT.q=el.value;const l=$('pt-list');if(l)l.innerHTML=patchTable()}else if(a==='kbq'){KS.q=el.value;const l=$('kb-list');if(l)l.innerHTML=kbList()}else if(a==='q'){uiOf(el.dataset.sheet).q=el.value;redrawTable(el.dataset.sheet)}else if(a==='fval'||a==='fval2'){const s=el.dataset.sheet,f=uiOf(s).fl[+el.dataset.fi];if(f){f[a==='fval'?'v':'v2']=el.value;redrawTable(s)}}});
@@ -2544,9 +2671,11 @@ const el=e.target;
 if(el.dataset&&el.dataset.act==='devsel'){const o=el.dataset.v==='ports'?PV:DV;o[el.dataset.f]=el.dataset.f==='per'?+el.value:el.value;route();return}
 if(el.dataset&&el.dataset.act==='caljumpx'){calJump(el);return}
 if(el.classList&&el.classList.contains('hpc')){hpSync(el);return}
+if(el.dataset&&el.dataset.act==='srtf'){srtField(el);return}
 if(el.dataset&&el.dataset.act==='dcpf'){dcpField(el);return}
 if(el.dataset&&el.dataset.act==='dcpopt'){if(el.dataset.o==='heat')DPS.heat=el.checked;else DPS.snap=parseFloat(el.value);dcpFull();return}
 if(el.dataset&&el.dataset.act==='pdprev'){ptdPrev();return}
+if(el.name==='Blade'&&el.form&&el.form.id==='frm'){bladeSync(el.form);return}
 if(el.id==='csv-sep'){META.csvSep=el.value;persist();return}
 if(el.dataset&&el.dataset.act==='bscol'){bsRender(el.dataset.sheet);return}
 if(el.id==='pl-dc'){$('pl-rack').innerHTML=dcRacks(el.value).map(x=>'<option>'+esc(x)+'</option>').join('');return}
