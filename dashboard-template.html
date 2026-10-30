@@ -234,6 +234,17 @@ pre{margin:0;padding:12px;background:var(--surface2);border:1px solid var(--line
 .encl .bays{flex:1;display:grid;grid-template-columns:repeat(var(--a),minmax(0,1fr));grid-template-rows:repeat(var(--d),minmax(0,1fr));gap:2px}
 .bay{border:0;border-radius:2px;background:rgba(0,0,0,.28);color:rgba(255,255,255,.7);font-size:8px;padding:0;min-width:0;min-height:0;cursor:pointer}
 .bay.on{background:#1f9d6b;color:#fff}.bay:hover{outline:1px solid #fff}
+.calgrid.big .cd{min-height:104px}.calgrid.big .cd.out{background:var(--surface2);opacity:.55;cursor:pointer;border-color:var(--line2)}
+.ce.full{white-space:normal;font-size:12px;padding:4px 6px;margin-bottom:4px;text-decoration:none}.ce.full small{display:block;opacity:.85;font-size:11px}
+a.ce{text-decoration:none;cursor:pointer}a.btn{text-decoration:none;color:var(--ink)}
+.weekgrid{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:8px}
+.weekgrid .wd{border:1px solid var(--line);border-radius:10px;padding:8px;display:flex;flex-direction:column;gap:2px;min-width:0;background:var(--surface2)}
+.weekgrid.tall .wd{min-height:260px}
+.wd.today{border-color:var(--accent);box-shadow:inset 0 0 0 1px var(--accent)}
+.wh{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:6px;color:var(--muted);font-size:12px;text-transform:uppercase;letter-spacing:.06em}.wh b{font-size:18px;color:var(--ink)}
+.agd{border-top:1px solid var(--line2);padding:10px 0}.agd:first-child{border-top:0}.agh{margin-bottom:4px}
+@media(max-width:900px){.weekgrid{grid-template-columns:1fr}.weekgrid.tall .wd{min-height:0}}
+.ce.cont{opacity:.72}
 </style>
 <div class="app">
 <aside class="side" aria-label="Navigation">
@@ -279,9 +290,10 @@ Storage:{key:'Array',label:'Storage',cols:[{k:'Array',req:1},sel('DC',DCS,1),sel
 Backup:{key:'Device',label:'Backup',cols:[{k:'Device',req:1},sel('DC',DCS,1),sel('Rack',RACKS,1),{k:'U start',t:'num'},{k:'U size',t:'num'},sel('Type',['Appliance','Tape library','Repository server']),{k:'Model'},{k:'Software'},{k:'Capacity TB',t:'num'},{k:'Used %',t:'num'},{k:'Retention'},{k:'Serial'},{k:'iLO URL'},{k:'FW patched',t:'date'},{k:'Support end',t:'date'},sel('Status',['Active','Degraded','Decom']),{k:'Attachments',att:1},{k:'Notes',t:'area',w:1}]},
 DCMI:{key:'Rack',label:'DCMI',cols:[sel('DC',DCS,1),sel('Rack',RACKS,1),{k:'Power kW',t:'num'},{k:'Limit kW',t:'num'},{k:'Inlet C',t:'num'},{k:'Humidity %',t:'num'},{k:'Reading time'},{k:'Notes',t:'area',w:1}]},
 DCChecks:{key:'Date',label:'DC Checks',cols:[{k:'Date',t:'date',req:1},sel('DC',DCS,1),{k:'Checked by',req:1},{k:'Temp C',t:'num'},{k:'Humidity %',t:'num'},sel('UPS',['OK','Warn','Fault']),sel('Cooling',['OK','Warn','Fault']),sel('Power',['OK','Warn','Fault']),sel('Fire/Leak',['OK','Alarm']),sel('Doors',['OK','Issue']),sel('Result',['OK','Issue'],1),{k:'Notes',t:'area',w:1},{k:'In calendar',t:'chk'}]},
-PatchEvents:{key:'ID',label:'Patching events',cols:[{k:'ID'},{k:'Date',t:'date',req:1},{k:'Title',req:1,w:1},{k:'CRQ'},sel('Status',['Planned','In progress','Done','Cancelled'],1),{k:'Servers',t:'area',w:1},{k:'Notes',t:'area',w:1},{k:'In calendar',t:'chk'},{k:'Attachments',att:1}]},
+PatchEvents:{key:'ID',label:'Patching events',cols:[{k:'ID'},{k:'Date',t:'date',req:1},{k:'End date',t:'date'},{k:'Title',req:1,w:1},{k:'CRQ'},sel('Status',['Planned','In progress','Done','Cancelled'],1),{k:'Servers',t:'area',w:1},{k:'Notes',t:'area',w:1},{k:'In calendar',t:'chk'},{k:'Attachments',att:1}]},
 NetPorts:{key:'Device',label:'Ports',cols:[{k:'Device',req:1},{k:'Port',req:1},sel('Kind',['RJ45','SFP','SFP+','SFP28','QSFP+','QSFP28','FC','iLO / BMC','Management','Console','Power','Other']),{k:'Speed'},sel('State',['Free','Connected','Reserved','Down']),{k:'Remote device'},{k:'Remote port'},{k:'Cable'},{k:'VLAN / purpose'},{k:'Notes',t:'area',w:1}]},
 Disks:{key:'Device',label:'Disks',cols:[{k:'Device',req:1},{k:'Slot',req:1},sel('Type',['HDD','SSD','NVMe','NL-SAS','Tape','Other']),{k:'Size TB',t:'num'},sel('State',['OK','Spare','Predictive fail','Failed','Empty']),{k:'Model'},{k:'Serial'},{k:'Group / pool'},{k:'Notes',t:'area',w:1}]},
+ActivityLog:{key:'Time',label:'Activity log',cols:[{k:'Time',req:1},{k:'User'},sel('Action',['Added','Changed','Deleted','Saved','Note']),{k:'Sheet'},{k:'Record'},{k:'Details',t:'area',w:1}]},
 Issues:{key:'ID',label:'DC Open Issues',cols:[{k:'ID'},{k:'Title',req:1,w:1},sel('DC',DCS,1),sel('Rack',['—'].concat(RACKS)),sel('Priority',['Low','Medium','High','Critical']),sel('Status',['New','In progress','Waiting','Resolved']),{k:'Assignee'},{k:'Created',t:'date'},{k:'Description',t:'area',w:1}]},
 Datastores:{key:'Datastore',label:'Datastores',cols:[{k:'Datastore',req:1},sel('DC',DCS,1),{k:'vCenter'},{k:'Cluster'},sel('Type',['VMFS6','VMFS5','NFS','vSAN']),{k:'NAA ID'},{k:'LUN ID'},{k:'Capacity TB',t:'num'},{k:'Free TB',t:'num'},{k:'Used %',t:'num'},{k:'Provisioned TB',t:'num'},{k:'VMs',t:'num'},{k:'Hosts',t:'num'},{k:'vCenter read'},{k:'Array'},{k:'Array volume'},{k:'Array LUN ID'},{k:'Array NAA'},{k:'Array size TB',t:'num'},{k:'Array read'},{k:'Notes',t:'area',w:1}]},
 Links:{key:'Name',label:'Links',cols:[{k:'Name',req:1},{k:'URL',req:1},{k:'Category'},{k:'Notes',t:'area',w:1}]},
@@ -295,7 +307,7 @@ ActivityTypes:{key:'Name',label:'Activity types',cols:[{k:'Name',req:1},sel('Act
 BackupTypes:{key:'Name',label:'Backup job categories',cols:[{k:'Name',req:1},sel('Counts as backup',['Yes','No'],1),sel('Cloud',['Yes','No'],1),sel('Active',['Yes','No'],1),{k:'Notes',t:'area',w:1}]},
 Contacts:{key:'Name',label:'Contacts',cols:[{k:'Name',req:1},{k:'Company / team'},{k:'Role'},{k:'Email'},{k:'Phone'},{k:'Mobile'},{k:'Assignment group'},sel('Active',['Yes','No'],1),{k:'Notes',t:'area',w:1}]},
 AssignGroups:{key:'Group',label:'Assignment groups',cols:[{k:'Group',req:1},{k:'Description',w:1},{k:'Manager'},{k:'Email / DL'},{k:'Phone / on-call'},{k:'Support hours'},{k:'Queue / tool'},{k:'Escalation',w:1},sel('Active',['Yes','No'],1),{k:'Notes',t:'area',w:1}]},
-DCSSActivity:{key:'ID',label:'DCSS Activity',cols:[{k:'ID'},{k:'Date',t:'date',req:1},{k:'Title',req:1,w:1},sel('Type',['Change','Maintenance','Incident','Installation','Audit','Visit','Other'],1),sel('DC',DCS,1),{k:'Performed by'},{k:'Assignment group'},{k:'Ticket / ref'},sel('Status',['Planned','In progress','Done','Cancelled'],1),{k:'Details',t:'area'},{k:'Outcome / lessons',t:'area'},{k:'In calendar',t:'chk'},{k:'Attachments',att:1}]},
+DCSSActivity:{key:'ID',label:'DCSS Activity',cols:[{k:'ID'},{k:'Date',t:'date',req:1},{k:'End date',t:'date'},{k:'Title',req:1,w:1},sel('Type',['Change','Maintenance','Incident','Installation','Audit','Visit','Other'],1),sel('DC',DCS,1),{k:'Performed by'},{k:'Assignment group'},{k:'Ticket / ref'},sel('Status',['Planned','In progress','Done','Cancelled'],1),{k:'Details',t:'area'},{k:'Outcome / lessons',t:'area'},{k:'In calendar',t:'chk'},{k:'Attachments',att:1}]},
 BackupJobs:{key:'Job',label:'Backup jobs',cols:[{k:'Job',req:1},sel('Type',['Image-level (VM)','Agent / file','Database','Cloud','Tape','Replication','Exempt'],1),{k:'Software'},{k:'Target'},{k:'Schedule'},{k:'Retention'},sel('Active',['Yes','No'],1),{k:'Notes',t:'area',w:1}]},
 BackupAssign:{key:'Server',label:'Backup assignments',cols:[{k:'Server',req:1},{k:'Job',req:1},{k:'Notes',t:'area',w:1}]},
 DataCenters:{key:'Name',label:'Data centers',cols:[{k:'Name',req:1},{k:'Notes',t:'area',w:1}]},
@@ -479,7 +491,7 @@ const act=[
 {ID:'ACT-0002',Date:ds(-9),Title:'Quarterly UPS battery test',Type:'Audit',DC:'DC2A','Performed by':'Operator 1','Assignment group':'DC Facilities','Ticket / ref':'CHG0021874',Status:'Done',Details:'Load test of UPS A and B.',['Outcome / lessons']:'UPS B runtime 11 min, lower than 14 min last quarter. Watch next test.',Updated:ds(-9)},
 {ID:'ACT-0003',Date:ds(-20),Title:'Installed two new ESXi hosts in R05',Type:'Installation',DC:'DC2A','Performed by':'Operator 1','Assignment group':'',['Ticket / ref']:'CHG0021311',Status:'Done',Details:'Racked esx-a06, esx-a07, cabled to both fabrics.',['Outcome / lessons']:'',Updated:ds(-20)},
 {ID:'ACT-0004',Date:ds(6),Title:'Replace CRAC-3 compressor',Type:'Maintenance',DC:'DC1B','Performed by':'','Assignment group':'DC Facilities','Ticket / ref':'CHG0022001',Status:'Planned',Details:'Technician booked. Other CRAC units cover the load.',['Outcome / lessons']:'',Updated:ds(-2)}];
-const out={ServerStatuses:defaultSS(),ActivityStatuses:defaultAS(),ActivityTypes:defaultAT(),BackupTypes:defaultBT(),Contacts:ctc,AssignGroups:agr,DCSSActivity:act,BackupJobs:bjobs,BackupAssign:bassign,ServerMI:server,ESXi:esxi,Storage:storage,Backup:backup,Datastores:dstores,Operators:operators,Environments:defaultEnvs(),DataCenters:defaultDCs(),RackList:defaultRacks(),DeviceTypes:dtypes,RackDevices:rdev,Links:links,KB:kb,KBComments:kbc,OpenIssues:oi,OIComments:oic,DCMI:dcmi,DCChecks:checks,PatchEvents:[],NetPorts:[],Disks:[],Issues:issues,Comments:comments};
+const out={ServerStatuses:defaultSS(),ActivityStatuses:defaultAS(),ActivityTypes:defaultAT(),BackupTypes:defaultBT(),Contacts:ctc,AssignGroups:agr,DCSSActivity:act,BackupJobs:bjobs,BackupAssign:bassign,ServerMI:server,ESXi:esxi,Storage:storage,Backup:backup,Datastores:dstores,Operators:operators,Environments:defaultEnvs(),DataCenters:defaultDCs(),RackList:defaultRacks(),DeviceTypes:dtypes,RackDevices:rdev,Links:links,KB:kb,KBComments:kbc,OpenIssues:oi,OIComments:oic,DCMI:dcmi,DCChecks:checks,PatchEvents:[],ActivityLog:[],NetPorts:[],Disks:[],Issues:issues,Comments:comments};
 if(!DEMO)Object.keys(out).forEach(k=>{out[k]=defaultsFor(k)});
 return out;
 }
@@ -520,14 +532,16 @@ datastores:'<ellipse cx="12" cy="6" rx="8" ry="3"/><path d="M4 6v6c0 1.7 3.6 3 8
 patchevents:'<rect x="3" y="5" width="18" height="16" rx="2"/><path d="M3 10h18M8 3v4M16 3v4"/>',
 ports:'<rect x="3" y="8" width="18" height="9" rx="1.5"/><path d="M7 11v3M10.5 11v3M14 11v3M17.5 11v3"/>',
 disks:'<rect x="3" y="4" width="18" height="16" rx="2"/><circle cx="12" cy="12" r="4"/><circle cx="12" cy="12" r="1"/>',
+calendar:'<rect x="3" y="5" width="18" height="16" rx="2"/><path d="M3 10h18M8 3v4M16 3v4"/>',
+log:'<path d="M5 4h14v16H5z"/><path d="M8 9h8M8 13h8M8 17h5"/>',
 settings:'<circle cx="12" cy="12" r="3"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3M4.9 4.9l2.1 2.1M17 17l2.1 2.1M19.1 4.9L17 7M7 17l-2.1 2.1"/>',
 quality:'<path d="M12 3l8 3v6c0 5-3.5 8-8 9-4.5-1-8-4-8-9V6z"/><path d="M9 12l2 2 4-4"/>',
 sources:'<path d="M10 14a4 4 0 0 0 5.7 0l3-3a4 4 0 0 0-5.7-5.7l-1 1"/><path d="M14 10a4 4 0 0 0-5.7 0l-3 3a4 4 0 0 0 5.7 5.7l1-1"/>'};
 const NAV=[
-['',[['overview','Overview'],['stuff','Stuff'],['kb','Knowledge base'],['tracker','Open Issues'],['contacts','Contacts'],['agroups','Assignment groups'],['activity','DCSS Activity']]],
+['',[['overview','Overview'],['calendar','Calendar'],['stuff','Stuff'],['kb','Knowledge base'],['tracker','Open Issues'],['contacts','Contacts'],['agroups','Assignment groups'],['activity','DCSS Activity']]],
 ['Inventory',[['servermi','ServersMI'],['patching','Patching'],['patchevents','Patch events'],['esxi','ESXi hosts'],['storage','Storage'],['datastores','Datastores'],['backup','Backup'],['backupjobs','Backup jobs'],['otherdevices','Other devices']]],
 ['Data center',[['dcmi','DCMI'],['racks','DC rack layout'],['ports','Ports & cabling'],['disks','Disks'],['checks','DC Checks'],['issues','DC Open Issues']]],
-['System',[['quality','Data quality'],['sources','Data sources'],['settings','Settings']]]];
+['System',[['quality','Data quality'],['sources','Data sources'],['activitylog','Activity log'],['settings','Settings']]]];
 let CUR='overview';
 function sheetUpdated(s){let m='';(DB[s]||[]).forEach(r=>{if(r.Updated&&String(r.Updated)>m)m=String(r.Updated)});return m}
 function checkMissingToday(){const t=ds(0);return DCS.filter(dc=>!DB.DCChecks.some(c=>c.DC===dc&&String(c.Date).slice(0,10)===t))}
@@ -535,7 +549,7 @@ function openIssues(){return DB.Issues.filter(i=>i.Status!=='Resolved')}
 function renderSide(){
 const q=quality().filter(c=>c.count>0).length,oi=openIssues().length;
 const badge={quality:q,issues:oi,tracker:DB.OpenIssues.filter(r=>r.Status!=='Resolved'&&r.Status!=='Closed').length,activity:DB.DCSSActivity.filter(actionable).length,disks:DB.Disks.filter(r=>r.State==='Failed'||r.State==='Predictive fail').length};
-$('nav').innerHTML=NAV.map(g=>(g[0]?'<div class="navlbl">'+g[0]+'</div>':'')+g[1].map(v=>'<a href="#'+v[0]+'"'+(v[0]===CUR?' class="on" aria-current="page"':'')+'><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true">'+IC[v[0]]+'</svg>'+v[1]+(badge[v[0]]?'<em>'+badge[v[0]]+'</em>':'')+'</a>').join('')).join('');
+$('nav').innerHTML=NAV.map(g=>(g[0]?'<div class="navlbl">'+g[0]+'</div>':'')+g[1].map(v=>'<a href="#'+v[0]+'"'+(v[0]===CUR?' class="on" aria-current="page"':'')+'><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true">'+IC[v[0]==='activitylog'?'log':v[0]]+'</svg>'+v[1]+(badge[v[0]]?'<em>'+badge[v[0]]+'</em>':'')+'</a>').join('')).join('');
 const row=(l,s)=>{const u=sheetUpdated(s);const f=fresh(u);return '<div><span>'+l+'</span><span'+(f[0]==='b-bad'?' style="color:#FF9492"':f[0]==='b-warn'?' style="color:#FFC966"':'')+'>'+ago(u)+'</span></div>'};
 $('fresh').innerHTML='<b>Data freshness</b><span class="mono" style="color:var(--side-muted)">'+esc(META.fileName||'inventory.xlsx')+'</span>'+row('ServersMI','ServerMI')+row('ESXi hosts','ESXi')+row('Storage','Storage')+row('Datastores','Datastores')+row('Backup','Backup')+row('DCMI','DCMI')+row('DC Checks','DCChecks')+'<span style="color:var(--side-muted);border-top:1px solid #2B4070;padding-top:8px">Page built '+esc(META.loadedAt)+'</span>';
 }
@@ -639,12 +653,15 @@ kpis:d=>[{l:'Devices',v:d.length,s:new Set(d.map(r=>r.Type)).size+' types'},{l:'
 DCMI:{id:'dcmi',title:'DCMI',sub:'Data center master inventory and readings, one row per rack · sheet “DCMI”',add:'Add reading',filter:'DC',show:['DC','Rack','Power kW','Limit kW','@load','Inlet C','Humidity %','Reading time'],
 kpis:d=>{const hot=d.filter(r=>load(r)>=80).length;return[{l:'IT load',v:r1(sum(d,'Power kW'))+' kW',s:'of '+r1(sum(d,'Limit kW'))+' kW rack limits'},{l:'Avg inlet temp',v:r1(sum(d,'Inlet C')/(d.length||1))+' °C',s:d.filter(r=>num(r['Inlet C'])>=25).length+' racks ≥ 25 °C',c:d.some(r=>num(r['Inlet C'])>=25)?'w':'g'},{l:'Avg humidity',v:r1(sum(d,'Humidity %')/(d.length||1))+' %',s:'Target 40–60 %'},{l:'Racks ≥ 80% power',v:hot,s:'of '+d.length+' racks',c:hot?'w':''}]},
 pre:()=>heatHtml()},
-PatchEvents:{id:'patchevents',title:'Patching events',sub:'Planned and finished patching windows, shown in the Overview calendar · sheet “PatchEvents”',add:'Add patching event',filter:'Status',sort:['Date',-1],show:['ID','Date','Title','CRQ','Status','Servers','In calendar','Notes'],
+PatchEvents:{id:'patchevents',title:'Patching events',sub:'Planned and finished patching windows, shown in the Overview calendar · sheet “PatchEvents”',add:'Add patching event',filter:'Status',sort:['Date',-1],show:['ID','Date','End date','Title','CRQ','Status','Servers','In calendar','Notes'],
 kpis:d=>[{l:'Events',v:d.length,s:d.filter(r=>r.Status==='Done').length+' done'},{l:'Planned',v:d.filter(r=>r.Status==='Planned'||r.Status==='In progress').length,s:'upcoming or running'},{l:'In calendar',v:d.filter(r=>r['In calendar']!=='No').length,s:'shown on Overview'}]},
 NetPorts:{id:'netports',title:'Ports',sub:'All ports and cable connections · sheet “NetPorts”. Use Ports & cabling for the graphical view.',add:'Add port',filter:'State',show:['Device','Port','Kind','Speed','State','Remote device','Remote port','Cable','VLAN / purpose'],
 kpis:d=>[{l:'Ports',v:d.length,s:new Set(d.map(r=>r.Device)).size+' devices'},{l:'Connected',v:d.filter(r=>r.State==='Connected').length,s:'with a cable'},{l:'Free',v:d.filter(r=>(r.State||'Free')==='Free').length,s:'available'}]},
 Disks:{id:'disklist',title:'Disks',sub:'All disks · sheet “Disks”. Use Disks for the graphical bay view.',add:'Add disk',filter:'State',show:['Device','Slot','Type','Size TB','State','Model','Serial','Group / pool'],
 kpis:d=>[{l:'Disks',v:d.length,s:new Set(d.map(r=>r.Device)).size+' devices'},{l:'Raw capacity',v:r1(sum(d.filter(r=>r.State!=='Empty'),'Size TB'))+' TB',s:'excluding empty slots'},{l:'Failed / predictive',v:d.filter(r=>r.State==='Failed'||r.State==='Predictive fail').length,s:'replace soon',c:d.some(r=>r.State==='Failed'||r.State==='Predictive fail')?'w':''}]},
+ActivityLog:{id:'activitylog',title:'Activity log',sub:'When and by whom the workbook was changed, written on every Save to Excel · sheet “ActivityLog”. For internal team review.',add:'Add note',filter:'Action',sort:['Time',-1],show:['Time','User','Action','Sheet','Record','Details'],
+kpis:d=>{const last=d.slice().sort((x,y)=>String(y.Time).localeCompare(String(x.Time)))[0];return[{l:'Entries',v:d.length,s:new Set(d.map(r=>r.User).filter(Boolean)).size+' people'},{l:'Last save',v:last?String(last.Time).slice(0,10):'—',s:last?(last.User||'unknown user'):'Nothing logged yet'},{l:'Deleted records',v:d.filter(r=>r.Action==='Deleted').length,s:'logged deletions',c:d.some(r=>r.Action==='Deleted')?'w':''}]},
+pre:()=>logPre()},
 DCChecks:{id:'checks',title:'DC Checks',sub:'Data center check log, entered by hand when you do a check (optional) · sheet “DCChecks”',add:'New check',filter:'DC',sort:['Date',-1],show:['Date','DC','Checked by','Temp C','Humidity %','UPS','Cooling','Power','Fire/Leak','Doors','Result','Notes'],
 kpis:d=>{const last=d.slice().sort((x,y)=>String(y.Date).localeCompare(String(x.Date)))[0];return[{l:'Checks logged',v:d.length,s:'on '+(new Set(d.map(r=>String(r.Date).slice(0,10))).size)+' days'},{l:'Last check',v:last?String(last.Date).slice(0,10):'—',s:last?ago(last.Date)+' · '+(last.DC||''):'Nothing logged yet'},{l:'Checks with issues',v:d.filter(r=>r.Result==='Issue').length,s:'in the log',c:d.some(r=>r.Result==='Issue')?'w':''}]}}
 };
@@ -659,7 +676,7 @@ const u0=sheetUpdated(sheet),fr=fresh(u0);
 return '<div class="head"><div><h1>'+t.title+'</h1><p>'+t.sub+'</p></div><div class="tools"><span class="badge '+fr[0]+'" style="height:30px;padding:0 12px;font-size:13px">Data as of '+(u0||'—')+' · '+ago(u0)+'</span><select class="inp" id="csv-sep" aria-label="CSV separator" style="width:auto"><option value=";"'+((META.csvSep||';')===';'?' selected':'')+'>CSV separator ;</option><option value=","'+(META.csvSep===','?' selected':'')+'>CSV separator ,</option></select><button class="btn" data-act="csv" data-sheet="'+sheet+'">Export CSV</button><button class="btn" data-act="cols" data-sheet="'+sheet+'">Columns</button><button class="btn p" data-act="add" data-sheet="'+sheet+'">+ '+t.add+'</button></div></div>'
 +'<div class="kpis">'+t.kpis(d).map(k=>'<div class="kpi"><span>'+k.l+'</span><b>'+k.v+'</b><small class="'+(k.c||'')+'">'+(k.s||'&nbsp;')+'</small></div>').join('')+'</div>'
 +(t.pre?t.pre():'')
-+'<section class="card" style="padding:0"><div class="tools" style="padding:14px 16px;justify-content:space-between"><div class="chips" id="chips">'+chipsHtml(sheet,fo)+'<button class="chip'+(u.open||u.fl.length?' on':'')+'" data-act="ftoggle" data-sheet="'+sheet+'" aria-expanded="'+(u.open?'true':'false')+'">Filters'+(u.fl.length?' ('+u.fl.length+')':'')+'</button>'+(u.fl.length?'<button class="chip" data-act="fclear" data-sheet="'+sheet+'">Clear filters ✕</button>':'')+'</div><input class="inp srch" id="q-'+sheet+'" type="search" data-act="q" data-sheet="'+sheet+'" placeholder="Search…" aria-label="Search '+t.title+'" value="'+esc(u.q)+'"></div>'+'<div id="fsum">'+fsummaryHtml(sheet)+'</div>'+(u.open?fpanelHtml(sheet):'')+'<div class="tw" id="tbl">'+tableHtml(sheet)+'</div></section>'
++'<section class="card" style="padding:0"><div class="tools" style="padding:14px 16px;justify-content:space-between"><div class="chips" id="chips">'+chipsHtml(sheet,fo)+'</div><div class="tools"><button class="btn fbtn'+(u.open||u.fl.length?' p':'')+'" data-act="ftoggle" data-sheet="'+sheet+'" aria-expanded="'+(u.open?'true':'false')+'"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M3 5h18l-7 8v6l-4 2v-8z"/></svg>Filters'+(u.fl.length?' ('+u.fl.length+')':'')+'</button>'+(u.fl.length?'<button class="btn" data-act="fclear" data-sheet="'+sheet+'">Clear filters ✕</button>':'')+'<input class="inp srch" id="q-'+sheet+'" type="search" data-act="q" data-sheet="'+sheet+'" placeholder="Search…" aria-label="Search '+t.title+'" value="'+esc(u.q)+'"></div></div>'+'<div id="fsum">'+fsummaryHtml(sheet)+'</div>'+(u.open?fpanelHtml(sheet):'')+'<div class="tw" id="tbl">'+tableHtml(sheet)+'</div></section>'
 +'<p class="note">Click a row to edit all fields, including the ones not shown in the table. Drag a column header to move it. Export CSV saves the rows and columns you see now, with the current filter, search and sort. Changes stay in this page until you save them to Excel.'+(DEMO?' Sample data only.':'')+'</p>';
 }
 function chipsHtml(sheet,fo){const u=uiOf(sheet);return fo.map(o=>'<button class="chip'+(u.f===o?' on':'')+'" data-act="chip" data-sheet="'+sheet+'" data-v="'+esc(o)+'">'+esc(o)+'</button>').join('')}
@@ -693,6 +710,7 @@ return '<label class="'+cls+'" for="'+id+'">'+esc(c.label||c.k)+inp+'</label>';
 function openForm(sheet,i,preset){
 ATT.q=[];const S=SCHEMA[sheet],isNew=i==null;
 const row=isNew?Object.assign({},preset||{}):DB[sheet][i];
+if(isNew&&sheet==='ActivityLog'){row.Time=nowStr();row.User=USER;row.Action='Note'}
 if(isNew&&sheet==='NetPorts'){row.State='Free'}
 if(isNew&&sheet==='Disks'){row.State='OK'}
 if(isNew&&sheet==='DCChecks'){row.Date=row.Date||ds(0);row.Result='OK'}
@@ -724,6 +742,7 @@ const base=isNew?{}:Object.assign({},DB[sheet][+iStr]);
 const miss=[];
 S.cols.forEach(c=>{const el=form.elements[c.k];if(!el)return;let v=c.t==='chk'?(el.checked?'Yes':'No'):el.value.trim();if(c.t==='num'&&v!=='')v=parseFloat(v);if(c.req&&(v===''||v==null))miss.push(c.k);base[c.k]=v});
 if(miss.length){$('ferr').textContent='Fill in: '+miss.join(', ');return false}
+if(base['End date']&&base.Date&&String(base['End date'])<String(base.Date)){$('ferr').textContent='End date is before the start date';return false}
 if(sheet==='Environments'){const nm=String(base.Name),dup=DB.Environments.some((x,i)=>String(x.Name).toLowerCase()===nm.toLowerCase()&&(isNew||i!==+iStr));if(dup){$('ferr').textContent='This environment already exists';return false}}
 if(sheet==='DataCenters'){const nm=String(base.Name),dup=DB.DataCenters.some((x,i)=>String(x.Name).toLowerCase()===nm.toLowerCase()&&(isNew||i!==+iStr));if(dup){$('ferr').textContent='This data center already exists';return false}}
 if(sheet==='ActivityTypes'){const nm=String(base.Name),dup=DB.ActivityTypes.some((x,i)=>String(x.Name).toLowerCase()===nm.toLowerCase()&&(isNew||i!==+iStr));if(dup){$('ferr').textContent='This activity type already exists';return false}}
@@ -788,7 +807,7 @@ const sc=[['Sheet','Column','Type','Options','Required','Show','Core','Order','L
 XLSX.utils.book_append_sheet(wb,XLSX.utils.aoa_to_sheet(sc),'_Schema');
 return wb;
 }
-function savedOk(msg){dirty=0;META.savedAt=nowStr();persist();renderPending();renderSide();if(CUR==='sources')route();toast(msg)}
+function savedOk(msg){dirty=0;SNAP=snap();PENDLOG=[];META.savedAt=nowStr();persist();renderPending();renderSide();if(CUR==='sources')route();toast(msg)}
 const XLSX_TYPES=[{description:'Excel workbook',accept:{'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet':['.xlsx']}}];
 function idb(){return new Promise((res,rej)=>{try{const r=indexedDB.open('infra-inventory-handles',1);r.onupgradeneeded=()=>r.result.createObjectStore('h');r.onsuccess=()=>res(r.result);r.onerror=()=>rej(r.error)}catch(e){rej(e)}})}
 async function keepHandle(h,k){try{const d=await idb();d.transaction('h','readwrite').objectStore('h').put(h,k||'main')}catch(e){}}
@@ -798,6 +817,8 @@ let SAVE_ARMED=false;
 function timeMs(s){const t=new Date(String(s||'').replace(' ','T')).getTime();return isNaN(t)?0:t}
 async function saveExcel(saveAs){
 if(typeof XLSX==='undefined'){toast('The Excel library did not load (vendor/xlsx.full.min.js).');return}
+if(!USER){if(!(await askUser()))return}
+logChanges();
 const buf=XLSX.write(buildBook(),{bookType:'xlsx',type:'array'});
 let name=(handle&&handle.name)||META.fileName||'inventory.xlsx';if(!/\.xlsx$/i.test(name))name+='.xlsx';
 if(ROOT&&!saveAs){
@@ -839,10 +860,10 @@ Object.keys(TV).forEach(s=>{SCHEMA[s].cols.forEach(c=>{const sp=sm[s+'|'+c.k];if
 Object.keys(TV).forEach(s=>{const ord=[];TV[s].show.forEach(k=>{const sp=sm[s+'|'+k];const n=sp?parseInt(sp.Order):NaN;if(!isNaN(n))ord.push([n,k])});if(ord.length){ord.sort((a,b)=>a[0]-b[0]);const names=ord.map(o=>o[1]);TV[s].show=names.concat(TV[s].show.filter(k=>names.indexOf(k)<0))}});
 SHEETS.forEach(s=>{SCHEMA[s].cols.forEach(c=>{const sp=sm[s+'|'+c.k];if(!sp)return;if(sp.Label)c.label=String(sp.Label);if(CORE[s].has(c.k)&&yes(sp.Hidden)&&c.k!==SCHEMA[s].key)hideCol(s,c);if(CORE[s].has(c.k)&&sp.Required!==''&&sp.Required!=null){if(yes(sp.Required))c.req=1;else delete c.req}})});
 if(!found)return{ok:false,missing:missing};
-missing=missing.filter(x=>['BackupJobs','BackupAssign','Contacts','AssignGroups','DCSSActivity','PatchEvents','NetPorts','Disks'].indexOf(x)<0);
+missing=missing.filter(x=>['BackupJobs','BackupAssign','Contacts','AssignGroups','DCSSActivity','PatchEvents','NetPorts','Disks','ActivityLog'].indexOf(x)<0);
 ['Environments','DataCenters','BackupTypes','ActivityTypes','ActivityStatuses','ServerStatuses'].forEach(s=>{if(!wb.Sheets[s]){nd[s]=defaultsFor(s);missing=missing.filter(x=>x!==s)}});
 if(!wb.Sheets.RackList){missing=missing.filter(x=>x!=='RackList');if(wb.Sheets.DataCenters){nd.RackList=[];XLSX.utils.sheet_to_json(wb.Sheets.DataCenters,{defval:''}).forEach(r=>{const n=parseInt(r.Racks),u=parseInt(r['U per rack']);if(r.Name)nd.RackList=nd.RackList.concat(makeRacks(String(r.Name),n>=1?n:8,u>=1?u:42,'R',1,2))})}else nd.RackList=defaultRacks()}
-DB=nd;handle=info.handle||null;dirty=0;
+DB=nd;handle=info.handle||null;dirty=0;SNAP=snap();PENDLOG=[];
 META={stuff:META.stuff,source:info.name,fileName:info.name,loadedAt:nowStr(),fileModified:info.modified||null,savedAt:null,generated:info.generated||''};
 saveSchemaMeta();
 return{ok:true,missing:missing};
@@ -1078,7 +1099,7 @@ function b64(u8){let s='';for(let i=0;i<u8.length;i+=0x8000)s+=String.fromCharCo
 const jsonSafe=o=>JSON.stringify(o).replace(/</g,'\\u003c');
 async function rootPerm(ask){
 if(!ROOT)return false;
-try{let p=ROOT.queryPermission?await ROOT.queryPermission({mode:'readwrite'}):'granted';if(p!=='granted'&&ask&&ROOT.requestPermission)p=await ROOT.requestPermission({mode:'readwrite'});return p==='granted'}catch(e){return false}
+try{let p=ROOT.queryPermission?await ROOT.queryPermission({mode:'readwrite'}):'granted';if(p!=='granted'&&ask&&ROOT.requestPermission)p=await ROOT.requestPermission({mode:'readwrite'});const ok=p==='granted';if(ok&&RPOBJ===ROOT&&RPST!=='ok'){RPST='ok';try{renderPending()}catch(x){}}return ok}catch(e){return false}
 }
 async function rootWire(){
 const inv=await ROOT.getDirectoryHandle('Inventory',{create:true});
@@ -1676,35 +1697,66 @@ if(sheet==='KB')DB.KBComments=DB.KBComments.filter(c=>c.Article!==r.ID);
 DB[sheet].splice(DB[sheet].indexOf(r),1)});
 selSet(sheet).clear();changed();route();toast('Deleted '+rows.length+(rows.length===1?' row':' rows'))}
 /* ---------- Overview calendar ---------- */
-const CAL={y:null,m:null,sel:null,off:{}};
+const CAL={a:null,sel:null,off:{},mode:'month'};
 const CAL_SRC=[
 {k:'act',sheet:'DCSSActivity',label:'DCSS Activity',c:'#2f7de1',title:r=>r.Title,date:r=>r.Date,meta:r=>[r.Type,r.DC,r.Status].filter(Boolean).join(' · ')},
 {k:'pat',sheet:'PatchEvents',label:'Patching',c:'#2e9e6b',title:r=>(r.Title||'Patching')+(r.CRQ?' ('+r.CRQ+')':''),date:r=>r.Date,meta:r=>[r.Status,r.Servers?String(r.Servers).split(/\r?\n/).filter(Boolean).length+' servers':''].filter(Boolean).join(' · ')},
 {k:'chk',sheet:'DCChecks',label:'DC checks',c:'#d98a1c',title:r=>'DC check '+(r.DC||''),date:r=>r.Date,meta:r=>[r['Checked by'],r.Result].filter(Boolean).join(' · ')}];
 function calEvents(){
 const ev={};
-CAL_SRC.forEach(s=>{if(CAL.off[s.k])return;(DB[s.sheet]||[]).forEach(r=>{if(r['In calendar']==='No')return;const d=String(s.date(r)||'').slice(0,10);if(!/^\d{4}-\d\d-\d\d$/.test(d))return;(ev[d]=ev[d]||[]).push({s:s,r:r,t:String(s.title(r)||'')})})});
+CAL_SRC.forEach(s=>{if(CAL.off[s.k])return;(DB[s.sheet]||[]).forEach(r=>{if(r['In calendar']==='No')return;const d=String(s.date(r)||'').slice(0,10);if(!/^\d{4}-\d\d-\d\d$/.test(d))return;
+let e=String(r['End date']||'').slice(0,10);if(!/^\d{4}-\d\d-\d\d$/.test(e)||e<=d||s.sheet==='DCChecks')e=d;
+const t=String(s.title(r)||''),rng=e>d?d+' → '+e:'';let cur=d,n=0;
+while(cur<=e&&n<92){(ev[cur]=ev[cur]||[]).push({s:s,r:r,t:t,cont:cur!==d,rng:rng});cur=CADD(cur,1);n++}})});
 return ev}
+const CD=s=>new Date(s+'T00:00:00'),CF=d=>d.getFullYear()+'-'+pad(d.getMonth()+1)+'-'+pad(d.getDate());
+const CADD=(s,n)=>{const d=CD(s);d.setDate(d.getDate()+n);return CF(d)};
+const CMON=s=>{const d=CD(s);return CADD(s,-((d.getDay()+6)%7))};
+const DOW=['Mon','Tue','Wed','Thu','Fri','Sat','Sun'];
+function calA(){if(!CAL.a)CAL.a=ds(0);return CAL.a}
+function calChip(x,full){return '<a href="#" class="ce'+(full?' full':'')+(x.cont?' cont':'')+'" data-act="calopen" data-k="'+x.s.k+'" data-i="'+DB[x.s.sheet].indexOf(x.r)+'" style="--c:'+x.s.c+'" title="'+esc(x.s.label+': '+x.t+(x.rng?' ('+x.rng+')':'')+(x.s.meta(x.r)?' · '+x.s.meta(x.r):''))+'">'+(x.cont?'↳ ':'')+esc(x.t)+(full&&(x.rng||x.s.meta(x.r))?'<small>'+esc((x.rng?x.rng+' · ':'')+x.s.meta(x.r))+'</small>':'')+'</a>'}
+function calAddBtns(d){return CAL_SRC.map(s=>'<button class="btn s" data-act="caladd" data-k="'+s.k+'" data-d="'+d+'">+ '+esc(s.label)+'</button>').join('')}
+/* this week, used on Overview */
 function calCard(){
-const now=new Date();if(CAL.y==null){CAL.y=now.getFullYear();CAL.m=now.getMonth()}
-const ev=calEvents(),first=new Date(CAL.y,CAL.m,1),off=(first.getDay()+6)%7,dim=new Date(CAL.y,CAL.m+1,0).getDate(),today=ds(0);
-const mn=first.toLocaleString('en-GB',{month:'long',year:'numeric'}),pad=n=>String(n).padStart(2,'0');
-let cells='';for(let i=0;i<off;i++)cells+='<div class="cd out"></div>';
-for(let d=1;d<=dim;d++){const key=CAL.y+'-'+pad(CAL.m+1)+'-'+pad(d),e=ev[key]||[];
-cells+='<div class="cd'+(key===today?' today':'')+(key===CAL.sel?' sel':'')+'" data-act="calday" data-d="'+key+'" tabindex="0"><b>'+d+'</b>'+e.slice(0,3).map(x=>'<span class="ce" style="--c:'+x.s.c+'" title="'+esc(x.s.label+': '+x.t)+'">'+esc(x.t)+'</span>').join('')+(e.length>3?'<span class="cm">+'+(e.length-3)+' more</span>':'')+'</div>'}
-const sel=CAL.sel&&CAL.sel.slice(0,7)===CAL.y+'-'+pad(CAL.m+1)?CAL.sel:null;
-const se=sel?(ev[sel]||[]):[];
-const detail=sel?'<div class="caldet"><div class="tools" style="justify-content:space-between"><b>'+esc(sel)+'</b><span class="tools"><span class="note" style="margin:0">Add on this day:</span>'+CAL_SRC.map(s=>'<button class="btn s" data-act="caladd" data-k="'+s.k+'" data-d="'+sel+'">'+esc(s.label)+'</button>').join('')+'</span></div>'+(se.length?se.map(x=>'<a class="calrow" href="#" data-act="calopen" data-k="'+x.s.k+'" data-i="'+DB[x.s.sheet].indexOf(x.r)+'"><i style="background:'+x.s.c+'"></i><span><b>'+esc(x.t)+'</b> <span class="note" style="margin:0">'+esc(x.s.label)+(x.s.meta(x.r)?' · '+esc(x.s.meta(x.r)):'')+'</span></span></a>').join(''):'<p class="note" style="margin:8px 0 0">Nothing in the calendar for this day.</p>')+'</div>':'';
-const upc=[];Object.keys(ev).filter(k=>k>=today).sort().forEach(k=>ev[k].forEach(x=>upc.push([k,x])));
-const up=upc.slice(0,5).map(a=>'<a class="calrow" href="#" data-act="calopen" data-k="'+a[1].s.k+'" data-i="'+DB[a[1].s.sheet].indexOf(a[1].r)+'"><i style="background:'+a[1].s.c+'"></i><span class="mono" style="min-width:84px">'+a[0]+'</span><span>'+esc(a[1].t)+'</span></a>').join('');
-return '<section class="card" id="calcard"><div class="tools" style="justify-content:space-between"><h2 style="margin:0">Calendar</h2><div class="tools"><button class="btn s" data-act="calnav" data-n="-1" aria-label="Previous month">‹</button><b style="min-width:130px;text-align:center">'+esc(mn)+'</b><button class="btn s" data-act="calnav" data-n="1" aria-label="Next month">›</button><button class="btn s" data-act="calnav" data-n="0">Today</button></div></div>'
-+'<div class="tools" style="margin:10px 0">'+CAL_SRC.map(s=>'<button class="chip'+(CAL.off[s.k]?'':' on')+'" data-act="calflt" data-k="'+s.k+'" style="'+(CAL.off[s.k]?'':'background:'+s.c+';border-color:'+s.c)+'">'+esc(s.label)+'</button>').join('')+'<span class="note" style="margin:0 0 0 auto">Tick “In calendar” on an event to show it here.</span></div>'
-+'<div class="calgrid"><div class="ch">Mon</div><div class="ch">Tue</div><div class="ch">Wed</div><div class="ch">Thu</div><div class="ch">Fri</div><div class="ch">Sat</div><div class="ch">Sun</div>'+cells+'</div>'+detail
-+'<div style="margin-top:12px"><b style="font-size:13px">Coming up</b>'+(up||'<p class="note" style="margin:6px 0 0">No upcoming events.</p>')+'</div></section>'}
-function calRedraw(){const el=$('calcard');if(el)el.outerHTML=calCard()}
+const ev=calEvents(),today=ds(0),mon=CMON(today);let cols='';
+for(let i=0;i<7;i++){const d=CADD(mon,i),e=ev[d]||[],dt=CD(d);
+cols+='<div class="wd'+(d===today?' today':'')+'"><div class="wh"><span>'+DOW[i]+'</span><b>'+dt.getDate()+'</b></div>'+(e.length?e.map(x=>calChip(x,1)).join(''):'<span class="note" style="margin:0">—</span>')+'</div>'}
+const n=Object.keys(ev).filter(d=>d>=mon&&d<=CADD(mon,6)).reduce((a,d)=>a+ev[d].length,0);
+return '<section class="card" id="calcard"><div class="tools" style="justify-content:space-between"><h2 style="margin:0">This week <span class="note" style="margin-left:8px">'+CD(mon).toLocaleString('en-GB',{day:'numeric',month:'short'})+' – '+CD(CADD(mon,6)).toLocaleString('en-GB',{day:'numeric',month:'short',year:'numeric'})+' · '+n+' event'+(n===1?'':'s')+'</span></h2><a class="btn s" href="#calendar">Open calendar</a></div><div class="weekgrid" style="margin-top:12px">'+cols+'</div></section>'}
+/* calendar page */
+function calMonthHtml(){
+const a=calA(),d0=CD(a),y=d0.getFullYear(),m=d0.getMonth(),ev=calEvents(),today=ds(0);
+const first=new Date(y,m,1),off=(first.getDay()+6)%7,dim=new Date(y,m+1,0).getDate();let cells='';
+const total=Math.ceil((off+dim)/7)*7;
+for(let i=0;i<total;i++){const day=i-off+1;if(day<1||day>dim){const ds2=CF(new Date(y,m,day));cells+='<div class="cd out" data-act="calday" data-d="'+ds2+'"><b>'+new Date(y,m,day).getDate()+'</b></div>';continue}
+const key=y+'-'+pad(m+1)+'-'+pad(day),e=ev[key]||[];
+cells+='<div class="cd'+(key===today?' today':'')+(key===CAL.sel?' sel':'')+'" data-act="calday" data-d="'+key+'" tabindex="0"><b>'+day+'</b>'+e.slice(0,4).map(x=>calChip(x)).join('')+(e.length>4?'<span class="cm">+'+(e.length-4)+' more</span>':'')+'</div>'}
+return '<div class="calgrid big">'+DOW.map(d=>'<div class="ch">'+d+'</div>').join('')+cells+'</div>'}
+function calWeekHtml(){
+const a=calA(),mon=CMON(a),ev=calEvents(),today=ds(0);let cols='';
+for(let i=0;i<7;i++){const d=CADD(mon,i),e=ev[d]||[];
+cols+='<div class="wd'+(d===today?' today':'')+'"><div class="wh"><span>'+DOW[i]+'</span><b>'+CD(d).getDate()+'</b></div>'+(e.length?e.map(x=>calChip(x,1)).join(''):'<span class="note" style="margin:0">Nothing</span>')+'<button class="btn s" data-act="calday" data-d="'+d+'" style="margin-top:auto">Details / add</button></div>'}
+return '<div class="weekgrid tall">'+cols+'</div>'}
+function calAgendaHtml(){
+const a=calA(),d0=CD(a),y=d0.getFullYear(),m=d0.getMonth(),ev=calEvents(),pre=y+'-'+pad(m+1),keys=Object.keys(ev).filter(k=>k.slice(0,7)===pre).sort();
+if(!keys.length)return '<div class="empty">No events in this month.</div>';
+return keys.map(k=>'<div class="agd"><div class="agh"><b>'+CD(k).toLocaleString('en-GB',{weekday:'long',day:'numeric',month:'long'})+'</b>'+(k===ds(0)?' <span class="badge b-info">Today</span>':'')+'</div>'+ev[k].map(x=>'<a class="calrow" href="#" data-act="calopen" data-k="'+x.s.k+'" data-i="'+DB[x.s.sheet].indexOf(x.r)+'"><i style="background:'+x.s.c+'"></i><span><b>'+esc(x.t)+'</b> <span class="note" style="margin:0">'+esc(x.s.label)+(x.rng?' · '+esc(x.rng):'')+(x.s.meta(x.r)?' · '+esc(x.s.meta(x.r)):'')+'</span></span></a>').join('')+'</div>').join('')}
+function calendarView(){
+const a=calA(),d0=CD(a),mode=CAL.mode,ev=calEvents();
+const title=mode==='week'?CD(CMON(a)).toLocaleString('en-GB',{day:'numeric',month:'short'})+' – '+CD(CADD(CMON(a),6)).toLocaleString('en-GB',{day:'numeric',month:'short',year:'numeric'}):d0.toLocaleString('en-GB',{month:'long',year:'numeric'});
+const body=mode==='week'?calWeekHtml():mode==='agenda'?calAgendaHtml():calMonthHtml();
+const sel=CAL.sel,se=sel?(ev[sel]||[]):[];
+const detail=sel?'<section class="card"><div class="tools" style="justify-content:space-between"><h2 style="margin:0">'+esc(CD(sel).toLocaleString('en-GB',{weekday:'long',day:'numeric',month:'long',year:'numeric'}))+'</h2><div class="tools">'+calAddBtns(sel)+'<button class="btn s" data-act="calday" data-d="">Close</button></div></div>'+(se.length?se.map(x=>'<a class="calrow" href="#" data-act="calopen" data-k="'+x.s.k+'" data-i="'+DB[x.s.sheet].indexOf(x.r)+'"><i style="background:'+x.s.c+'"></i><span><b>'+esc(x.t)+'</b> <span class="note" style="margin:0">'+esc(x.s.label)+(x.rng?' · '+esc(x.rng):'')+(x.s.meta(x.r)?' · '+esc(x.s.meta(x.r)):'')+'</span></span></a>').join(''):'<p class="note" style="margin:10px 0 0">Nothing in the calendar for this day.</p>')+'</section>':'';
+const seg=(k,l)=>'<button class="chip'+(mode===k?' on':'')+'" data-act="calmode" data-v="'+k+'">'+l+'</button>';
+return head('Calendar','DCSS activities, patching events and DC checks. Tick “In calendar” on an event to show it here.','<button class="btn p" data-act="caladd" data-k="act" data-d="'+(sel||ds(0))+'">+ Add event</button>')
++'<section class="card" id="calcard"><div class="tools" style="justify-content:space-between"><div class="tools"><button class="btn s" data-act="calnav" data-n="-1" aria-label="Previous">‹</button><button class="btn s" data-act="calnav" data-n="1" aria-label="Next">›</button><button class="btn s" data-act="calnav" data-n="0">Today</button><b style="font-size:18px;margin-left:6px">'+esc(title)+'</b><input class="inp" type="date" id="cal-jump" data-act="caljumpx" value="'+a+'" aria-label="Go to date" style="width:auto;height:32px"></div><div class="tools"><div class="chips">'+seg('month','Month')+seg('week','Week')+seg('agenda','Agenda')+'</div></div></div>'
++'<div class="tools" style="margin:12px 0">'+CAL_SRC.map(s=>'<button class="chip'+(CAL.off[s.k]?'':' on')+'" data-act="calflt" data-k="'+s.k+'" style="'+(CAL.off[s.k]?'':'background:'+s.c+';border-color:'+s.c)+'">'+esc(s.label)+'</button>').join('')+'</div>'+body+'</section>'+detail}
+function calJump(el){if(el.value){CAL.a=el.value;calRedraw()}}
+function calRedraw(){if(CUR==='calendar')$('view').innerHTML=calendarView()}
 const CALACT={
-calnav(el){const n=+el.dataset.n,now=new Date();if(!n){CAL.y=now.getFullYear();CAL.m=now.getMonth();CAL.sel=ds(0)}else{const d=new Date(CAL.y,CAL.m+n,1);CAL.y=d.getFullYear();CAL.m=d.getMonth()}calRedraw()},
-calday(el){CAL.sel=el.dataset.d;calRedraw()},
+calnav(el){const n=+el.dataset.n,a=calA();if(!n)CAL.a=ds(0);else if(CAL.mode==='week')CAL.a=CADD(a,7*n);else{const d=CD(a);d.setDate(1);d.setMonth(d.getMonth()+n);CAL.a=CF(d)}calRedraw()},
+calmode(el){CAL.mode=el.dataset.v;calRedraw()},
+calday(el){const d=el.dataset.d;CAL.sel=d||null;if(d)CAL.a=d;calRedraw()},
 calflt(el){CAL.off[el.dataset.k]=!CAL.off[el.dataset.k];calRedraw()},
 calopen(el){const s=CAL_SRC.find(x=>x.k===el.dataset.k);openForm(s.sheet,+el.dataset.i)},
 caladd(el){const s=CAL_SRC.find(x=>x.k===el.dataset.k);openForm(s.sheet,null,{Date:el.dataset.d})}};
@@ -1811,6 +1863,40 @@ if(hi>=0){RK.sel={sheet:'ESXi',i:hi};route();return}
 const e=DB.RackDevices.find(x=>x.Name===enc)||{};openForm('ESXi',null,{Enclosure:enc,Bay:String(n),DC:e.DC||RK.dc,Rack:e.Rack||''})},
 rkencl(){if(!DB.DeviceTypes.some(t=>t.Name==='Blade enclosure'))DB.DeviceTypes.push({Name:'Blade enclosure',Color:'Gold','Default U':10,Active:'Yes',Notes:'Blade chassis with bays, e.g. HPE CS700 / c7000',Updated:ds(0)});
 openForm('RackDevices',null,{Name:'',Type:'Blade enclosure',DC:RK.dc,Model:'HPE CS700 (c7000)','U size':10,'Bays across':8,'Bays down':2})}};
+/* ---------- Activity log (who changed what, written to the workbook on every save) ---------- */
+let USER='';try{USER=localStorage.getItem('infra-user')||''}catch(e){}
+let SNAP=null,PENDLOG=[],USERRES=null;
+const LOGSKIP={ActivityLog:1};
+function rid(sheet,r){const g=k=>String(r[k]==null?'':r[k]);return sheet==='DCMI'||sheet==='RackList'?g('DC')+'/'+g('Rack'):sheet==='BackupAssign'?g('Server')+' / '+g('Job'):sheet==='NetPorts'?g('Device')+' / '+g('Port'):sheet==='Disks'?g('Device')+' / '+g('Slot'):sheet==='DCChecks'?g('Date').slice(0,10)+' '+g('DC'):g(SCHEMA[sheet].key)}
+function snap(){const o={};SHEETS.forEach(s=>{if(LOGSKIP[s])return;const m=new Map(),cnt={};(DB[s]||[]).forEach(r=>{let k=rid(s,r);cnt[k]=(cnt[k]||0)+1;if(cnt[k]>1)k+=' #'+cnt[k];const c={};Object.keys(r).forEach(h=>{if(h!=='Updated')c[h]=r[h]==null?'':String(r[h])});m.set(k,c)});o[s]=m});return o}
+function logChanges(){
+DB.ActivityLog=DB.ActivityLog.filter(r=>PENDLOG.indexOf(r)<0);PENDLOG=[];
+if(!SNAP)return;
+const now=snap(),t=nowStr(),out=[];
+const mk=(a,s,rec,det)=>({Time:t,User:USER,Action:a,Sheet:s?SCHEMA[s].label:'',Record:rec,Details:det||'',Updated:ds(0)});
+const sh=v=>{v=String(v==null?'':v).replace(/\s+/g,' ');return v.length>40?v.slice(0,38)+'…':v};
+SHEETS.forEach(s=>{if(LOGSKIP[s])return;const a=SNAP[s]||new Map(),b=now[s],add=[],del=[],chg=[];
+b.forEach((c,k)=>{const o=a.get(k);if(!o)add.push(k);else{const fs=[];Object.keys(c).concat(Object.keys(o)).forEach(h=>{if(fs.indexOf(h)<0&&(c[h]||'')!==(o[h]||''))fs.push(h)});if(fs.length)chg.push([k,fs.map(h=>h+': '+(sh(o[h])||'∅')+' → '+(sh(c[h])||'∅')).join('; ').slice(0,500)])}});
+a.forEach((c,k)=>{if(!b.has(k))del.push(k)});
+if(add.length>25)out.push(mk('Added',s,'('+add.length+' records)'));else add.forEach(k=>out.push(mk('Added',s,k)));
+if(chg.length>25)out.push(mk('Changed',s,'('+chg.length+' records)'));else chg.forEach(x=>out.push(mk('Changed',s,x[0],x[1])));
+if(del.length>25)out.push(mk('Deleted',s,'('+del.length+' records)'));else del.forEach(k=>out.push(mk('Deleted',s,k)))});
+if(!out.length)out.push(mk('Saved','','','No data changes'));
+out.forEach(r=>DB.ActivityLog.push(r));PENDLOG=out}
+function askUser(){return new Promise(res=>{USERRES=res;
+$('modal').innerHTML='<div class="modal"><div class="dlg" role="dialog" aria-modal="true" aria-label="Your name" style="width:min(460px,100%)"><h2>Who is saving?</h2><p class="note" style="margin:0">Your name is written to the Activity log next to every change you save. It is kept in this browser only and is not verified.</p><input class="inp" id="u-name" list="u-list" placeholder="Your name" value="'+esc(USER)+'"><datalist id="u-list">'+DB.Operators.filter(o=>o.Active!=='No').map(o=>'<option value="'+esc(o.Name)+'">').join('')+'</datalist><div class="acts"><span></span><div class="tools"><button class="btn" data-act="usercancel">Cancel</button><button class="btn p" data-act="userok">Continue</button></div></div></div></div>';
+setTimeout(()=>{const e=$('u-name');if(e)e.focus()},30)})}
+function logPre(){
+return '<section class="card"><div class="tools" style="justify-content:space-between"><div><b>Working as: '+(USER?esc(USER):'not set')+'</b> <button class="btn s" data-act="logwho">'+(USER?'Change name':'Set my name')+'</button></div><div class="tools"><span class="note" style="margin:0">Delete entries older than</span><input class="inp" id="log-days" type="number" value="90" min="1" style="width:80px;height:32px" aria-label="Days"><span class="note" style="margin:0">days</span><button class="btn s d" data-act="logtrim">Delete</button></div></div>'
++'<p class="note" style="margin:10px 0 0">Every “Save to Excel” adds what was added, changed or deleted since the page loaded the workbook. The name is the one entered on this computer (the browser cannot read the Windows user), so treat it as a team convention, not proof. Select rows with the checkboxes to delete single entries.</p></section>'}
+const LOGACT={
+logwho(){askUser().then(ok=>{if(ok)route()})},
+userok(){const v=($('u-name').value||'').trim();if(!v)return;USER=v;try{localStorage.setItem('infra-user',v)}catch(e){}closeForm();if(USERRES){USERRES(true);USERRES=null}},
+usercancel(){closeForm();if(USERRES){USERRES(false);USERRES=null}},
+logtrim(el){if(!el.dataset.arm){el.dataset.arm='1';el.textContent='Click again to delete';return}
+const days=parseInt($('log-days').value);if(!(days>=1)){el.dataset.arm='';el.textContent='Delete';return}
+const cut=ds(-days),n0=DB.ActivityLog.length;DB.ActivityLog=DB.ActivityLog.filter(r=>String(r.Time||'').slice(0,10)>=cut);
+const n=n0-DB.ActivityLog.length;if(n)changed();route();toast(n+' log entr'+(n===1?'y':'ies')+' deleted')}};
 
 /* ---------- data quality (computed from the data) ---------- */
 function sevN(s){return s==='high'?0:s==='medium'?1:2}
@@ -2081,7 +2167,7 @@ return head('Stuff','Files from the Stuff folder and the links you go through on
 }
 
 /* ---------- router + events ---------- */
-const VIEWDEF={overview:overview,servermi:()=>tableView('ServerMI'),patching:patchView,patchevents:()=>tableView('PatchEvents'),ports:portsView,disks:disksView,netports:()=>tableView('NetPorts'),disklist:()=>tableView('Disks'),contacts:()=>tableView('Contacts'),agroups:()=>tableView('AssignGroups'),activity:()=>tableView('DCSSActivity'),backupjobs:bjView,esxi:()=>tableView('ESXi'),storage:()=>tableView('Storage'),backup:()=>tableView('Backup'),dcmi:()=>tableView('DCMI'),racks:racksView,checks:()=>tableView('DCChecks'),issues:issuesView,stuff:stuffView,kb:kbView,otherdevices:()=>tableView('RackDevices'),tracker:oiView,quality:qualityView,sources:sourcesView,datastores:()=>tableView('Datastores'),settings:settingsView};
+const VIEWDEF={overview:overview,calendar:calendarView,servermi:()=>tableView('ServerMI'),patching:patchView,patchevents:()=>tableView('PatchEvents'),activitylog:()=>tableView('ActivityLog'),ports:portsView,disks:disksView,netports:()=>tableView('NetPorts'),disklist:()=>tableView('Disks'),contacts:()=>tableView('Contacts'),agroups:()=>tableView('AssignGroups'),activity:()=>tableView('DCSSActivity'),backupjobs:bjView,esxi:()=>tableView('ESXi'),storage:()=>tableView('Storage'),backup:()=>tableView('Backup'),dcmi:()=>tableView('DCMI'),racks:racksView,checks:()=>tableView('DCChecks'),issues:issuesView,stuff:stuffView,kb:kbView,otherdevices:()=>tableView('RackDevices'),tracker:oiView,quality:qualityView,sources:sourcesView,datastores:()=>tableView('Datastores'),settings:settingsView};
 function route(){
 const id=(location.hash||'#overview').slice(1);CUR=VIEWDEF[id]?id:'overview';
 syncEnvOptions();syncBackupTypes();syncActivityTypes();syncActivityStatuses();syncServerStatuses();syncLayout();renderSide();renderPending();$('view').innerHTML=VIEWDEF[CUR]();
@@ -2208,13 +2294,14 @@ const fallback=()=>{const r=document.createRange();r.selectNodeContents(node);co
 if(navigator.clipboard&&navigator.clipboard.writeText)navigator.clipboard.writeText(t).then(()=>toast('Copied'),fallback);else fallback();
 }
 };
-Object.assign(ACT,CALACT,PORTACT,ENCLACT);
+Object.assign(ACT,CALACT,PORTACT,ENCLACT,LOGACT);
 document.addEventListener('click',e=>{const el=e.target.closest('[data-act]');if(!el)return;if(el.tagName==='A'&&el.getAttribute('href')==='#')e.preventDefault();const f=ACT[el.dataset.act];if(f)f(el,e)});
 document.addEventListener('submit',e=>{if(e.target.id!=='frm')return;e.preventDefault();const sheet=e.target.dataset.sheet;const r=submitForm(e.target);if(r&&sheet==='Issues'&&r.ID){IS.sel=r.ID;route()}});
 document.addEventListener('input',e=>{const el=e.target,a=el.dataset&&el.dataset.act;if(a==='pvq'){PV.q=el.value;const p=el.selectionStart;route();const n=document.querySelector('[data-act=pvq]');if(n){n.focus();try{n.setSelectionRange(p,p)}catch(x){}}}else if(a==='oiq'){OS.q=el.value;const l=$('oi-list');if(l)l.innerHTML=oiList()}else if(a==='bjq'){BJ.q=el.value;const l=$('bj-list');if(l)l.innerHTML=bjServerTable()}else if(a==='bjmq'){const q=el.value.toLowerCase();document.querySelectorAll('.bjrow').forEach(r=>{r.style.display=r.dataset.t.indexOf(q)>=0?'':'none'})}else if(a==='pbprev'){ptPreview()}else if(a==='pq'){PT.q=el.value;const l=$('pt-list');if(l)l.innerHTML=patchTable()}else if(a==='kbq'){KS.q=el.value;const l=$('kb-list');if(l)l.innerHTML=kbList()}else if(a==='q'){uiOf(el.dataset.sheet).q=el.value;redrawTable(el.dataset.sheet)}else if(a==='fval'||a==='fval2'){const s=el.dataset.sheet,f=uiOf(s).fl[+el.dataset.fi];if(f){f[a==='fval'?'v':'v2']=el.value;redrawTable(s)}}});
 document.addEventListener('change',e=>{
 const el=e.target;
 if(el.dataset&&el.dataset.act==='devsel'){const o=el.dataset.v==='ports'?PV:DV;o[el.dataset.f]=el.dataset.f==='per'?+el.value:el.value;route();return}
+if(el.dataset&&el.dataset.act==='caljumpx'){calJump(el);return}
 if(el.id==='csv-sep'){META.csvSep=el.value;persist();return}
 if(el.dataset&&el.dataset.act==='bscol'){bsRender(el.dataset.sheet);return}
 if(el.id==='pl-dc'){$('pl-rack').innerHTML=dcRacks(el.value).map(x=>'<option>'+esc(x)+'</option>').join('');return}
@@ -2263,6 +2350,7 @@ function apply(){const dark=mode==='dark'||(mode==='auto'&&mq&&mq.matches);if(da
 try{mode=localStorage.getItem('infra-theme')||'light'}catch(e){}if(['light','dark','auto'].indexOf(mode)<0)mode='light';
 (document.querySelectorAll?document.querySelectorAll('input[name=theme]'):[]).forEach(r=>{r.checked=r.value===mode;r.addEventListener('change',()=>{if(!r.checked)return;mode=r.value;try{localStorage.setItem('infra-theme',mode)}catch(e){}apply()})});
 if(mq&&mq.addEventListener)mq.addEventListener('change',()=>{if(mode==='auto')apply()});apply()})();
+SNAP=snap();
 route();
 })();
 </script>
