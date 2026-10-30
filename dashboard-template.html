@@ -416,6 +416,7 @@ section.card[id^="set-"]{scroll-margin-top:64px}
 .chips{align-items:center}
 .chip.lay{gap:7px}.chip.lay i{width:9px;height:9px;border-radius:3px;background:var(--c);opacity:.35}.chip.lay.on{background:color-mix(in srgb,var(--c) 14%,var(--surface));border-color:color-mix(in srgb,var(--c) 55%,transparent);color:var(--ink)}.chip.lay.on i{opacity:1}
 @media (max-width:760px){.side{flex:1 1 100%!important;width:100%}.nav{flex-direction:row;overflow-x:auto;gap:4px}.navg{flex:none;gap:4px}.nav a{flex:none}}
+.ctl{display:flex;flex-direction:column;gap:2px;max-height:55vh;overflow:auto;border:1px solid var(--line);border-radius:10px;padding:6px 10px}.ctr{display:flex;align-items:center;gap:6px;padding:3px 0;border-top:1px solid var(--line2)}.ctr:first-child{border-top:0}
 </style>
 <div class="app">
 <aside class="side" aria-label="Navigation">
@@ -1653,8 +1654,21 @@ rows.sort((a,b)=>key(a)-key(b));return rows}
 function patchTable(){
 const rows=patchRows();
 if(!rows.length)return '<div class="empty">No servers match. '+(DB.ServerMI.length?'Change the filter.':'Add servers on the ServersMI tab first.')+'</div>';
-return '<div class="tw"><table><thead><tr><th>Hostname</th><th>Env</th><th>OS</th><th>Owner</th><th>Platform</th><th>Last patched</th><th>CRQ</th><th>FW patched</th><th>SLA (days)</th><th>Compliance expires</th><th>Days left</th><th>Status</th><th></th></tr></thead><tbody>'
-+rows.map(x=>{const r=x.r,p=x.p;return '<tr><td class="mono"><b>'+esc(r.Hostname)+'</b></td><td>'+cellHtml('Env',r)+'</td><td>'+esc(r.OS)+'</td><td>'+(esc(r.Owner)||'<span class="note">—</span>')+'</td><td>'+esc(r.Platform||'Virtual')+'</td><td>'+(p.lp?esc(p.lp)+' <span class="note">· '+p.age+' d ago</span>':'<span class="note">not recorded</span>')+'</td><td class="mono">'+(esc(r['Last patch CRQ'])||'<span class="note">—</span>')+'</td><td>'+(r.Platform==='Physical'?cellHtml('FW patched',r):'<span class="note">—</span>')+'</td><td class="mono">'+(p.sla||'—')+'</td><td>'+(p.due?esc(p.due):'—')+'</td><td class="mono">'+(p.left!=null?(p.left<0?'<span style="color:var(--bad-fg)">'+p.left+'</span>':p.left):'—')+'</td><td><span class="badge '+PCLS[p.st]+'">'+p.st+'</span></td><td style="white-space:nowrap"><button class="btn s" data-act="ptoday" data-i="'+x.i+'" title="Set Last patched to today">Patched today</button> <button class="btn s" data-act="edit" data-sheet="ServerMI" data-i="'+x.i+'">Edit</button></td></tr>'}).join('')+'</tbody></table></div>'}
+const SO={Overdue:0,'Due soon':1,Unknown:2,'No SLA':3,Compliant:4,Excluded:5};
+return ctTable('patching',[
+{k:'Hostname',v:x=>x.r.Hostname,h:x=>'<b>'+esc(x.r.Hostname)+'</b>',cls:'mono'},
+{k:'Env',v:x=>x.r.Env,h:x=>cellHtml('Env',x.r)},
+{k:'OS',v:x=>x.r.OS,h:x=>esc(x.r.OS)},
+{k:'Owner',v:x=>x.r.Owner,h:x=>esc(x.r.Owner)||'<span class="note">—</span>'},
+{k:'Platform',v:x=>x.r.Platform||'Virtual',h:x=>esc(x.r.Platform||'Virtual')},
+{k:'Last patched',v:x=>x.p.lp||'',h:x=>x.p.lp?esc(x.p.lp)+' <span class="note">· '+x.p.age+' d ago</span>':'<span class="note">not recorded</span>'},
+{k:'CRQ',v:x=>x.r['Last patch CRQ'],h:x=>esc(x.r['Last patch CRQ'])||'<span class="note">—</span>',cls:'mono'},
+{k:'FW patched',v:x=>x.r['FW patched']||'',h:x=>x.r.Platform==='Physical'?cellHtml('FW patched',x.r):'<span class="note">—</span>'},
+{k:'SLA (days)',v:x=>x.p.sla||0,h:x=>String(x.p.sla||'—'),cls:'mono'},
+{k:'Compliance expires',v:x=>x.p.due||'',h:x=>x.p.due?esc(x.p.due):'—'},
+{k:'Days left',v:x=>x.p.left!=null?x.p.left:99999,h:x=>x.p.left!=null?(x.p.left<0?'<span style="color:var(--bad-fg)">'+x.p.left+'</span>':String(x.p.left)):'—',cls:'mono'},
+{k:'Status',v:x=>SO[x.p.st],h:x=>'<span class="badge '+PCLS[x.p.st]+'">'+x.p.st+'</span>'},
+{k:'',fix:1,h:x=>'<span style="white-space:nowrap"><button class="btn s" data-act="ptoday" data-i="'+x.i+'" title="Record a patch with CRQ / INC">Patched today</button> <button class="btn s" data-act="edit" data-sheet="ServerMI" data-i="'+x.i+'">Edit</button></span>'}],rows)}
 function patchEnvTable(){
 const names=DB.Environments.map(e=>e.Name);DB.ServerMI.forEach(r=>{if(r.Env&&names.indexOf(r.Env)<0)names.push(r.Env)});
 return '<div class="tw"><table><thead><tr><th>Environment</th><th>Patch within (days)</th><th>Servers</th><th>Compliant</th><th>Due soon</th><th>Overdue</th><th>No date</th><th>Compliance</th></tr></thead><tbody>'+names.map(n=>{const e=envRow(n),rs=DB.ServerMI.filter(r=>r.Env===n),s=patchStats(rs),sla=e?parseInt(e['Patch days']):NaN;
@@ -1667,7 +1681,7 @@ return head('Patching compliance','OS patching status per server. Each environme
 +'<div class="kpis"><div class="kpi"><span>Compliance</span><b>'+(s.scored?s.pct+'%':'—')+'</b><small class="'+(s.scored&&s.pct<90?'w':'g')+'">'+(s.Compliant+s['Due soon'])+' of '+s.scored+' servers within their rule</small></div><div class="kpi"><span>Overdue</span><b>'+s.Overdue+'</b><small class="'+(s.Overdue?'b':'g')+'">patch rule exceeded</small></div><div class="kpi"><span>Expires within '+PWARN+' days</span><b>'+s['Due soon']+'</b><small class="'+(s['Due soon']?'w':'')+'">patch these next</small></div><div class="kpi"><span>No patch date</span><b>'+s.Unknown+'</b><small class="'+(s.Unknown?'w':'')+'">fill in Last patched · '+s['No SLA']+' have no rule</small></div></div>'
 +(noSla.length?'<section class="card" style="border-color:var(--warn-fg)"><b>Set the patch rule for: '+noSla.map(esc).join(', ')+'.</b> <span class="note">Servers in these environments are shown as “No SLA” until you enter Patch days in Settings → Environments.</span> <button class="btn s" data-act="goto" data-v="settings">Open Settings</button></section>':'')
 +'<section class="card"><h2>By environment</h2>'+patchEnvTable()+'</section>'
-+'<section class="card" style="padding:0"><div class="tools" style="padding:14px 16px;justify-content:space-between"><div class="chips">'+chips+'</div><input class="inp" type="search" data-act="pq" value="'+esc(PT.q)+'" placeholder="Search hostname, IP, OS, owner" aria-label="Search servers" style="max-width:280px"></div><div class="tools" style="padding:0 16px 12px"><span class="note">Environment:</span><div class="chips">'+envs+'</div></div><div id="pt-list">'+patchTable()+'</div></section>'
++'<section class="card" style="padding:0"><div class="tools" style="padding:14px 16px;justify-content:space-between"><div class="chips">'+chips+'</div><div class="tools">'+ctBtn('patching')+'<input class="inp srch" type="search" data-act="pq" value="'+esc(PT.q)+'" placeholder="Search hostname, IP, OS, owner" aria-label="Search servers" style="max-width:280px"></div></div><div class="tools" style="padding:0 16px 12px"><span class="note">Environment:</span><div class="chips">'+envs+'</div></div><div id="pt-list">'+patchTable()+'</div></section>'
 +'<p class="note">Last patched is a column of ServersMI. “Patched today” sets it to today. Changes stay in this page until you save them to Excel.</p>'}
 async function patchCsv(){
 const rows=patchRows(),sep=META.csvSep||';';if(!rows.length){toast('Nothing to export');return}
@@ -1816,17 +1830,38 @@ if(BJ.q){const q=BJ.q.toLowerCase();rows=rows.filter(x=>['Hostname','IP','OS','O
 const o={'No job':0,Covered:1,Exempt:2,Decom:3};rows.sort((a,b)=>o[a.b.st]-o[b.b.st]||String(a.r.Hostname).localeCompare(String(b.r.Hostname)));return rows}
 function bjServerTable(){
 const rows=bjRows();if(!rows.length)return '<div class="empty">'+(DB.ServerMI.length?'No servers match this filter.':'No servers yet. Add them on the ServersMI tab, they appear here automatically.')+'</div>';
-return '<div class="tw"><table><thead><tr><th>Server</th><th>Env</th><th>Platform</th><th>Owner</th><th>Backup jobs</th><th>Status</th><th>Note in ServersMI</th><th></th></tr></thead><tbody>'
-+rows.map(x=>{const r=x.r;return '<tr><td class="mono"><b>'+esc(r.Hostname)+'</b></td><td>'+cellHtml('Env',r)+'</td><td>'+esc(r.Platform||'Virtual')+'</td><td>'+(esc(r.Owner)||'<span class="note">—</span>')+'</td><td style="white-space:normal"><div class="pillrow">'+(x.b.js.length?x.b.js.map(bjBadge).join(''):'<span class="note">none</span>')+'</div></td><td><span class="badge '+BJCLS[x.b.st]+'">'+x.b.st+'</span></td><td class="note" style="white-space:normal">'+esc(r.Backup)+'</td><td><button class="btn s" data-act="bjasv" data-i="'+x.i+'">Assign jobs…</button></td></tr>'}).join('')+'</tbody></table></div>'}
+const O={'No job':0,Covered:1,Exempt:2,Decom:3};
+return ctTable('bjservers',[
+{k:'Server',v:x=>x.r.Hostname,h:x=>'<b>'+esc(x.r.Hostname)+'</b>',cls:'mono'},
+{k:'Env',v:x=>x.r.Env,h:x=>cellHtml('Env',x.r)},
+{k:'Platform',v:x=>x.r.Platform||'Virtual',h:x=>esc(x.r.Platform||'Virtual')},
+{k:'Owner',v:x=>x.r.Owner,h:x=>esc(x.r.Owner)||'<span class="note">—</span>'},
+{k:'Backup jobs',v:x=>x.b.js.map(j=>j.Job).join(', '),h:x=>'<div class="pillrow">'+(x.b.js.length?x.b.js.map(bjBadge).join(''):'<span class="note">none</span>')+'</div>',st:'white-space:normal'},
+{k:'Status',v:x=>O[x.b.st],h:x=>'<span class="badge '+BJCLS[x.b.st]+'">'+x.b.st+'</span>'},
+{k:'Note in ServersMI',v:x=>x.r.Backup,h:x=>'<span class="note">'+esc(x.r.Backup)+'</span>',st:'white-space:normal'},
+{k:'',fix:1,h:x=>'<button class="btn s" data-act="bjasv" data-i="'+x.i+'">Assign jobs…</button>'}],rows)}
+function bjJobsTable(){const rows=DB.BackupJobs.map((j,i)=>({j:j,i:i,n:DB.BackupAssign.filter(a=>a.Job===j.Job).length}));
+return ctTable('bjjobs',[
+{k:'Job',v:x=>x.j.Job,h:x=>'<b>'+esc(x.j.Job)+'</b>'},
+{k:'Type',v:x=>x.j.Type,h:x=>'<span class="badge '+(btCloud(x.j.Type)?'b-info':!btCounts(x.j.Type)?'b-off':'b-ok')+'">'+(btCloud(x.j.Type)?'☁ ':'')+esc(x.j.Type)+'</span>'},
+{k:'Level',v:x=>x.j['Backup level'],h:x=>esc(x.j['Backup level']||'')},
+{k:'Software',v:x=>x.j.Software,h:x=>esc(x.j.Software)},
+{k:'Target',v:x=>x.j.Target,h:x=>esc(x.j.Target)},
+{k:'Catalyst store',v:x=>x.j['Catalyst store'],h:x=>esc(x.j['Catalyst store']||'')},
+{k:'Schedule',v:x=>x.j.Schedule,h:x=>esc(x.j.Schedule)},
+{k:'Retention',v:x=>x.j.Retention,h:x=>esc(x.j.Retention)},
+{k:'Servers',v:x=>x.n,h:x=>'<a class="mono" href="#backupjobs" data-act="bjjobset" data-v="'+esc(x.j.Job)+'">'+x.n+'</a>'},
+{k:'Status',v:x=>x.j.Active==='No'?1:0,h:x=>'<span class="badge '+(x.j.Active==='No'?'b-off':'b-ok')+'">'+(x.j.Active==='No'?'Inactive':'Active')+'</span>'},
+{k:'',fix:1,h:x=>'<span style="white-space:nowrap"><button class="btn s" data-act="bjajob" data-i="'+x.i+'">Assign servers…</button> <button class="btn s" data-act="edit" data-sheet="BackupJobs" data-i="'+x.i+'">Edit</button></span>'}],rows)}
 function bjView(){
 const sv=DB.ServerMI.filter(r=>srvKind(r)!=='Decommissioned'),inf=sv.map(bjInfo),cov=inf.filter(b=>b.st==='Covered').length,none=inf.filter(b=>b.st==='No job').length,cl=inf.filter(b=>b.cloud).length,multi=inf.filter(b=>b.js.length>1).length;
-const jobs='<div class="tw"><table><thead><tr><th>Job</th><th>Type</th><th>Level</th><th>Software</th><th>Target</th><th>Catalyst store</th><th>Schedule</th><th>Retention</th><th>Servers</th><th>Status</th><th></th></tr></thead><tbody>'+DB.BackupJobs.map((j,i)=>{const n=DB.BackupAssign.filter(a=>a.Job===j.Job).length;return '<tr><td><b>'+esc(j.Job)+'</b></td><td><span class="badge '+(btCloud(j.Type)?'b-info':!btCounts(j.Type)?'b-off':'b-ok')+'">'+(btCloud(j.Type)?'☁ ':'')+esc(j.Type)+'</span></td><td>'+esc(j['Backup level']||'')+'</td><td>'+esc(j.Software)+'</td><td>'+esc(j.Target)+'</td><td>'+esc(j['Catalyst store']||'')+'</td><td>'+esc(j.Schedule)+'</td><td>'+esc(j.Retention)+'</td><td><a class="mono" href="#backupjobs" data-act="bjjobset" data-v="'+esc(j.Job)+'">'+n+'</a></td><td><span class="badge '+(j.Active==='No'?'b-off':'b-ok')+'">'+(j.Active==='No'?'Inactive':'Active')+'</span></td><td style="white-space:nowrap"><button class="btn s" data-act="bjajob" data-i="'+i+'">Assign servers…</button> <button class="btn s" data-act="edit" data-sheet="BackupJobs" data-i="'+i+'">Edit</button></td></tr>'}).join('')+'</tbody></table></div>';
+const jobs=bjJobsTable();
 const chips=['All','No job','Covered','Cloud','Exempt'].map(o=>'<button class="chip'+(BJ.f===o?' on':'')+'" data-act="bjf" data-v="'+o+'">'+o+'</button>').join('');
 const jsel='<select class="inp" data-act="bjjob" aria-label="Filter by job" style="width:auto;max-width:260px"><option value="All">All jobs</option>'+DB.BackupJobs.map(j=>'<option'+(BJ.job===j.Job?' selected':'')+'>'+esc(j.Job)+'</option>').join('')+'</select>';
 return head('Backup jobs','Which server is under which backup job. Define the jobs once, then assign servers to them. A server can be in several jobs, for example an on-site job and a cloud job.','<button class="btn" data-act="bjcsv">Export CSV</button><button class="btn p" data-act="saveXlsx">Save to Excel</button>')
 +'<div class="kpis"><div class="kpi"><span>Servers with a backup job</span><b>'+(sv.length?Math.round(cov/sv.length*100)+'%':'—')+'</b><small class="'+(none?'w':'g')+'">'+cov+' of '+sv.length+' servers</small></div><div class="kpi"><span>Without a backup job</span><b>'+none+'</b><small class="'+(none?'b':'g')+'">'+(none?'assign a job or mark exempt':'all covered')+'</small></div><div class="kpi"><span>Also in a cloud job</span><b>'+cl+'</b><small>'+multi+' servers in more than one job</small></div><div class="kpi"><span>Backup jobs</span><b>'+DB.BackupJobs.length+'</b><small>'+DB.BackupJobs.filter(j=>j.Active==='No').length+' inactive</small></div></div>'
-+'<section class="card"><div class="tools" style="justify-content:space-between;margin-bottom:8px"><h2 style="margin:0">Job specifications</h2><button class="btn p" data-act="bjadd">+ Add job</button></div>'+(DB.BackupJobs.length?jobs:'<div class="empty">No jobs yet. Add each backup job once: name, type, target, schedule, retention. Categories (cloud, tape, exempt and so on) are managed in Settings.</div>')+'</section>'
-+'<section class="card" style="padding:0"><div class="tools" style="padding:14px 16px;justify-content:space-between"><div class="chips">'+chips+'</div><div class="tools">'+jsel+'<input class="inp" type="search" data-act="bjq" value="'+esc(BJ.q)+'" placeholder="Search server, owner, job" aria-label="Search" style="max-width:260px"></div></div><div id="bj-list">'+bjServerTable()+'</div></section>'
++'<section class="card"><div class="tools" style="justify-content:space-between;margin-bottom:8px"><h2 style="margin:0">Job specifications</h2><div class="tools">'+ctBtn('bjjobs')+'<button class="btn p" data-act="bjadd">+ Add job</button></div></div>'+(DB.BackupJobs.length?jobs:'<div class="empty">No jobs yet. Add each backup job once: name, type, target, schedule, retention. Categories (cloud, tape, exempt and so on) are managed in Settings.</div>')+'</section>'
++'<section class="card" style="padding:0"><div class="tools" style="padding:14px 16px;justify-content:space-between"><div class="chips">'+chips+'</div><div class="tools">'+ctBtn('bjservers')+jsel+'<input class="inp srch" type="search" data-act="bjq" value="'+esc(BJ.q)+'" placeholder="Search server, owner, job" aria-label="Search" style="max-width:260px"></div></div><div id="bj-list">'+bjServerTable()+'</div></section>'
 +'<p class="note">The server list comes from the ServersMI tab. Assignments are saved in the sheet BackupAssign, job definitions in BackupJobs. Renaming a server or a job updates its assignments.</p>'}
 function bjOpenModal(title,body,sub){
 $('modal').innerHTML='<div class="modal" data-act="mbg"><div class="dlg" role="dialog" aria-modal="true" aria-label="'+esc(title)+'" style="width:min(560px,100%)"><h2>'+esc(title)+'</h2>'+(sub?'<p class="note" style="margin:0">'+sub+'</p>':'')+body+'<div class="acts"><span></span><div class="tools"><button class="btn" data-act="mclose">Cancel</button><button class="btn p" data-act="bjsave">Save</button></div></div></div></div>'}
@@ -2451,6 +2486,28 @@ navgrp(el){const g=el.dataset.g;NAVC[g]=!NAVC[g];navSave();renderSide()},
 ckopen(){openCk()},
 ckgo(el){ckGo(+el.dataset.j)},
 subgo(el){const s=$(el.dataset.id);if(s)s.scrollIntoView({behavior:'smooth',block:'start'})}};
+/* ---------- sortable tables with column chooser for custom pages (Patching, Backup jobs) ---------- */
+let CTS={};try{CTS=JSON.parse(localStorage.getItem('ii-ct')||'{}')||{}}catch(e){CTS={}}
+const CTREG={};
+function ctSave(){try{localStorage.setItem('ii-ct',JSON.stringify(CTS))}catch(e){}}
+function ctSt(id){return CTS[id]=CTS[id]||{sk:null,sd:1,hide:[],ord:null}}
+function ctCols(id){const st=ctSt(id),cols=CTREG[id].cols.slice();if(st.ord){const ix=c=>{const i=st.ord.indexOf(c.k);return i<0?999:i};cols.sort((a,b)=>(a.fix?1000:ix(a))-(b.fix?1000:ix(b)))}return cols}
+function ctCmp(a,b){const na=typeof a==='number',nb=typeof b==='number';if(na&&nb)return a-b;a=String(a==null?'':a);b=String(b==null?'':b);if(!a&&b)return 1;if(a&&!b)return -1;return a.localeCompare(b,undefined,{numeric:true,sensitivity:'base'})}
+function ctTable(id,cols,rows){CTREG[id]={cols:cols};const st=ctSt(id),C=ctCols(id).filter(c=>c.fix||st.hide.indexOf(c.k)<0);
+const sc=st.sk&&cols.find(c=>c.k===st.sk&&c.v);if(sc){rows=rows.map((x,i)=>[x,i]).sort((a,b)=>ctCmp(sc.v(a[0]),sc.v(b[0]))*st.sd||a[1]-b[1]).map(a=>a[0])}
+return '<div class="tw"><table><thead><tr>'+C.map(c=>c.fix||!c.v?'<th>'+(c.l||'')+'</th>':'<th data-act="ctsort" data-t="'+id+'" data-k="'+esc(c.k)+'" aria-sort="'+(st.sk===c.k?(st.sd>0?'ascending':'descending'):'none')+'" title="Sort by '+esc(c.l||c.k)+'">'+esc(c.l||c.k)+(st.sk===c.k?(st.sd>0?' ↑':' ↓'):'')+'</th>').join('')+'</tr></thead><tbody>'
++rows.map(x=>'<tr>'+C.map(c=>'<td'+(c.cls?' class="'+c.cls+'"':'')+(c.st?' style="'+c.st+'"':'')+'>'+c.h(x)+'</td>').join('')+'</tr>').join('')+'</tbody></table></div>'}
+function ctBtn(id){return '<button class="btn s" data-act="ctcols" data-t="'+id+'"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="M9 4v16M15 4v16"/></svg>Columns</button>'}
+function ctDlg(id){const st=ctSt(id),cols=ctCols(id).filter(c=>!c.fix);
+$('modal').innerHTML='<div class="modal" data-act="mbg"><div class="dlg" role="dialog" aria-modal="true" aria-label="Columns" style="width:min(460px,100%)"><h2>Columns</h2><p class="note" style="margin:0">Tick the columns to show and use the arrows to change their order. Click a column header in the table to sort by it, click again to reverse.</p><div class="ctl">'
++cols.map((c,i)=>'<div class="ctr"><label class="chkrow" style="grid-column:auto;flex:1"><input type="checkbox" data-act="ctvis" data-t="'+id+'" data-k="'+esc(c.k)+'"'+(st.hide.indexOf(c.k)<0?' checked':'')+'> '+esc(c.l||c.k)+'</label><button class="btn s" data-act="ctmove" data-t="'+id+'" data-k="'+esc(c.k)+'" data-d="-1" aria-label="Move '+esc(c.l||c.k)+' up"'+(i===0?' disabled':'')+'>↑</button><button class="btn s" data-act="ctmove" data-t="'+id+'" data-k="'+esc(c.k)+'" data-d="1" aria-label="Move '+esc(c.l||c.k)+' down"'+(i===cols.length-1?' disabled':'')+'>↓</button></div>').join('')
++'</div><div class="acts"><button class="btn" data-act="ctreset" data-t="'+id+'">Reset to default</button><button class="btn p" data-act="mclose">Done</button></div></div></div>'}
+const CTACT={
+ctsort(el){const st=ctSt(el.dataset.t),k=el.dataset.k;if(st.sk===k){if(st.sd>0)st.sd=-1;else{st.sk=null;st.sd=1}}else{st.sk=k;st.sd=1}ctSave();route()},
+ctcols(el){ctDlg(el.dataset.t)},
+ctvis(el){const st=ctSt(el.dataset.t),k=el.dataset.k;st.hide=st.hide.filter(x=>x!==k);if(!el.checked)st.hide.push(k);ctSave();route();ctDlg(el.dataset.t)},
+ctmove(el){const id=el.dataset.t,st=ctSt(id),o=ctCols(id).filter(c=>!c.fix).map(c=>c.k),i=o.indexOf(el.dataset.k),j=i+(+el.dataset.d);if(j<0||j>=o.length)return;o.splice(j,0,o.splice(i,1)[0]);st.ord=o;ctSave();route();ctDlg(id)},
+ctreset(el){CTS[el.dataset.t]={sk:null,sd:1,hide:[],ord:null};ctSave();route();ctDlg(el.dataset.t)}};
 
 /* ---------- data quality (computed from the data) ---------- */
 function sevN(s){return s==='high'?0:s==='medium'?1:2}
@@ -2858,7 +2915,7 @@ const fallback=()=>{const r=document.createRange();r.selectNodeContents(node);co
 if(navigator.clipboard&&navigator.clipboard.writeText)navigator.clipboard.writeText(t).then(()=>toast('Copied'),fallback);else fallback();
 }
 };
-Object.assign(ACT,CALACT,PORTACT,ENCLACT,LOGACT,HPACT,DCPACT,SRTACT,SHELLACT);
+Object.assign(ACT,CALACT,PORTACT,ENCLACT,LOGACT,HPACT,DCPACT,SRTACT,SHELLACT,CTACT);
 document.addEventListener('click',e=>{const el=e.target.closest('[data-act]');if(!el)return;if(el.tagName==='A'&&el.getAttribute('href')==='#')e.preventDefault();const f=ACT[el.dataset.act];if(f)f(el,e)});
 document.addEventListener('submit',e=>{if(e.target.id!=='frm')return;e.preventDefault();const sheet=e.target.dataset.sheet;const r=submitForm(e.target);if(r&&sheet==='Issues'&&r.ID){IS.sel=r.ID;route()}});
 document.addEventListener('input',e=>{const el=e.target,a=el.dataset&&el.dataset.act;if(a==='pvq'){PV.q=el.value;const p=el.selectionStart;route();const n=document.querySelector('[data-act=pvq]');if(n){n.focus();try{n.setSelectionRange(p,p)}catch(x){}}}else if(a==='oiq'){OS.q=el.value;const l=$('oi-list');if(l)l.innerHTML=oiList()}else if(a==='bjq'){BJ.q=el.value;const l=$('bj-list');if(l)l.innerHTML=bjServerTable()}else if(a==='bjmq'){const q=el.value.toLowerCase();document.querySelectorAll('.bjrow').forEach(r=>{r.style.display=r.dataset.t.indexOf(q)>=0?'':'none'})}else if(a==='pbprev'){ptPreview()}else if(a==='pq'){PT.q=el.value;const l=$('pt-list');if(l)l.innerHTML=patchTable()}else if(a==='kbq'){KS.q=el.value;const l=$('kb-list');if(l)l.innerHTML=kbList()}else if(a==='q'){uiOf(el.dataset.sheet).q=el.value;redrawTable(el.dataset.sheet)}else if(a==='fval'||a==='fval2'){const s=el.dataset.sheet,f=uiOf(s).fl[+el.dataset.fi];if(f){f[a==='fval'?'v':'v2']=el.value;redrawTable(s)}}});
@@ -2867,6 +2924,7 @@ const el=e.target;
 if(el.dataset&&el.dataset.act==='devsel'){const o=el.dataset.v==='ports'?PV:DV;o[el.dataset.f]=el.dataset.f==='per'?+el.value:el.value;route();return}
 if(el.dataset&&el.dataset.act==='caljumpx'){calJump(el);return}
 if(el.classList&&el.classList.contains('hpc')){hpSync(el);return}
+if(el.dataset&&el.dataset.act==='ctvis'){CTACT.ctvis(el);return}
 if(el.dataset&&el.dataset.act==='srtf'){srtField(el);return}
 if(el.dataset&&el.dataset.act==='dcpf'){dcpField(el);return}
 if(el.dataset&&el.dataset.act==='dcpopt'){if(el.dataset.o==='heat')DPS.heat=el.checked;else DPS.snap=parseFloat(el.value);dcpFull();return}
