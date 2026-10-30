@@ -127,13 +127,13 @@ tr.clk{cursor:pointer}
 .toast{position:fixed;left:50%;bottom:calc(20px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);background:var(--ink);color:var(--bg);padding:10px 16px;border-radius:8px;z-index:80;max-width:90vw}
 /* rack layout */
 .racks{display:flex;gap:12px;min-width:max-content}
-.rack{width:150px;flex:0 0 150px}
+.rack{width:var(--rw,150px);flex:0 0 var(--rw,150px)}
 .rack h3{font-size:13px;display:flex;justify-content:space-between;margin-bottom:6px}
-.rk{display:grid;grid-template-rows:repeat(42,14px);gap:1px;background:var(--line);border:2px solid var(--line);border-radius:4px;padding:1px}
+.rk{display:grid;grid-template-rows:repeat(42,var(--rh,14px));grid-auto-rows:var(--rh,14px);gap:1px;background:var(--line);border:2px solid var(--line);border-radius:4px;padding:1px}
 .rk>*{grid-column:1}
-.rk .f{background:var(--u-free);font:9px/14px var(--font);color:var(--muted);padding:0 0 0 3px;overflow:hidden;border:0;text-align:left;cursor:pointer;min-height:0}
+.rk .f{background:var(--u-free);font:calc(var(--rf,10px) - 1px)/var(--rh,14px) var(--font);color:var(--muted);padding:0 0 0 3px;overflow:hidden;border:0;text-align:left;cursor:pointer;min-height:0}
 .rk .f:hover{background:var(--accent-soft);color:var(--accent)}
-.dev{border:0;border-radius:2px;color:#fff;font-size:10px;line-height:1;padding:0 4px;text-align:left;overflow:hidden;white-space:nowrap;text-overflow:ellipsis;cursor:pointer;min-height:0}
+.dev{border:0;border-radius:2px;color:#fff;font-size:var(--rf,10px);line-height:1;padding:0 4px;text-align:left;overflow:hidden;white-space:nowrap;text-overflow:ellipsis;cursor:pointer;min-height:0}
 .dev.esxi{background:var(--u-esxi)}.dev.stor{background:var(--u-stor)}.dev.back{background:var(--u-back)}
 .dev.hit{outline:2px solid var(--bad-fg);outline-offset:-2px}
 .leg{display:flex;flex-wrap:wrap;gap:6px 16px;font-size:12px;color:var(--muted)}
@@ -230,10 +230,10 @@ pre{margin:0;padding:12px;background:var(--surface2);border:1px solid var(--line
 .pt:hover{outline:2px solid var(--accent)}
 @media(max-width:700px){.pgrid{grid-template-columns:repeat(6,minmax(0,1fr))}}
 .dev.encl{display:flex;flex-direction:column;gap:2px;padding:2px;white-space:normal;cursor:pointer}
-.encl .en{font-size:10px;line-height:11px;font-weight:600;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.encl .en{font-size:var(--rf,10px);line-height:calc(var(--rf,10px) + 1px);font-weight:600;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .encl .bays{flex:1;display:grid;grid-template-columns:repeat(var(--a),minmax(0,1fr));grid-template-rows:repeat(var(--d),minmax(0,1fr));gap:2px}
 .bay{border:0;border-radius:2px;background:rgba(0,0,0,.28);color:rgba(255,255,255,.7);font-size:8px;padding:0;min-width:0;min-height:0;cursor:pointer}
-.bay.on{background:#1f9d6b;color:#fff}.bay:hover{outline:1px solid #fff}
+.bay.on{background:#1f9d6b;color:#fff}.bay .bn{display:block;writing-mode:vertical-rl;transform:rotate(180deg);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-height:100%;margin:auto;font-size:var(--rf,10px);line-height:1.1;font-weight:600}.bay{font-size:var(--rf,10px)}.bay:hover{outline:1px solid #fff}
 .calgrid.big .cd{min-height:104px}.calgrid.big .cd.out{background:var(--surface2);opacity:.55;cursor:pointer;border-color:var(--line2)}
 .ce.full{white-space:normal;font-size:12px;padding:4px 6px;margin-bottom:4px;text-decoration:none}.ce.full small{display:block;opacity:.85;font-size:11px}
 a.ce{text-decoration:none;cursor:pointer}a.btn{text-decoration:none;color:var(--ink)}
@@ -1251,7 +1251,7 @@ return '<div class="tw"><table><thead><tr><th>Sheet</th><th>Rows</th><th>Last up
 function devices(){const o=[];[['ESXi','Hostname','esxi'],['Storage','Array','stor'],['Backup','Device','back'],['RackDevices','Name','cust']].forEach(a=>DB[a[0]].forEach((r,i)=>{if(a[0]==='ESXi'&&inEncl(r))return;o.push({sheet:a[0],i:i,name:r[a[1]],t:a[2],dc:r.DC,rack:r.Rack,u:parseInt(r['U start']),sz:parseInt(r['U size']),r:r})}));return o}
 function valid(d){return !isNaN(d.u)&&!isNaN(d.sz)&&d.sz>=1&&d.u>=1&&d.u+d.sz-1<=rackU(d.dc,d.rack)&&dcRacks(d.dc).indexOf(String(d.rack))>=0}
 function overlaps(all){const hit=new Set(),pairs=[];const ok=all.filter(valid);for(let a=0;a<ok.length;a++)for(let b=a+1;b<ok.length;b++){const x=ok[a],y=ok[b];if(x.dc===y.dc&&x.rack===y.rack&&x.u<=y.u+y.sz-1&&y.u<=x.u+x.sz-1){hit.add(x.sheet+x.i);hit.add(y.sheet+y.i);pairs.push([x,y])}}return{hit:hit,pairs:pairs}}
-const RK={dc:'DC2A',sel:null};
+const RK={dc:'DC2A',sel:null,z:1},RKZ=[['Compact',150,14,10],['Large',340,18,12],['Extra large',560,24,14]];
 const TYPE_LABEL={esxi:'ESXi host',stor:'Storage array',back:'Backup device'};
 function devLabel(d){return d.t==='srv'?'Blade server':d.t==='cust'?String(d.r.Type||'Other device'):TYPE_LABEL[d.t]}
 function typeColor(name){const t=DB.DeviceTypes.find(x=>x.Name===name);return DT_COLORS[(t&&t.Color)||'Slate']||DT_COLORS.Slate}
@@ -1275,7 +1275,7 @@ const un=unplaced();
 const unHtml='<section class="card"><h2>Unplaced devices</h2>'+(un.length?'<div class="tw"><table><thead><tr><th>Device</th><th>Type</th><th>DC</th><th></th></tr></thead><tbody>'+un.map(d=>'<tr><td class="mono">'+esc(d.name)+'</td><td>'+devLabel(d)+'</td><td>'+esc(d.dc||'—')+'</td><td><button class="btn s" data-act="rkmove" data-sheet="'+d.sheet+'" data-i="'+d.i+'">Place…</button></td></tr>').join('')+'</tbody></table></div>':'<p class="note" style="margin:0">Every device in the inventory has a position.</p>')+'</section>';
 return head('DC rack layout','One layout per data center: '+NR+' racks, '+TU+' U in total (add, rename or resize racks in Settings). Click a free U or the + on a rack to place a device. Select a device to move or remove it.','<button class="btn" data-act="rkencl">Add blade enclosure (CS700)</button><div class="chips">'+DCS.map(dc=>'<button class="chip'+(RK.dc===dc?' on':'')+'" data-act="rkdc" data-v="'+dc+'">'+dc+'</button>').join('')+'</div>')
 +'<div class="kpis"><div class="kpi"><span>Rack space used · '+RK.dc+'</span><b>'+used+' / '+TU+' U</b><small>'+Math.round(used/(TU||1)*100)+'% of '+NR+' racks</small></div><div class="kpi"><span>Devices placed</span><b>'+all.filter(d=>d.dc===RK.dc&&valid(d)).length+'</b><small>'+all.filter(d=>d.dc===RK.dc&&!valid(d)).length+' without a valid position</small></div><div class="kpi"><span>Position conflicts</span><b>'+ov.pairs.filter(p=>p[0].dc===RK.dc).length+'</b><small class="'+(ov.pairs.some(p=>p[0].dc===RK.dc)?'b':'g')+'">'+(ov.pairs.some(p=>p[0].dc===RK.dc)?'Overlapping devices are outlined in red':'No overlaps')+'</small></div></div>'
-+'<section class="card"><div class="leg" style="margin-bottom:12px"><span><i style="background:var(--u-esxi)"></i>ESXi host</span><span><i style="background:var(--u-stor)"></i>Storage array</span><span><i style="background:var(--u-back)"></i>Backup device</span>'+DB.DeviceTypes.filter(t=>t.Active!=='No').map(t=>'<span><i style="background:'+typeColor(t.Name)+'"></i>'+esc(t.Name)+'</span>').join('')+'<span><i style="background:var(--u-free);border:1px solid var(--line)"></i>Free U</span><span>U1 is at the bottom of each rack</span></div><div class="tw"><div class="racks">'+(rackHtml||'<p class="note">This data center has no racks yet. Add them in Settings → Racks.</p>')+'</div></div></section>'
++'<section class="card"><div class="tools" style="margin-bottom:10px">Size: '+RKZ.map((z,i)=>'<button class="btn s'+(RK.z===i?' p':'')+'" data-act="rkzoom" data-z="'+i+'">'+z[0]+'</button>').join('')+'<span class="note">Large and Extra large show hostnames in the blade bays. Scroll sideways for more racks.</span></div><div class="leg" style="margin-bottom:12px"><span><i style="background:var(--u-esxi)"></i>ESXi host</span><span><i style="background:var(--u-stor)"></i>Storage array</span><span><i style="background:var(--u-back)"></i>Backup device</span>'+DB.DeviceTypes.filter(t=>t.Active!=='No').map(t=>'<span><i style="background:'+typeColor(t.Name)+'"></i>'+esc(t.Name)+'</span>').join('')+'<span><i style="background:var(--u-free);border:1px solid var(--line)"></i>Free U</span><span>U1 is at the bottom of each rack</span></div><div class="tw"><div class="racks" style="--rw:'+RKZ[RK.z][1]+'px;--rh:'+RKZ[RK.z][2]+'px;--rf:'+RKZ[RK.z][3]+'px">'+(rackHtml||'<p class="note">This data center has no racks yet. Add them in Settings → Racks.</p>')+'</div></div></section>'
 +'<section class="card"><h2>Selected device</h2>'+detail+'</section>'+unHtml;
 }
 
@@ -2018,13 +2018,14 @@ $('modal').innerHTML='<div class="modal" data-act="mbg"><div class="dlg" role="d
 let BP=null,BPL=[];
 function enclCell(d,UH,hit,ln){
 const r=d.r,A=parseInt(r['Bays across']),D=parseInt(r['Bays down']);let b='';
-for(let n=1;n<=A*D;n++){const hh=bladeAt(r.Name,n),h=hh?hh.r:null;b+='<button class="bay'+(h?' on':'')+'" data-act="rkbay" data-enc="'+esc(r.Name)+'" data-b="'+n+'" title="'+esc('Bay '+n+': '+(h?h.Hostname:'empty — click to put a blade in'))+'">'+(h?'':n)+'</button>'}
+for(let n=1;n<=A*D;n++){const hh=bladeAt(r.Name,n),h=hh?hh.r:null;b+='<button class="bay'+(h?' on':'')+'" data-act="rkbay" data-enc="'+esc(r.Name)+'" data-b="'+n+'" title="'+esc('Bay '+n+': '+(h?h.Hostname:'empty — click to put a blade in'))+'">'+(h?'<span class="bn">'+esc(h.Hostname)+'</span>':n)+'</button>'}
 return '<div class="dev encl'+(hit?' hit':'')+'" style="grid-row:'+(UH+2-d.u-d.sz)+' / span '+d.sz+';background:'+devColor(d)+(ln===undefined?'':';width:50%;justify-self:'+(ln?'end':'start'))+'" data-act="rkdev" data-sheet="'+d.sheet+'" data-i="'+d.i+'" title="'+esc(d.name)+' · U'+d.u+(d.sz>1?'–U'+(d.u+d.sz-1):'')+'"><span class="en">'+esc(d.name)+'</span><div class="bays" style="--a:'+A+';--d:'+D+'">'+b+'</div></div>'}
 function enclDetail(r){
 const A=parseInt(r['Bays across']),D=parseInt(r['Bays down']);let rows='';
 for(let n=1;n<=A*D;n++){const hh=bladeAt(r.Name,n);rows+='<tr><td class="mono">'+n+'</td><td>'+(hh?'<a href="#" data-act="rkbay" data-enc="'+esc(r.Name)+'" data-b="'+n+'">'+esc(hh.r.Hostname)+'</a> <span class="note">'+(hh.sheet==='ESXi'?'ESXi host':'server')+'</span>':'<span class="note" style="margin:0">empty</span>')+'</td><td style="text-align:right">'+(hh?'<button class="btn s" data-act="bprm" data-sheet="'+hh.sheet+'" data-i="'+hh.i+'">Remove from bay</button>':'<button class="btn s" data-act="rkbay" data-enc="'+esc(r.Name)+'" data-b="'+n+'">Put a blade here…</button>')+'</td></tr>'}
 return '<h3 style="font-size:14px;margin:14px 0 6px">Bays ('+A+' across × '+D+' down)</h3><div class="tw"><table><thead><tr><th>Bay</th><th>Blade</th><th></th></tr></thead><tbody>'+rows+'</tbody></table></div>'}
 const ENCLACT={
+rkzoom(el){RK.z=+el.dataset.z;route()},
 rkbay(el,e){const enc=el.dataset.enc,n=+el.dataset.b,hh=bladeAt(enc,n);
 if(hh){RK.sel={sheet:hh.sheet,i:hh.i};route();return}openBayPick(enc,n)},
 bpgo(){const x=BPL[+$('bp-sel').value];if(!x)return;const e=DB.RackDevices.find(y=>y.Name===BP.enc)||{};const t=Object.assign({},x.r,{Enclosure:BP.enc,Bay:String(BP.n),Blade:'Yes'});if(x.sheet==='ESXi'){t.DC=e.DC||t.DC;t.Rack=e.Rack||t.Rack}
