@@ -454,6 +454,50 @@ box-shadow:inset 0 0 0 1px rgba(255,255,255,.14),inset 0 -1px 0 rgba(0,0,0,.3),0
 .rk .dev{position:relative;z-index:1}.rk .dev.sel{z-index:3}
 .rk .dev.encl{flex-direction:column;align-items:stretch;padding:3px 4px 4px;gap:3px}.rk .dev.encl .en{flex:none}.rk .dev.encl .bays{flex:1;width:100%}.rk .bay{background:rgba(0,0,0,.38);box-shadow:inset 0 1px 0 rgba(0,0,0,.4)}.rk .bay.on{background:linear-gradient(180deg,#2FB67E,#1C8C5E);box-shadow:inset 0 0 0 1px rgba(255,255,255,.18)}
 .rk .dev.phys{--dc:var(--u-phys)}.dev.phys{background:var(--u-phys)}.card.callout{border-color:color-mix(in srgb,var(--warn-c) 45%,var(--line));background:color-mix(in srgb,var(--warn-c) 6%,var(--surface))}
+
+/* ---- script central ---- */
+.sc-agent{display:flex;align-items:center;gap:12px;padding:12px 14px;border-radius:12px;border:1px solid var(--line);background:var(--surface);box-shadow:var(--sh-1)}
+.sc-agent.on{border-color:color-mix(in srgb,var(--ok-c) 40%,var(--line))}.sc-agent.off{border-color:color-mix(in srgb,var(--bad-c) 35%,var(--line))}
+.sc-grid{display:grid;grid-template-columns:minmax(240px,300px) minmax(0,1fr);gap:16px;align-items:start}
+@media(max-width:900px){.sc-grid{grid-template-columns:1fr}}
+.sc-lib{position:sticky;top:12px;padding:12px;max-height:calc(100vh - 40px);display:flex;flex-direction:column;gap:8px}
+.sc-list{overflow:auto;display:flex;flex-direction:column;gap:1px;margin:0 -4px;padding:0 4px}
+.sc-cat{font-size:11px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);padding:12px 8px 4px}
+.sc-item{display:flex;align-items:center;gap:8px;width:100%;text-align:left;border:0;background:none;padding:7px 8px;border-radius:8px;cursor:pointer;color:var(--ink);font-size:13px}
+.sc-item:hover{background:var(--surface2)}.sc-item.on{background:var(--accent-soft);color:var(--accent);font-weight:600}
+.sc-n{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.sc-tags{display:flex;align-items:center;gap:5px;flex:none}.sc-tags em{font-style:normal;font-size:10px;font-weight:600;padding:1px 6px;border-radius:6px;background:var(--surface2);color:var(--muted);border:1px solid var(--line)}
+.sc-tags em.r{color:var(--info-fg);background:var(--info-bg);border-color:transparent}
+.sc-danger{width:7px;height:7px;border-radius:50%;background:var(--warn-c)}
+.sc-main{display:flex;flex-direction:column;gap:16px;min-width:0}
+.sc-code summary{cursor:pointer;font-size:13px;font-weight:500;color:var(--accent);margin-top:14px}
+.sc-code pre{max-height:340px;margin:8px 0;white-space:pre;background:#0F1623;color:#D6E2F3;border-color:#1E293B}
+.sc-tlist{max-height:260px;overflow:auto;border:1px solid var(--line);border-radius:10px;padding:4px 8px;display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:0 12px}
+.sc-t{display:flex;align-items:center;gap:8px;padding:5px 2px;border-bottom:1px solid var(--line2);font-size:13px;min-width:0}
+.sc-t .note{margin-left:auto;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.sc-opts{display:flex;flex-wrap:wrap;align-items:center;gap:10px 18px}
+.spin{display:inline-block;width:12px;height:12px;border:2px solid var(--line);border-top-color:var(--accent);border-radius:50%;animation:spin .7s linear infinite;vertical-align:-2px;margin-right:6px}
+@keyframes spin{to{transform:rotate(360deg)}}
+.lnkaddr{display:flex;align-items:center;gap:6px;min-width:0}.lnkaddr>span{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;min-width:0}
+.btn.icon{width:30px;padding:0;justify-content:center;flex:none}
+code{font-family:var(--mono);font-size:12px;background:var(--surface2);border:1px solid var(--line);border-radius:5px;padding:1px 5px}
+.btn.p.d{background:var(--bad-c);border-color:var(--bad-c);color:#fff}
+.sc-lib .inp{flex:none}.sc-list{flex:1 1 auto;min-height:0}
+
+/* ---- data import ---- */
+.impsteps{display:flex;gap:8px;list-style:none;margin:0;padding:0;flex-wrap:wrap}
+.impsteps li{display:flex;align-items:center;gap:8px;padding:8px 14px 8px 8px;border-radius:999px;background:var(--surface);border:1px solid var(--line);font-size:13px;color:var(--muted)}
+.impsteps li b{width:24px;height:24px;border-radius:50%;display:inline-flex;align-items:center;justify-content:center;background:var(--surface2);border:1px solid var(--line);font-size:12px}
+.impsteps li.on{color:var(--ink);border-color:var(--accent);font-weight:600}.impsteps li.on b{background:var(--accent);color:var(--accent-ink);border-color:var(--accent)}
+.impsteps li.done b{background:var(--ok-bg);color:var(--ok-fg);border-color:transparent}
+.impsrc{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:10px}
+.impcard{display:flex;flex-direction:column;gap:4px;text-align:left;padding:14px;border-radius:12px;border:1px solid var(--line);background:var(--surface);cursor:pointer;color:var(--ink)}
+.impcard span{font-size:12.5px;color:var(--muted);line-height:1.45}.impcard:hover{border-color:color-mix(in srgb,var(--accent) 45%,var(--line))}
+.impcard.on{border-color:var(--accent);background:var(--accent-soft);box-shadow:inset 0 0 0 1px var(--accent)}
+.impdrop{margin-top:14px;border:2px dashed var(--line);border-radius:14px;padding:22px;display:flex;flex-direction:column;align-items:center;gap:8px;text-align:center;background:var(--surface2)}
+.impdrop.over{border-color:var(--accent);background:var(--accent-soft)}
+.impmap tr.ign td{opacity:.6}.impplan tr.off td{opacity:.5}
+.impch{display:inline-block;margin:2px 10px 2px 0;font-size:12.5px}.impch s{color:var(--muted)}
 </style>
 <div class="app">
 <aside class="side" aria-label="Navigation">
@@ -750,7 +794,7 @@ return out;
 }
 
 /* ---------- state + persistence ---------- */
-const LS=DEMO?'infra-inventory-demo-v27':'infra-inventory-v1';
+const LS=DEMO?'infra-inventory-demo-v28':'infra-inventory-v1';
 let DB=null,META={source:DEMO?'Built-in demo data':'Not loaded yet',loadedAt:nowStr(),fileModified:null,savedAt:null},dirty=0,handle=null;
 function loadState(){
 let o=null;try{const r=localStorage.getItem(LS);if(r){o=JSON.parse(r);if(!(o&&o.DB&&o.DB.ServerMI))o=null}}catch(e){o=null}
@@ -790,6 +834,10 @@ log:'<path d="M5 4h14v16H5z"/><path d="M8 9h8M8 13h8M8 17h5"/>',
 catalyst:'<ellipse cx="12" cy="6" rx="8" ry="3"/><path d="M4 6v12c0 1.7 3.6 3 8 3s8-1.3 8-3V6M4 12c0 1.7 3.6 3 8 3s8-1.3 8-3"/>',
 repljobs:'<path d="M4 8h13l-3-3M20 16H7l3 3"/>',
 dcdesign:'<rect x="3" y="4" width="7" height="7" rx="1"/><rect x="14" y="4" width="7" height="4" rx="1"/><rect x="3" y="15" width="18" height="5" rx="1"/>',
+scripts:'<rect x="3" y="4" width="18" height="16" rx="2"/><path d="M7 9l3 3-3 3M12 15h5"/>',
+myscripts:'<path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z"/><path d="M14 3v5h5M9 13l-2 2 2 2M13 13l2 2-2 2"/>',
+scruns:'<circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/>',
+import:'<path d="M12 3v12M7 10l5 5 5-5"/><path d="M4 15v4a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-4"/>',
 settings:'<circle cx="12" cy="12" r="3"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3M4.9 4.9l2.1 2.1M17 17l2.1 2.1M19.1 4.9L17 7M7 17l-2.1 2.1"/>',
 quality:'<path d="M12 3l8 3v6c0 5-3.5 8-8 9-4.5-1-8-4-8-9V6z"/><path d="M9 12l2 2 4-4"/>',
 sources:'<path d="M10 14a4 4 0 0 0 5.7 0l3-3a4 4 0 0 0-5.7-5.7l-1 1"/><path d="M14 10a4 4 0 0 0-5.7 0l-3 3a4 4 0 0 0 5.7 5.7l1-1"/>'};
@@ -797,7 +845,7 @@ const NAV=[
 ['',[['overview','Overview'],['calendar','Calendar'],['stuff','Stuff'],['kb','Knowledge base'],['tracker','Open issues'],['contacts','Contacts'],['agroups','Assignment groups'],['activity','DCSS activity']]],
 ['Inventory',[['servermi','ServersMI'],['patching','Patching'],['patchevents','Patch events'],['esxi','ESXi hosts'],['storage','Storage'],['datastores','Datastores'],['backup','Backup'],['catalyst','Catalyst stores'],['backupjobs','Backup jobs'],['repljobs','Replication jobs'],['otherdevices','Other devices']]],
 ['Data center',[['dcmi','DCMI'],['checks','DC checks'],['issues','DC open issues'],['racks','DC rack layout'],['dcdesign','DC designer'],['ports','Ports & cabling'],['disks','Disks']]],
-['System',[['quality','Data quality'],['sources','Data sources'],['activitylog','Activity log'],['settings','Settings']]]];
+['System',[['quality','Data quality'],['import','Data import'],['sources','Data sources'],['activitylog','Activity log'],['settings','Settings']]]];
 let CUR='overview';
 function sheetUpdated(s){let m='';(DB[s]||[]).forEach(r=>{if(r.Updated&&String(r.Updated)>m)m=String(r.Updated)});return m}
 function checkMissingToday(){const t=ds(0);return DCS.filter(dc=>!DB.DCChecks.some(c=>c.DC===dc&&String(c.Date).slice(0,10)===t))}
@@ -938,7 +986,7 @@ kpis:d=>{const last=d.slice().sort((x,y)=>String(y.Date).localeCompare(String(x.
 function heatHtml(){
 return '<div class="row">'+DCS.map(dc=>'<div class="card"><h2>Rack power load · '+dc+'</h2><div class="heat">'+dcRacks(dc).map(rk=>{const r=DB.DCMI.find(x=>x.DC===dc&&x.Rack===rk);if(!r)return '<div class="cell h1"><span class="mono">'+rk+'</span><span>no reading</span></div>';const l=load(r);const k=l>=80?'h4':l>=60?'h3':l>=40?'h2':'h1';return '<div class="cell '+k+'"><span class="mono">'+rk+'</span><b style="font-size:18px">'+l+'%'+(l>=80?' ▲':'')+'</b></div>'}).join('')+'</div></div>').join('')+'</div><div class="leg"><span><i style="background:var(--info-bg)"></i>&lt; 40%</span><span><i style="background:#A9C4F5"></i>40–59%</span><span><i style="background:#2F66C4"></i>60–79%</span><span><i style="background:#B85C00"></i>≥ 80% ▲</span></div>';
 }
-function uiOf(s){if(!UI[s]){const t=TV[s];UI[s]={q:'',f:'All',fl:[],open:false,sk:t.show[0]||null,sd:s==='DCSSActivity'?-1:1}}return UI[s]}
+function uiOf(s){if(!UI[s]){const t=TV[s];UI[s]={q:'',f:'All',fl:[],open:false,sk:t.sort?t.sort[0]:(t.show[0]||null),sd:t.sort?t.sort[1]:(s==='DCSSActivity'?-1:1)}}return UI[s]}
 function tableView(sheet){
 const t=TV[sheet],u=uiOf(sheet),d=DB[sheet];
 const fo=['All'].concat(SCHEMA[sheet].cols.find(c=>c.k===t.filter).o);
@@ -1004,7 +1052,7 @@ if(isNew&&sheet==='DeviceTypes'){row.Color='Slate';row['Default U']=1}
 if(isNew&&sheet==='OpenIssues'){row.Created=ds(0);row.Status='New';row.Priority='Medium';row.Type='Task'}
 if(isNew&&sheet==='KB'){row.Created=ds(0);row.Status='Draft';row.Version='1.0';row['Review due']=ds(180)}
 const name=isNew?'New '+(TV[sheet]?TV[sheet].add.replace(/^Add |^New /,''):sheet==='Operators'?'operator':sheet==='DeviceTypes'?'device type':sheet==='Environments'?'environment':sheet==='DataCenters'?'data center':sheet==='BackupJobs'?'backup job':sheet==='BackupTypes'?'backup category':sheet==='ActivityTypes'?'activity type':sheet==='KBTypes'?'article type':sheet==='ActivityStatuses'?'activity status':sheet==='ServerStatuses'?'server status':sheet==='RackDevices'?'device':sheet==='Links'?'link':sheet==='KB'?'article':'issue'):'Edit '+(row[S.key]||'');
-$('modal').innerHTML='<div class="modal" data-act="mbg"><form class="dlg" id="frm" role="dialog" aria-modal="true" aria-label="'+esc(name)+'" data-sheet="'+sheet+'" data-i="'+(isNew?'':i)+'"><h2>'+esc(name)+'</h2><div class="fgrid">'+formCols(sheet).map(c=>fieldHtml(sheet,c,row,(sheet==='Issues'&&c.k==='ID')||((sheet==='KB'||sheet==='OpenIssues')&&(c.k==='ID'||c.k==='Files')))).join('')+'</div>'+attBlock(sheet,row,isNew)+'<div id="ferr" class="note" style="color:var(--bad-fg)" role="alert"></div><div class="acts"><div>'+(isNew?'':'<button type="button" class="btn d" data-act="del">Delete</button>')+(!isNew&&sheet==='PatchEvents'&&row.Status!=='Done'?' <button type="button" class="btn" data-act="ptdone" data-i="'+i+'">Mark as done…</button>':'')+'</div><div class="tools"><button type="button" class="btn" data-act="mclose">Cancel</button><button type="submit" class="btn p">Save</button></div></div></form></div>';bladeSync($('frm'));srvSync($('frm'));
+$('modal').innerHTML='<div class="modal" data-act="mbg"><form class="dlg" id="frm" role="dialog" aria-modal="true" aria-label="'+esc(name)+'" data-sheet="'+sheet+'" data-i="'+(isNew?'':i)+'"><h2>'+esc(name)+'</h2><div class="fgrid">'+formCols(sheet).map(c=>fieldHtml(sheet,c,row,(sheet==='Issues'&&c.k==='ID')||((sheet==='KB'||sheet==='OpenIssues')&&(c.k==='ID'||c.k==='Files')))).join('')+'</div>'+attBlock(sheet,row,isNew)+'<div id="ferr" class="note" style="color:var(--bad-fg)" role="alert"></div><div class="acts"><div>'+(isNew?'':'<button type="button" class="btn d" data-act="del">Delete</button>')+(!isNew&&(sheet==='ServerMI'||sheet==='ESXi')?' <button type="button" class="btn" data-act="srvrdp" data-t="'+esc(row.FQDN||row.Hostname)+'" title="Open a Remote Desktop session">RDP</button>':'')+(!isNew&&sheet==='PatchEvents'&&row.Status!=='Done'?' <button type="button" class="btn" data-act="ptdone" data-i="'+i+'">Mark as done…</button>':'')+'</div><div class="tools"><button type="button" class="btn" data-act="mclose">Cancel</button><button type="submit" class="btn p">Save</button></div></div></form></div>';bladeSync($('frm'));srvSync($('frm'));
 const f=$('frm').querySelector('input:not([readonly]),select');if(f)f.focus();
 }
 function closeForm(){$('modal').innerHTML=''}
@@ -1141,7 +1189,7 @@ Object.keys(TV).forEach(s=>{SCHEMA[s].cols.forEach(c=>{const sp=sm[s+'|'+c.k];if
 Object.keys(TV).forEach(s=>{const ord=[];TV[s].show.forEach(k=>{const sp=sm[s+'|'+k];const n=sp?parseInt(sp.Order):NaN;if(!isNaN(n))ord.push([n,k])});if(ord.length){ord.sort((a,b)=>a[0]-b[0]);const names=ord.map(o=>o[1]);TV[s].show=names.concat(TV[s].show.filter(k=>names.indexOf(k)<0))}});
 SHEETS.forEach(s=>{SCHEMA[s].cols.forEach(c=>{const sp=sm[s+'|'+c.k];if(!sp)return;if(sp.Label)c.label=String(sp.Label);if(CORE[s].has(c.k)&&yes(sp.Hidden)&&c.k!==SCHEMA[s].key)hideCol(s,c);if(CORE[s].has(c.k)&&sp.Required!==''&&sp.Required!=null){if(yes(sp.Required))c.req=1;else delete c.req}})});
 if(!found)return{ok:false,missing:missing};
-missing=missing.filter(x=>['BackupJobs','BackupAssign','Contacts','AssignGroups','DCSSActivity','PatchEvents','NetPorts','Disks','ActivityLog','KBTypes','Catalyst','ReplJobs','DCLayout'].indexOf(x)<0);
+missing=missing.filter(x=>['BackupJobs','BackupAssign','Contacts','AssignGroups','DCSSActivity','PatchEvents','NetPorts','Disks','ActivityLog','KBTypes','Catalyst','ReplJobs','DCLayout','Scripts','ScriptRuns'].indexOf(x)<0);
 ['Environments','DataCenters','BackupTypes','KBTypes','ActivityTypes','ActivityStatuses','ServerStatuses'].forEach(s=>{if(!wb.Sheets[s]){nd[s]=defaultsFor(s);missing=missing.filter(x=>x!==s)}});
 if(!wb.Sheets.RackList){missing=missing.filter(x=>x!=='RackList');if(wb.Sheets.DataCenters){nd.RackList=[];XLSX.utils.sheet_to_json(wb.Sheets.DataCenters,{defval:''}).forEach(r=>{const n=parseInt(r.Racks),u=parseInt(r['U per rack']);if(r.Name)nd.RackList=nd.RackList.concat(makeRacks(String(r.Name),n>=1?n:8,u>=1?u:42,'R',1,2))})}else nd.RackList=defaultRacks()}
 DB=nd;handle=info.handle||null;dirty=0;SNAP=snap();PENDLOG=[];
@@ -2567,6 +2615,184 @@ function srvSync(f){if(!f||f.dataset.sheet!=='ServerMI')return;const el=f.elemen
 const PHYSACT={
 physmergeall(el){if(!el.dataset.arm){el.dataset.arm='1';el.textContent='Click again to merge';return}let n=0;for(let g=0;g<500;g++){const d=physDups();if(!d.length)break;if(!mergeDup(d[0].i))break;n++}changed();route();toast(n+' device'+(n===1?'':'s')+' merged into ServersMI')},
 physmerge(el){const f=$('frm'),r=DB.RackDevices[+el.dataset.i];if(f&&r&&f.elements.Name){const old=r.Name;r.Name=f.elements.Name.value.trim();if(old!==r.Name)devRename('RackDevices',old,r.Name)}const n=mergeDup(+el.dataset.i);closeForm();if(n){changed();route();toast('Merged into ServersMI: '+n)}}};
+/* ---------- Stuff helpers: copy to clipboard, RDP files ---------- */
+function dlBlob(name,data,type){try{const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([data],{type:type}));a.download=name;document.body.appendChild(a);a.click();a.remove();return true}catch(e){toast('Download blocked by the browser');return false}}
+function clipCopy(t,msg){const done=()=>toast(msg||'Copied');const fb=()=>{const a=document.createElement('textarea');a.value=t;a.style.position='fixed';a.style.opacity='0';document.body.appendChild(a);a.select();try{document.execCommand('copy');done()}catch(e){toast('Copy failed, select the text manually')}a.remove()};
+try{if(navigator.clipboard&&navigator.clipboard.writeText)navigator.clipboard.writeText(t).then(done,fb);else fb()}catch(e){fb()}}
+async function stuffConnect(name){
+if(STDIR){try{const f=await(await STDIR.getFileHandle(name)).getFile();if(dlBlob(name,await f.arrayBuffer(),'application/x-rdp'))toast('Opening '+name+'. If it only downloads, choose “Always open files of this type” once in the download bar.');return}catch(e){}}
+const a=document.createElement('a');a.href='Stuff/'+encodeURIComponent(name);a.download=name;document.body.appendChild(a);a.click();a.remove();toast('Opening '+name+'. If it only downloads, choose “Always open files of this type” once in the download bar.')}
+const STUFFACT={
+stconnect(el){stuffConnect(el.dataset.name)},
+lnkcopy(el){clipCopy(el.dataset.u,'Copied: '+el.dataset.u)},
+srvrdp(el){const t=el.dataset.t;if(dlBlob(t+'.rdp','full address:s:'+t+'\r\nprompt for credentials:i:1\r\nadministrative session:i:0\r\nscreen mode id:i:2\r\n','application/x-rdp'))toast('Opening Remote Desktop to '+t+'. If it only downloads, choose “Always open files of this type” once.')}};
+/* ---------- Data import: RVTools / vCenter / vROps / OneView / 3PAR / StoreOnce / any table ---------- */
+const IMP_SRC=[
+{id:'rvtools',n:'RVTools',d:'Excel export from RVTools. vInfo updates ServersMI (VMs), vHost the ESXi hosts, vDatastore the datastores.',t:['ServerMI','ESXi','Datastores'],how:'RVTools → File → Export all to Excel.'},
+{id:'vcenter',n:'vCenter (vSphere Client)',d:'CSV exported from a list in the vSphere Client: VMs, Hosts or Datastores.',t:['ServerMI','ESXi','Datastores'],how:'In a VM / Host / Datastore list click Export (bottom right), choose the columns, Export CSV.'},
+{id:'vrops',n:'vROps / Aria Operations',d:'CSV from a view or report: VM, host or datastore lists with capacity and configuration.',t:['ServerMI','ESXi','Datastores'],how:'Environment → choose objects → a List view → Export (CSV), or a report exported as CSV.'},
+{id:'oneview',n:'HPE OneView',d:'Server hardware or enclosure list: model, serial number, iLO address, firmware.',t:['ESXi','ServerMI','RackDevices'],how:'Server Hardware → select all → Actions → Export (CSV).'},
+{id:'3par',n:'HPE 3PAR / SSMC',d:'Systems (model, serial, OS version, capacity) → Storage, or virtual volumes (name, WWN, size) → Datastores, matched on the WWN / NAA.',t:['Storage','Datastores'],how:'SSMC: Systems or Virtual volumes list → Export CSV. CLI: showvv -showcols Name,VV_WWN,VSize_MB -csvtable.'},
+{id:'storeonce',n:'HPE StoreOnce',d:'Catalyst stores (size, dedupe ratio, status) or appliance details → Backup.',t:['Catalyst','Backup'],how:'StoreOnce GUI → Catalyst → Stores → Export, or copy the table and paste it here.'},
+{id:'other',n:'Other table',d:'Any CSV, Excel file or table pasted from a web page or Excel. You pick the target and the columns.',t:['ServerMI','ESXi','Storage','Datastores','Backup','Catalyst','RackDevices'],how:'Copy a table (Ctrl+C) and paste it below, or pick the file.'}];
+const IMP_T=['ServerMI','ESXi','Storage','Datastores','Backup','Catalyst','RackDevices'];
+const IMP_SYN={
+ServerMI:{'vCenter name':['vm','vm name','virtual machine','vm display name','display name'],Hostname:['hostname','host name','computer name','server','server name','server hostname','name'],FQDN:['dns name','fqdn','guest hostname','guest dns name','dns'],IP:['primary ip address','ip address','ip','ipv4 address','guest ip address','ip addresses','ipv4'],OS:['os according to the vmware tools','os according to the configuration file','guest os','operating system','os','guest full name','configured guest os','os name'],vCPU:['cpus','num cpu','vcpu','vcpus','number of cpus','cpu count'],'RAM GB':['memory','memory size','ram','configured memory','memory configured','total memory'],'Disk GB':['provisioned','provisioned space','total disk','disk capacity','provisioned storage','total disk capacity','storage provisioned'],Cluster:['cluster'],'ESXi host':['host','esx host','esxi host','vmhost'],Status:['powerstate','power state'],Model:['model','server model','product name'],Serial:['serial number','serial','service tag','serialnumber'],'iLO URL':['ilo','ilo address','ilo ip','management processor','ilo hostname','mp host name']},
+ESXi:{Hostname:['host','hostname','host name','server name','esxi host','name'],'ESXi version':['esx version','esxi version','version','product version','hypervisor version'],vCenter:['vi sdk server','vcenter','vcenter server'],Cluster:['cluster'],'RAM GB':['memory','memory size','total memory','ram','memory capacity'],VMs:['vms','vm count','number of vms','virtual machines'],Model:['model','server model','product name'],Serial:['serial number','serial','service tag'],'BMC IP':['ilo ip','bmc ip','ilo address','management processor ip','ilo ip address'],'iLO URL':['ilo url','ilo hostname','ilo','ilo name']},
+Datastores:{Datastore:['name','datastore','datastore name'],vCenter:['vi sdk server','vcenter','vcenter server'],Cluster:['cluster name','cluster','datastore cluster'],Type:['type','file system','filesystem type','file system type'],'NAA ID':['address','naa','naa id','canonical name','device name','wwn','vv wwn','lun wwn','vv_wwn'],'Capacity TB':['capacity','total capacity','size','capacity total'],'Free TB':['free','free space','free capacity','capacity free'],'Used %':['used pct','usage pct','used space pct'],'Provisioned TB':['provisioned','provisioned space'],VMs:['vms','number of vms','vm count'],Hosts:['hosts','host count','number of hosts'],'Array volume':['vv name','volume name','virtual volume','virtual volume name'],'Array size TB':['vsize','virtual size','volume size','vsize_mb','vsize mb','provisioned size'],'Array LUN ID':['lun','lun id'],Array:['system name','storage system','array','system']},
+Storage:{Array:['system name','name','array','storage system','system','hostname'],Model:['model','system model'],Serial:['serial number','serial','system serial','serial no'],Firmware:['os version','firmware','software version','3par os version','firmware version','hpe 3par os version'],'Raw TB':['raw capacity','total raw','raw','total raw capacity','physical capacity'],'Usable TB':['usable capacity','usable','total capacity','allocated capacity'],'Used %':['used pct','capacity used pct','utilization pct','used capacity pct'],Controllers:['nodes','controllers','node count','controller nodes'],'iLO URL':['management ip','management address']},
+Backup:{Device:['name','appliance','system name','hostname','device','appliance name'],Model:['model','product','product name'],Software:['software version','version','firmware','software'],'Capacity TB':['capacity','total capacity','user capacity','usable capacity'],'Used %':['used pct','capacity used pct','utilization pct'],Serial:['serial number','serial']},
+Catalyst:{Store:['name','store','store name','catalyst store','catalyst store name'],Appliance:['appliance','system','storeonce','system name','appliance name'],'Capacity TB':['size on disk','disk used','physical size','capacity','disk size'],'Dedup ratio':['dedupe ratio','deduplication ratio','dedup ratio','dedupe'],'Used %':['used pct'],Status:['status','health']},
+RackDevices:{Name:['name','hostname','device name','enclosure name'],Model:['model','product name'],Serial:['serial number','serial'],'iLO URL':['ilo','ilo address','oa ip','management ip']}};
+const IMP_KEYS={ServerMI:[['@name','Server name (Hostname, FQDN or vCenter name)'],['IP','IP address'],['Serial','Serial number']],ESXi:[['@name','Host name'],['Serial','Serial number'],['BMC IP','iLO / BMC IP']],Storage:[['Array','Array name'],['Serial','Serial number']],Datastores:[['Datastore','Datastore name'],['NAA ID','NAA / WWN (array volumes)']],Backup:[['Device','Device name'],['Serial','Serial number']],Catalyst:[['Store','Store name']],RackDevices:[['Name','Device name'],['Serial','Serial number']]};
+const IMP={step:1,src:'rvtools',files:[],sheets:[],jobs:[],cur:0,mode:'fill',addNew:false,paste:'',undo:null,done:null,err:''};
+function impNorm(h){let s=String(h==null?'':h).toLowerCase();const pct=/%|percent|pct/.test(s);s=s.replace(/\(.*?\)/g,' ').replace(/#/g,' ').replace(/\b(mib|mb|gib|gb|tib|tb|kib|kb|bytes|percent)\b/g,' ').replace(/[^a-z0-9]+/g,' ').replace(/\s+/g,' ').trim();if(pct)s=(s+' pct').trim();return s}
+function impUnit(h){const s=String(h||'').toLowerCase();return /\b(tib|tb)\b/.test(s)?1024:/\b(gib|gb)\b/.test(s)?1:/\b(mib|mb)\b|_mb\b/.test(s)?1/1024:/\b(kib|kb)\b/.test(s)?1/1048576:/\bbytes\b/.test(s)?1/1073741824:null}
+function impToNum(v){if(typeof v==='number')return v;let s=String(v==null?'':v).replace(/[\s %]/g,'').replace(/[a-z]+$/i,'');if(!s)return NaN;
+if(s.indexOf(',')>=0&&s.indexOf('.')>=0){s=s.lastIndexOf(',')>s.lastIndexOf('.')?s.replace(/\./g,'').replace(',','.'):s.replace(/,/g,'')}else if(s.indexOf(',')>=0){s=/^-?\d{1,3}(,\d{3})+$/.test(s)?s.replace(/,/g,''):s.replace(',','.')}const n=parseFloat(s);return isNaN(n)?NaN:n}
+function impCsv(text){text=String(text||'').replace(/^﻿/,'');const first=text.split(/\r?\n/).find(l=>l.trim())||'';const cand=['\t',';',',','|'];let sep=',',best=-1;cand.forEach(c=>{const n=first.split(c).length;if(n>best){best=n;sep=c}});
+const rows=[];let row=[],f='',q=false;for(let i=0;i<text.length;i++){const ch=text[i];if(q){if(ch==='"'){if(text[i+1]==='"'){f+='"';i++}else q=false}else f+=ch}else if(ch==='"'&&f==='')q=true;else if(ch===sep){row.push(f);f=''}else if(ch==='\n'||ch==='\r'){if(ch==='\r'&&text[i+1]==='\n')i++;row.push(f);rows.push(row);row=[];f=''}else f+=ch}
+if(f!==''||row.length){row.push(f);rows.push(row)}return rows.filter(r=>r.some(c=>String(c).trim()!==''))}
+function impTable(name,aoa){aoa=aoa.filter(r=>r&&r.some(c=>String(c==null?'':c).trim()!==''));if(aoa.length<2)return null;let hi=0,mx=0;aoa.slice(0,10).forEach((r,i)=>{const n=r.filter(c=>String(c==null?'':c).trim()!=='').length;if(n>mx){mx=n;hi=i}});
+const headers=aoa[hi].map((h,i)=>String(h==null||h===''?'Column '+(i+1):h).trim());const rows=aoa.slice(hi+1).map(r=>{const o={};headers.forEach((h,i)=>{let v=r[i];if(v instanceof Date)v=fmt(v);o[h]=v==null?'':v});return o});return {name:name,headers:headers,rows:rows}}
+function impSuggest(target,headers){const syn=IMP_SYN[target]||{},map={},used=new Set();
+Object.keys(syn).forEach(col=>{const s=syn[col];let best=null,bi=99;headers.forEach(h=>{if(map[h])return;const n=impNorm(h),i=s.indexOf(n);if(i>=0&&i<bi){bi=i;best=h}});if(best&&!used.has(col)){map[best]=col;used.add(col)}});
+headers.forEach(h=>{if(map[h])return;const n=impNorm(h);const c=SCHEMA[target].cols.find(c=>!c.att&&impNorm(c.k)===n&&!used.has(c.k));if(c){map[h]=c.k;used.add(c.k)}});return map}
+function impScore(target,headers){const m=impSuggest(target,headers),v=Object.values(m);let s=v.length;const key=IMP_KEYS[target][0][0];if(key==='@name'?v.some(x=>/Hostname|vCenter name|FQDN/.test(x)):v.indexOf(key)>=0)s+=3;return s}
+function impGuessTarget(t){const src=IMP_SRC.find(s=>s.id===IMP.src),n=t.name.toLowerCase();
+if(IMP.src==='rvtools'){if(/^vinfo/.test(n))return 'ServerMI';if(/^vhost/.test(n))return 'ESXi';if(/^vdatastore/.test(n))return 'Datastores';return ''}
+let best='',bs=0;(src?src.t:IMP_T).forEach(tg=>{const s=impScore(tg,t.headers);if(s>bs){bs=s;best=tg}});return bs>=2?best:''}
+function impMapKey(target,headers){return 'ii-imp|'+target+'|'+headers.map(impNorm).sort().join(',')}
+function impMakeJob(t,target){let saved=null;try{saved=JSON.parse(localStorage.getItem(impMapKey(target,t.headers))||'null')}catch(e){}
+const map=saved&&saved.map?saved.map:impSuggest(target,t.headers);const keys=IMP_KEYS[target];let key=saved&&saved.key||keys[0][0];
+if(target==='Datastores'&&!saved){const wwn=Object.keys(map).find(h=>map[h]==='NAA ID'&&/wwn/i.test(h));if(wwn||IMP.src==='3par'){Object.keys(map).forEach(h=>{if(map[h]==='Datastore')map[h]='Array volume'});key='NAA ID'}}
+if(target==='Datastores'&&!Object.values(map).includes('Datastore')&&Object.values(map).includes('NAA ID'))key='NAA ID';
+return {t:t,target:target,map:map,key:key,on:true,sel:{},plan:null,remembered:!!saved}}
+function impRememb(j){try{localStorage.setItem(impMapKey(j.target,j.t.headers),JSON.stringify({map:j.map,key:j.key}))}catch(e){}}
+/* values */
+function impVal(j,h,col,raw){const c=SCHEMA[j.target].cols.find(x=>x.k===col);if(raw==null)return '';let v=raw;
+if(c&&c.t==='num'||/ (GB|TB)$|%$|^vCPU$|^VMs$|^Hosts$|^Controllers$/.test(col)){let n=impToNum(v);if(isNaN(n))return '';
+const tu=/ TB$/.test(col)?1024:/ GB$/.test(col)?1:null;if(tu){let su=impUnit(h);if(su==null&&/RAM GB/.test(col)&&n>=512)su=1/1024;if(su==null)su=tu;n=n*su/tu}
+if(/%$/.test(col)&&/free/i.test(h))n=100-n;return Math.round(n*100)/100}
+if(c&&c.t==='date'){if(v instanceof Date)return fmt(v);const s=String(v).trim();const m=s.match(/^(\d{4})-(\d{2})-(\d{2})/);if(m)return m[0];const d=new Date(s);return isNaN(d)?s:fmt(d)}
+v=String(v).trim();if(!v||/^(n\/a|na|null|none|-)$/i.test(v))return '';
+if(col==='Status'&&j.target==='ServerMI'){const st=DB.ServerStatuses||[],by=m=>(st.find(x=>x.Meaning===m)||{}).Name;if(/^poweredon$|^on$|running/i.test(v))return by('Running')||'On';if(/^poweredoff$|^off$|^suspended$|stopped/i.test(v))return by('Stopped')||'Off'}
+if(c&&c.o&&c.o.length){const hit=c.o.find(o=>String(o).toLowerCase()===v.toLowerCase());if(hit)return hit}
+if(col==='NAA ID'||col==='Array NAA'){v=v.toLowerCase().replace(/^naa\./,'').replace(/[^0-9a-f]/g,'');return v?'naa.'+v:''}
+if(col==='OS')v=v.replace(/^Microsoft\s+/i,'').replace(/\s*\((32|64)-bit\)\s*/ig,'').replace(/^Red Hat Enterprise Linux\s+(\d+).*/i,'RHEL $1').replace(/^SUSE Linux Enterprise( Server)?\s+(\d+).*/i,'SLES $2').replace(/\s+/g,' ').trim();
+if(col==='ESXi version'){const m=v.match(/(\d+)\.(\d+)\.(\d+)/);if(m)v=m[1]+'.'+m[2]+(+m[3]>0?' U'+m[3]:'')}
+if(col==='IP')v=v.split(/[,; ]+/).filter(x=>/^\d+\.\d+\.\d+\.\d+$/.test(x))[0]||v.split(/[,; ]+/)[0];
+return v}
+function impRowVals(j,r){const o={};Object.keys(j.map).forEach(h=>{const col=j.map[h];if(!col)return;const v=impVal(j,h,col,r[h]);if(v!==''&&(o[col]===undefined||o[col]===''))o[col]=v});
+if(j.target==='ESXi'&&(!o.CPU||/^\d+$/.test(String(o.CPU)))){const hs=Object.keys(r),f=n=>hs.find(h=>impNorm(h)===n),so=f('cpu')||f('cpus')||f('cpu sockets')||f('sockets'),cpc=f('cores per cpu')||f('cores per socket'),tc=f('cores');const s=so?impToNum(r[so]):NaN;let c=cpc?impToNum(r[cpc]):NaN;if(isNaN(c)&&tc&&s>0)c=impToNum(r[tc])/s;if(s>0&&c>0)o.CPU=s+' × '+Math.round(c)+'c';else if(/^\d+$/.test(String(o.CPU||'')))delete o.CPU}
+if(j.target==='Datastores'&&o['Capacity TB']!=null&&o['Free TB']!=null&&o['Used %']==null&&o['Capacity TB']>0)o['Used %']=Math.round((1-o['Free TB']/o['Capacity TB'])*1000)/10;
+if(j.target==='Storage'&&o['Used %']==null&&o['Usable TB']!=null){}
+return o}
+function impSkip(j,r){const t=Object.keys(r).find(h=>impNorm(h)==='template');return t&&/^(true|yes|1)$/i.test(String(r[t]))}
+/* matching */
+function impNames(v){const s=String(v||'').trim().toLowerCase();if(!s)return [];const o=[s],sh=s.split('.')[0];if(sh!==s)o.push(sh);return o}
+function impIndex(j){const idx=new Map(),add=(k,i)=>{if(!k)return;const a=idx.get(k)||[];if(a.indexOf(i)<0)a.push(i);idx.set(k,a)};
+DB[j.target].forEach((r,i)=>{if(j.key==='@name'){['Hostname','FQDN','vCenter name'].forEach(c=>impNames(r[c]).forEach(k=>add(k,i)));const h=String(r.Hostname||'').toLowerCase();if(h.indexOf('-')>0)add(h.split('-')[0],i)}
+else if(j.key==='NAA ID'){add(String(r['NAA ID']||'').toLowerCase().replace(/^naa\./,''),i);add(String(r['Array NAA']||'').toLowerCase().replace(/^naa\./,''),i)}
+else add(String(r[j.key]||'').trim().toLowerCase(),i)});return idx}
+function impKeyVals(j,o){if(j.key==='@name'){const a=[];['Hostname','vCenter name','FQDN'].forEach(c=>impNames(o[c]).forEach(k=>{if(a.indexOf(k)<0)a.push(k)}));return a}
+if(j.key==='NAA ID')return o['NAA ID']?[String(o['NAA ID']).replace(/^naa\./,'')]:[];const v=String(o[j.key]||'').trim().toLowerCase();return v?[v]:[]}
+function impEq(a,b,col){if(col&&/^(ESXi host|Hostname|vCenter)$/.test(col)){const s=x=>String(x||'').trim().toLowerCase().split('.')[0];if(s(a)&&s(a)===s(b))return true}if(a==null)a='';if(b==null)b='';const na=impToNum(a),nb=impToNum(b);if(typeof b==='number'&&!isNaN(na))return Math.abs(na-nb)<=Math.max(0.01,Math.abs(nb)*0.005);return String(a).trim().toLowerCase()===String(b).trim().toLowerCase()}
+function impPlan(j){const idx=impIndex(j),kname=SCHEMA[j.target].key,hit={},out=[];
+j.t.rows.forEach((r,ri)=>{if(impSkip(j,r))return;const o=impRowVals(j,r),keys=impKeyVals(j,o);const label=o[kname]||o['vCenter name']||o.FQDN||o['NAA ID']||keys[0]||'(row '+(ri+1)+')';
+if(!keys.length){out.push({ri:ri,st:'nokey',label:label,o:o});return}
+let m=[];for(const k of keys){const a=idx.get(k);if(a&&a.length){m=a;break}}
+if(m.length>1){out.push({ri:ri,st:'ambig',label:label,o:o,cand:m.map(i=>DB[j.target][i][kname])});return}
+if(!m.length){out.push({ri:ri,st:'new',label:label,o:o});return}
+const ti=m[0];if(hit[ti]!=null){out.push({ri:ri,st:'dup',label:label,o:o,ti:ti});return}hit[ti]=ri;
+const tr=DB[j.target][ti],ch=[];Object.keys(o).forEach(col=>{if(j.key!=='@name'&&col===j.key)return;if(col===kname&&j.key==='@name'&&String(tr[col]||'')!=='')return;const old=tr[col],nv=o[col];if(nv===''||nv==null)return;if(impEq(old,nv,col))return;if(IMP.mode==='fill'&&old!=null&&String(old).trim()!=='')return;ch.push({c:col,o:old==null?'':old,n:nv})});
+if(j.key==='NAA ID'&&j.target==='Datastores'){if(o['NAA ID']&&!impEq(tr['Array NAA'],o['NAA ID'],'Array NAA')&&(IMP.mode!=='fill'||!tr['Array NAA']))ch.push({c:'Array NAA',o:tr['Array NAA']||'',n:o['NAA ID']});ch.forEach(x=>{if(x.c==='NAA ID')x.c='__skip'});if(ch.some(x=>x.c!=='__skip'))ch.push({c:'Array read',o:tr['Array read']||'',n:ds(0)})}
+out.push({ri:ri,st:ch.filter(x=>x.c!=='__skip').length?'upd':'same',label:label,ti:ti,name:tr[kname],o:o,ch:ch.filter(x=>x.c!=='__skip')})});
+j.plan=out;out.forEach((p,i)=>{if(j.sel[i]==null)j.sel[i]=p.st==='upd'||(p.st==='new'&&IMP.addNew)});return out}
+/* file loading */
+async function impLoadFiles(files){IMP.err='';IMP.sheets=[];IMP.files=[...files].map(f=>f.name);
+for(const f of files){try{if(/\.(xlsx|xlsm|xls)$/i.test(f.name)){if(typeof XLSX==='undefined'){IMP.err='The Excel reader (vendor/xlsx.full.min.js) is not loaded. Save the sheet as CSV or paste the table.';continue}
+const wb=XLSX.read(await f.arrayBuffer(),{type:'array',cellDates:true});wb.SheetNames.forEach(sn=>{const t=impTable(sn,XLSX.utils.sheet_to_json(wb.Sheets[sn],{header:1,defval:'',raw:true}));if(t)IMP.sheets.push(t)})}
+else{const t=impTable(f.name.replace(/\.[^.]+$/,''),impCsv(await f.text()));if(t)IMP.sheets.push(t)}}catch(e){IMP.err='Could not read '+f.name+': '+e.message}}
+impAfterLoad()}
+function impAfterLoad(){if(!IMP.sheets.length&&!IMP.err)IMP.err='No table found. The file needs a header row and at least one data row.';
+IMP.jobs=IMP.sheets.map(t=>{const g=impGuessTarget(t);const j=impMakeJob(t,g||(IMP_SRC.find(s=>s.id===IMP.src)||{t:['ServerMI']}).t[0]);j.on=!!g;return j});
+if(IMP.src==='rvtools'&&!IMP.jobs.some(j=>j.on)&&IMP.jobs.length){IMP.err='No vInfo, vHost or vDatastore tab found. Is this an RVTools export?'}
+IMP.cur=Math.max(0,IMP.jobs.findIndex(j=>j.on));IMP.step=IMP.jobs.length?2:1;IMP.done=null;route()}
+/* views */
+function impStepper(){const st=[['1','Source'],['2','Match columns'],['3','Review and write']];return '<ol class="impsteps">'+st.map((s,i)=>'<li class="'+(IMP.step===i+1?'on':IMP.step>i+1?'done':'')+'"><b>'+(IMP.step>i+1?'✓':s[0])+'</b>'+s[1]+'</li>').join('')+'</ol>'}
+function impStep1(){const src=IMP_SRC.find(s=>s.id===IMP.src);
+return '<section class="card"><h2>1 · Where does the data come from?</h2><div class="impsrc">'+IMP_SRC.map(s=>'<button class="impcard'+(IMP.src===s.id?' on':'')+'" data-act="impsrc" data-v="'+s.id+'"><b>'+esc(s.n)+'</b><span>'+esc(s.d)+'</span></button>').join('')+'</div>'
++'<div class="impdrop" id="imp-drop"><div><b>Drop the export file here</b> or <label class="btn s p" style="display:inline-flex;cursor:pointer">Choose file<input type="file" id="imp-file" accept=".xlsx,.xlsm,.xls,.csv,.txt,.tsv" multiple hidden></label></div><span class="note">'+esc(src.how)+' Excel (.xlsx) and CSV are read in the browser. Nothing is written until you confirm in step 3.</span></div>'
++'<details style="margin-top:12px"'+(IMP.paste?' open':'')+'><summary style="cursor:pointer;font-weight:500;color:var(--accent)">…or paste a table (from a web GUI, Excel, vROps, SSMC, StoreOnce)</summary><textarea class="inp mono" id="imp-paste" rows="7" style="margin-top:8px" placeholder="Name&#9;Model&#9;Serial number&#10;esx-a01&#9;ProLiant BL460c Gen10&#9;CZ12345678">'+esc(IMP.paste)+'</textarea><div class="tools" style="margin-top:8px"><button class="btn p" data-act="imppaste">Use pasted table</button><span class="note">The first row must be the column names.</span></div></details>'
++(IMP.err?'<div class="pending" style="margin-top:12px"><span>'+esc(IMP.err)+'</span></div>':'')+'</section>'}
+function impJobTabs(){return '<div class="chips" style="margin-bottom:12px">'+IMP.jobs.map((j,i)=>'<button class="chip'+(IMP.cur===i?' on':'')+'" data-act="impjob" data-i="'+i+'">'+(j.on?'':'<s>')+esc(j.t.name)+(j.on?' → '+esc(SCHEMA[j.target].label||j.target):'</s>')+' <span class="note">'+j.t.rows.length+'</span></button>').join('')+'</div>'}
+function impStep2(){const j=IMP.jobs[IMP.cur];if(!j)return '';const cols=SCHEMA[j.target].cols.filter(c=>!c.att&&c.k!=='Attachments'),used={};Object.values(j.map).forEach(v=>{if(v)used[v]=(used[v]||0)+1});
+const sample=h=>j.t.rows.map(r=>r[h]).filter(v=>v!==''&&v!=null).slice(0,3).map(v=>esc(String(v).slice(0,40))).join(' · ');
+const keyOk=j.key==='@name'?Object.values(j.map).some(v=>/^(Hostname|vCenter name|FQDN)$/.test(v)):Object.values(j.map).includes(j.key);
+return '<section class="card"><div class="tools" style="justify-content:space-between"><h2 style="margin:0">2 · Match the columns</h2><span class="note">'+esc(IMP.files.join(', '))+'</span></div><p class="note" style="margin:6px 0 12px">Suggested from the column names; units (MiB, GB, TB, %) are converted. Check the arrows, change what is wrong, choose “ignore” for what you do not want. The choice is remembered for the next file with the same columns'+(j.remembered?' <span class="badge b-info">loaded from last time</span>':'')+'.</p>'
++(IMP.jobs.length>1?impJobTabs():'')
++'<div class="fgrid" style="grid-template-columns:repeat(auto-fit,minmax(220px,1fr));margin-bottom:12px"><label class="chkrow" style="grid-column:auto;align-self:end"><input type="checkbox" data-act="impon"'+(j.on?' checked':'')+'> Import this table ('+j.t.rows.length+' rows)</label>'
++'<label>Write into<select class="inp" data-act="imptarget">'+IMP_T.map(t=>'<option value="'+t+'"'+(j.target===t?' selected':'')+'>'+esc(SCHEMA[t].label||t)+'</option>').join('')+'</select></label>'
++'<label>Find existing rows by<select class="inp" data-act="impkey">'+IMP_KEYS[j.target].map(k=>'<option value="'+k[0]+'"'+(j.key===k[0]?' selected':'')+'>'+esc(k[1])+'</option>').join('')+'</select></label></div>'
++(keyOk?'':'<div class="pending" style="margin-bottom:12px"><span>No column is mapped to '+(j.key==='@name'?'Hostname, vCenter name or FQDN':esc(j.key))+', so rows cannot be matched. Map one below.</span></div>')
++'<div class="tw"><table class="impmap"><thead><tr><th>Column in your file</th><th>Sample values</th><th></th><th>Goes to</th></tr></thead><tbody>'+j.t.headers.map(h=>{const v=j.map[h]||'',u=impUnit(h),dup=v&&used[v]>1;return '<tr class="'+(v?'':'ign')+'"><td><b>'+esc(h)+'</b></td><td class="note" style="max-width:320px;overflow:hidden;text-overflow:ellipsis">'+sample(h)+'</td><td>'+(v?'→':'')+'</td><td><select class="inp" data-act="impmap" data-h="'+esc(h)+'" style="min-width:200px'+(dup?';border-color:var(--warn-c)':'')+'"><option value="">— ignore —</option>'+cols.map(c=>'<option'+(v===c.k?' selected':'')+'>'+esc(c.k)+'</option>').join('')+'</select>'+(v&&u!=null&&/ (GB|TB)$/.test(v)?' <span class="note">'+(u===1?'GB':u===1024?'TB':u<1/1000?'KB':'MB')+' → '+(/TB$/.test(v)?'TB':'GB')+'</span>':'')+(v&&/%$/.test(v)&&/free/i.test(h)?' <span class="note">free → used</span>':'')+(dup?' <span class="note" style="color:var(--warn-fg)">also mapped from another column, first non-empty wins</span>':'')+'</td></tr>'}).join('')+'</tbody></table></div>'
++'<div class="tools" style="margin-top:14px;justify-content:space-between"><button class="btn" data-act="impback">← Back</button><div class="tools"><button class="btn" data-act="impreset">Reset to suggestions</button><button class="btn p" data-act="impnext"'+(IMP.jobs.some(x=>x.on)?'':' disabled')+'>Review changes →</button></div></div></section>'}
+function impStep3(){const act=IMP.jobs.filter(j=>j.on);act.forEach(impPlan);const j=IMP.jobs[IMP.cur]&&IMP.jobs[IMP.cur].on?IMP.jobs[IMP.cur]:act[0];if(!j)return '';IMP.cur=IMP.jobs.indexOf(j);
+const cnt=s=>j.plan.filter(p=>p.st===s).length,nsel=IMP.jobs.filter(x=>x.on).reduce((a,x)=>a+x.plan.filter((p,i)=>x.sel[i]).length,0),fields=j.plan.reduce((a,p,i)=>a+(j.sel[i]&&p.ch?p.ch.length:0),0);
+const kname=SCHEMA[j.target].key,req=SCHEMA[j.target].cols.filter(c=>c.req).map(c=>c.k);
+const rowsHtml=j.plan.map((p,i)=>{if(p.st==='same')return '';const b={upd:['b-info','Update'],new:['b-ok','New'],ambig:['b-warn','Several matches'],dup:['b-warn','Duplicate in file'],nokey:['b-off','No key']}[p.st];
+const miss=p.st==='new'?req.filter(k=>!(p.o[k]||(k==='Hostname'&&(p.o['vCenter name']||p.o.FQDN)))):[];
+const can=p.st==='upd'||p.st==='new';
+return '<tr class="'+(j.sel[i]?'':'off')+'"><td>'+(can?'<input type="checkbox" data-act="impsel" data-i="'+i+'"'+(j.sel[i]?' checked':'')+' aria-label="Include '+esc(p.label)+'">':'')+'</td><td><span class="badge '+b[0]+'">'+b[1]+'</span></td><td class="mono"><b>'+esc(p.label)+'</b>'+(p.name&&String(p.name).toLowerCase()!==String(p.label).toLowerCase()?'<span class="note" style="display:block">matched '+esc(p.name)+'</span>':'')+'</td><td style="white-space:normal">'
++(p.st==='upd'?p.ch.map(c=>'<span class="impch"><b>'+esc(c.c)+'</b> <s>'+(c.o===''?'empty':esc(c.o))+'</s> → '+esc(c.n)+'</span>').join(''):p.st==='new'?Object.keys(p.o).slice(0,8).map(k=>'<span class="impch"><b>'+esc(k)+'</b> '+esc(p.o[k])+'</span>').join('')+(miss.length?'<span class="note" style="display:block;color:var(--warn-fg)">Missing required: '+miss.map(esc).join(', ')+' (fill in later, Data quality will list it)</span>':''):p.st==='ambig'?'<span class="note">Matches '+p.cand.map(esc).join(', ')+'. Skipped, fix the names or choose another “Find by”.</span>':p.st==='dup'?'<span class="note">Another row in the file already matched the same record. Skipped.</span>':'<span class="note">The match column is empty.</span>')+'</td></tr>'}).join('');
+return '<section class="card"><div class="tools" style="justify-content:space-between"><h2 style="margin:0">3 · Review what will be written</h2><span class="note">Nothing has changed yet</span></div>'
++(IMP.jobs.filter(x=>x.on).length>1?'<div style="margin-top:10px">'+impJobTabs()+'</div>':'')
++'<div class="tools" style="margin:12px 0"><div class="chips"><button class="chip'+(IMP.mode==='fill'?' on':'')+'" data-act="impmode" data-v="fill">Only fill empty fields</button><button class="chip'+(IMP.mode==='over'?' on':'')+'" data-act="impmode" data-v="over">Overwrite with imported values</button></div><label class="chkrow" style="grid-column:auto"><input type="checkbox" data-act="impnew"'+(IMP.addNew?' checked':'')+'> Add rows that are not in '+esc(SCHEMA[j.target].label||j.target)+' yet</label></div>'
++'<div class="kpis" style="margin-bottom:12px"><div class="kpi"><span>Will update</span><b>'+cnt('upd')+'</b><small>'+fields+' field'+(fields===1?'':'s')+' selected</small></div><div class="kpi"><span>Not in the inventory</span><b>'+cnt('new')+'</b><small>'+(IMP.addNew?'added as new rows when ticked':'skipped, tick “Add rows”')+'</small></div><div class="kpi"><span>Already up to date</span><b>'+cnt('same')+'</b><small>nothing to change</small></div><div class="kpi"><span>Skipped</span><b>'+(cnt('ambig')+cnt('dup')+cnt('nokey'))+'</b><small class="'+(cnt('ambig')?'w':'')+'">ambiguous, duplicate or no key</small></div></div>'
++(rowsHtml?'<div class="tools" style="margin-bottom:8px"><button class="btn s" data-act="impall" data-v="1">Select all</button><button class="btn s" data-act="impall" data-v="0">Select none</button></div><div class="tw" style="max-height:60vh"><table class="impplan"><thead><tr><th></th><th>Action</th><th>'+esc(kname)+'</th><th>Changes</th></tr></thead><tbody>'+rowsHtml+'</tbody></table></div>':'<div class="empty">Everything in this file already matches the inventory.</div>')
++'<div class="tools" style="margin-top:14px;justify-content:space-between"><button class="btn" data-act="impback">← Back to columns</button><button class="btn p" data-act="impapply"'+(nsel?'':' disabled')+'>Write '+nsel+' row'+(nsel===1?'':'s')+' into the inventory</button></div></section>'}
+function impDone(){const d=IMP.done;return '<section class="card"><h2>Done</h2><p style="margin:0 0 10px">'+d.upd+' row'+(d.upd===1?'':'s')+' updated ('+d.fields+' fields) and '+d.add+' added. '+esc(d.sheets.join(', '))+'.</p><p class="note" style="margin:0 0 12px">The changes are in the page now. <b>Save to Excel</b> writes them to the workbook (and to the Activity log). Not happy? Undo puts everything back as it was before the import.</p><div class="tools"><button class="btn" data-act="impundo"'+(IMP.undo?'':' disabled')+'>Undo this import</button><button class="btn p" data-act="saveXlsx">Save to Excel</button><button class="btn" data-act="imprestart">Import another file</button></div></section>'}
+function importView(){return head('Data import','Bring data from RVTools, vCenter, vROps, OneView, 3PAR, StoreOnce or any table into the inventory. Columns are matched for you, you check every change before it is written.')
++impStepper()+(IMP.done?impDone():IMP.step===1?impStep1():IMP.step===2?impStep2():impStep3())
++'<details class="card"><summary style="cursor:pointer;font-weight:600">What each source can fill</summary><div class="tw" style="margin-top:10px"><table><thead><tr><th>Source</th><th>Export</th><th>Fills</th></tr></thead><tbody>'
++'<tr><td><b>RVTools</b></td><td>Export all to Excel</td><td style="white-space:normal">ServersMI: vCenter name, FQDN, IP, OS, vCPU, RAM, disk, cluster, ESXi host, power state · ESXi: version, vCenter, cluster, CPU, RAM, VMs, model, serial · Datastores: type, NAA, capacity, free, used %, provisioned, VMs, hosts</td></tr>'
++'<tr><td><b>vCenter GUI</b></td><td>List → Export CSV</td><td style="white-space:normal">Same as RVTools for the columns you export</td></tr>'
++'<tr><td><b>vROps</b></td><td>List view / report → CSV</td><td style="white-space:normal">Configuration and capacity columns (CPU, memory, disk, OS, IP, datastore capacity/free)</td></tr>'
++'<tr><td><b>OneView</b></td><td>Server hardware → Export</td><td style="white-space:normal">ESXi hosts / physical servers: model, serial number, iLO address, matched by server name</td></tr>'
++'<tr><td><b>3PAR / SSMC</b></td><td>Systems or Virtual volumes → CSV</td><td style="white-space:normal">Storage: model, serial, OS version, raw/usable capacity, used % · Datastores: array volume name, size, WWN (matched to the datastore NAA)</td></tr>'
++'<tr><td><b>StoreOnce</b></td><td>Catalyst stores → export or copy</td><td style="white-space:normal">Catalyst stores: size on disk, dedupe ratio, status · Backup: model, software version, capacity</td></tr></tbody></table></div></details>'}
+function impApply(){const sheets=[...new Set(IMP.jobs.filter(j=>j.on).map(j=>j.target))],undo={};sheets.forEach(s=>{undo[s]=JSON.parse(JSON.stringify(DB[s]))});
+let upd=0,add=0,fields=0;IMP.jobs.filter(j=>j.on).forEach(j=>{impPlan(j);impRememb(j);const kname=SCHEMA[j.target].key;
+j.plan.forEach((p,i)=>{if(!j.sel[i])return;if(p.st==='upd'){const r=DB[j.target][p.ti];p.ch.forEach(c=>{r[c.c]=c.n;fields++});r.Updated=ds(0);upd++}
+else if(p.st==='new'){const r={};SCHEMA[j.target].cols.forEach(c=>{r[c.k]=''});Object.assign(r,p.o);if(!r[kname])r[kname]=j.target==='ServerMI'?String(p.o['vCenter name']||String(p.o.FQDN||'').split('.')[0]||''):p.label;
+if(j.target==='ServerMI'&&!r.Platform)r.Platform=Object.keys(j.map).some(h=>/powerstate|template/i.test(h))||IMP.src==='rvtools'||IMP.src==='vcenter'?'Virtual':'';if(j.target==='Datastores'&&j.key==='NAA ID'&&r['NAA ID'])r['Array NAA']=r['NAA ID'];r.Updated=ds(0);DB[j.target].push(r);add++}})});
+IMP.undo=undo;IMP.done={upd:upd,add:add,fields:fields,sheets:sheets.map(s=>SCHEMA[s].label||s)};
+try{DB.ActivityLog.unshift({Time:nowStr(),User:USER||'',Action:'Note',Sheet:'Data import',Record:IMP.files.join(', '),Details:'Imported from '+(IMP_SRC.find(s=>s.id===IMP.src)||{}).n+': '+upd+' updated ('+fields+' fields), '+add+' added in '+IMP.done.sheets.join(', '),Updated:ds(0)})}catch(e){}
+changed();route();toast('Import written: '+upd+' updated, '+add+' added. Save to Excel to keep it.')}
+const IMPACT={
+impsrc(el){IMP.src=el.dataset.v;route()},
+imppaste(){const t=$('imp-paste').value;IMP.paste=t;if(!t.trim()){IMP.err='Paste a table first.';route();return}IMP.files=['pasted table'];IMP.err='';const tb=impTable('Pasted table',impCsv(t));IMP.sheets=tb?[tb]:[];impAfterLoad()},
+impjob(el){IMP.cur=+el.dataset.i;route()},
+impback(){IMP.step=Math.max(1,IMP.step-1);route()},
+impnext(){IMP.jobs.forEach(j=>{j.sel={}});IMP.step=3;if(!IMP.jobs[IMP.cur]||!IMP.jobs[IMP.cur].on)IMP.cur=IMP.jobs.findIndex(j=>j.on);route()},
+impreset(){const j=IMP.jobs[IMP.cur];j.map=impSuggest(j.target,j.t.headers);j.key=IMP_KEYS[j.target][0][0];j.remembered=false;route()},
+impmode(el){IMP.mode=el.dataset.v;IMP.jobs.forEach(j=>{j.sel={}});route()},
+impall(el){const j=IMP.jobs[IMP.cur];j.plan.forEach((p,i)=>{if(p.st==='upd'||p.st==='new')j.sel[i]=el.dataset.v==='1'});route()},
+impapply(el){if(!el.dataset.arm){el.dataset.arm='1';el.textContent='Click again to write the changes';el.classList.add('d');return}impApply()},
+impundo(){if(!IMP.undo)return;Object.keys(IMP.undo).forEach(s=>{DB[s].splice(0,DB[s].length,...IMP.undo[s])});IMP.undo=null;changed();route();toast('Import undone')},
+imprestart(){Object.assign(IMP,{step:1,files:[],sheets:[],jobs:[],cur:0,undo:null,done:null,err:'',paste:''});route()}};
+function impField(el){if(el.id==='imp-file'){impLoadFiles(el.files);return true}const a=el.dataset&&el.dataset.act,j=IMP.jobs[IMP.cur];if(!a||a.indexOf('imp')!==0)return false;
+if(a==='impmap'){j.map[el.dataset.h]=el.value;route();return true}
+if(a==='imptarget'){j.target=el.value;j.map=impSuggest(j.target,j.t.headers);j.key=IMP_KEYS[j.target][0][0];route();return true}
+if(a==='impkey'){j.key=el.value;route();return true}
+if(a==='impon'){j.on=el.checked;route();return true}
+if(a==='impsel'){j.sel[+el.dataset.i]=el.checked;route();return true}
+if(a==='impnew'){IMP.addNew=el.checked;IMP.jobs.forEach(x=>{x.sel={}});route();return true}
+return false}
+document.addEventListener('dragover',e=>{const d=e.target.closest&&e.target.closest('#imp-drop');if(d){e.preventDefault();d.classList.add('over')}});
+document.addEventListener('dragleave',e=>{const d=e.target.closest&&e.target.closest('#imp-drop');if(d)d.classList.remove('over')});
+document.addEventListener('drop',e=>{const d=e.target.closest&&e.target.closest('#imp-drop');if(d){e.preventDefault();d.classList.remove('over');if(e.dataTransfer&&e.dataTransfer.files.length)impLoadFiles(e.dataTransfer.files)}});
 
 /* ---------- data quality (computed from the data) ---------- */
 function sevN(s){return s==='high'?0:s==='medium'?1:2}
@@ -2807,7 +3033,7 @@ return '<section class="card" style="margin-top:16px"><div class="tools" style="
 
 let STDIR=null;
 const fmtT=d=>fmt(d)+' '+pad(d.getHours())+':'+pad(d.getMinutes());
-function stuffList(){if(!META.stuff)META.stuff=DEMO?[{name:'remote-servers.rds',size:4096,modified:ds(-3)+' 09:20'}]:[];return META.stuff}
+function stuffList(){if(!META.stuff)META.stuff=DEMO?[{name:'jump-dc2a-mgmt.rdp',size:2048,modified:ds(-1)+' 08:05'},{name:'remote-servers.rds',size:4096,modified:ds(-3)+' 09:20'}]:[];return META.stuff}
 async function stuffRefresh(){const out=[];for await(const e of STDIR.entries()){if(e[1].kind==='file'){const f=await e[1].getFile();out.push({name:e[0],size:f.size,modified:fmtT(new Date(f.lastModified))})}}out.sort((a,b)=>a.name.localeCompare(b.name));META.stuff=out;persist()}
 async function stuffAdd(files){
 let n=0;
@@ -2834,18 +3060,18 @@ const links=DB.Links.map((r,i)=>({r:r,i:i})).sort((a,b)=>String(a.r.Category||'~
 const tk=ticks(),done=links.filter(x=>tk.indexOf(x.r.Name)>=0).length;
 let cat=null;
 const lrows=links.map(x=>{const r=x.r,c=r.Category||'Other',h=(c!==cat?'<tr><td colspan="5" style="background:var(--surface2);font-weight:600;font-size:12px;letter-spacing:.05em;text-transform:uppercase;color:var(--muted)">'+esc(c)+'</td></tr>':'');cat=c;
-return h+'<tr><td style="width:44px"><input type="checkbox" data-act="lnkchk" data-n="'+esc(r.Name)+'"'+(tk.indexOf(r.Name)>=0?' checked':'')+' aria-label="Checked today: '+esc(r.Name)+'" style="width:20px;height:20px"></td><td><a class="lnk" data-act="lnkopen" data-n="'+esc(r.Name)+'" href="'+esc(lhref(r.URL))+'" target="_blank" rel="noopener noreferrer">'+esc(r.Name)+' ↗</a></td><td class="mono" style="max-width:320px;overflow:hidden;text-overflow:ellipsis">'+esc(r.URL)+'</td><td style="white-space:normal">'+esc(r.Notes)+'</td><td><button class="btn s" data-act="edit" data-sheet="Links" data-i="'+x.i+'">Edit</button></td></tr>'}).join('');
+return h+'<tr><td style="width:44px"><input type="checkbox" data-act="lnkchk" data-n="'+esc(r.Name)+'"'+(tk.indexOf(r.Name)>=0?' checked':'')+' aria-label="Checked today: '+esc(r.Name)+'" style="width:20px;height:20px"></td><td><a class="lnk" data-act="lnkopen" data-n="'+esc(r.Name)+'" href="'+esc(lhref(r.URL))+'" target="_blank" rel="noopener noreferrer">'+esc(r.Name)+' ↗</a></td><td class="mono" style="max-width:340px"><span class="lnkaddr"><span>'+esc(r.URL)+'</span><button class="btn s icon" data-act="lnkcopy" data-u="'+esc(r.URL)+'" title="Copy address" aria-label="Copy '+esc(r.Name)+' address"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><rect x="9" y="9" width="11" height="11" rx="2"/><path d="M5 15V6a2 2 0 0 1 2-2h9"/></svg></button></span></td><td style="white-space:normal">'+esc(r.Notes)+'</td><td><button class="btn s" data-act="edit" data-sheet="Links" data-i="'+x.i+'">Edit</button></td></tr>'}).join('');
 return head('Stuff','Files from the Stuff folder and the links you go through on daily checks.')
 +'<section class="card"><div class="tools" style="justify-content:space-between;margin-bottom:10px"><h2 style="margin:0">Files</h2><div class="tools">'+(can&&!STDIR?rootBtn():'')+'<button class="btn p" data-act="stadd">+ Add file</button><input type="file" id="stuff-file" multiple hidden></div></div>'
 +(STDIR?'<p class="note" style="margin:0 0 10px"><span class="badge b-ok">Connected</span> Adding and removing files changes the real Stuff folder.</p>':'<p class="note" style="margin:0 0 10px">'+(can?'Not connected to the project folder. Connect it once, then Add and Remove change the real files.':'This browser cannot write to folders. Use Edge or Chrome for that.')+' Without a connection, Add and Remove only change the list on this page: copy or delete the file in the folder yourself.</p>')
-+(files.length?'<div class="tw"><table><thead><tr><th>File</th><th>Location</th><th>Size</th><th>Modified</th><th></th></tr></thead><tbody>'+files.map(f=>'<tr><td><b>'+esc(f.name)+'</b></td><td class="mono">Stuff/'+esc(f.name)+'</td><td>'+Math.max(1,Math.round(f.size/1024))+' KB</td><td>'+esc(f.modified)+'</td><td><div class="tools"><a class="btn p" href="Stuff/'+encodeURIComponent(f.name)+'" target="_blank" rel="noopener">Open</a><button class="btn s d" data-act="stdel" data-name="'+esc(f.name)+'">Remove</button></div></td></tr>').join('')+'</tbody></table></div>':'<div class="empty">No files yet. Use Add file.</div>')
-+'<p class="note" style="margin:12px 0 0">Open is a normal link to <span class="mono">Stuff/&lt;file&gt;</span>; the browser passes the file to the app set for its type. '+(DEMO?'This preview has no Stuff folder, so Open only works in the real folder. The sample file is a placeholder.':'')+'</p></section>'
++(files.length?'<div class="tw"><table><thead><tr><th>File</th><th>Location</th><th>Size</th><th>Modified</th><th></th></tr></thead><tbody>'+files.map(f=>'<tr><td><b>'+esc(f.name)+'</b></td><td class="mono">Stuff/'+esc(f.name)+'</td><td>'+Math.max(1,Math.round(f.size/1024))+' KB</td><td>'+esc(f.modified)+'</td><td><div class="tools">'+(/\.(rdp|rdg|rds)$/i.test(f.name)?'<button class="btn p" data-act="stconnect" data-name="'+esc(f.name)+'">Connect</button><a class="btn s" href="Stuff/'+encodeURIComponent(f.name)+'" target="_blank" rel="noopener" title="Show the file content">View</a>':'<a class="btn p" href="Stuff/'+encodeURIComponent(f.name)+'" target="_blank" rel="noopener">Open</a>')+'<button class="btn s d" data-act="stdel" data-name="'+esc(f.name)+'">Remove</button></div></td></tr>').join('')+'</tbody></table></div>':'<div class="empty">No files yet. Use Add file.</div>')
++'<p class="note" style="margin:12px 0 0">Open is a normal link to <span class="mono">Stuff/&lt;file&gt;</span>. <b>Connect</b> on .rdp files hands the file to Remote Desktop (in Edge/Chrome choose “Always open files of this type” once in the download bar, then it opens straight away). '+(DEMO?'This preview has no Stuff folder, so Open only works in the real folder. The sample file is a placeholder.':'')+'</p></section>'
 +'<section class="card"><div class="tools" style="justify-content:space-between;margin-bottom:10px"><h2 style="margin:0">Useful links</h2><div class="tools"><button class="btn p" data-act="lnkadd">+ Add link</button></div></div>'
 +(links.length?'<div class="tw"><table><thead><tr><th>Today</th><th>Link</th><th>Address</th><th>Notes</th><th></th></tr></thead><tbody>'+lrows+'</tbody></table></div><p class="note" style="margin:12px 0 0">Opening a link ticks it for today. The ticks reset every day and stay in this browser only. Links themselves are saved in the “Links” sheet of the workbook. To remove a link, use Edit, then Delete.</p>':'<div class="empty">No links yet. Add the ones you check every day.</div>')+'</section>';
 }
 
 /* ---------- router + events ---------- */
-const VIEWDEF={overview:overview,calendar:calendarView,servermi:()=>tableView('ServerMI'),patching:patchView,patchevents:()=>tableView('PatchEvents'),catalyst:()=>tableView('Catalyst'),repljobs:()=>tableView('ReplJobs'),activitylog:()=>tableView('ActivityLog'),ports:portsView,disks:disksView,netports:()=>tableView('NetPorts'),disklist:()=>tableView('Disks'),contacts:()=>tableView('Contacts'),agroups:()=>tableView('AssignGroups'),activity:()=>tableView('DCSSActivity'),backupjobs:bjView,esxi:()=>tableView('ESXi'),storage:()=>tableView('Storage'),backup:()=>tableView('Backup'),dcmi:()=>tableView('DCMI'),racks:racksView,dcdesign:dcdesignView,dclayoutlist:()=>tableView('DCLayout'),checks:()=>tableView('DCChecks'),issues:issuesView,stuff:stuffView,kb:kbView,otherdevices:()=>tableView('RackDevices'),tracker:oiView,quality:qualityView,sources:sourcesView,datastores:()=>tableView('Datastores'),settings:settingsView};
+const VIEWDEF={overview:overview,calendar:calendarView,servermi:()=>tableView('ServerMI'),patching:patchView,patchevents:()=>tableView('PatchEvents'),catalyst:()=>tableView('Catalyst'),repljobs:()=>tableView('ReplJobs'),activitylog:()=>tableView('ActivityLog'),ports:portsView,disks:disksView,netports:()=>tableView('NetPorts'),disklist:()=>tableView('Disks'),contacts:()=>tableView('Contacts'),agroups:()=>tableView('AssignGroups'),activity:()=>tableView('DCSSActivity'),backupjobs:bjView,esxi:()=>tableView('ESXi'),storage:()=>tableView('Storage'),backup:()=>tableView('Backup'),dcmi:()=>tableView('DCMI'),racks:racksView,import:importView,dcdesign:dcdesignView,dclayoutlist:()=>tableView('DCLayout'),checks:()=>tableView('DCChecks'),issues:issuesView,stuff:stuffView,kb:kbView,otherdevices:()=>tableView('RackDevices'),tracker:oiView,quality:qualityView,sources:sourcesView,datastores:()=>tableView('Datastores'),settings:settingsView};
 function route(){
 const id=(location.hash||'#overview').slice(1);CUR=VIEWDEF[id]?id:'overview';
 syncEnvOptions();syncBackupTypes();syncActivityTypes();syncKBTypes();syncActivityStatuses();syncServerStatuses();syncLayout();renderSide();renderPending();$('view').innerHTML=VIEWDEF[CUR]();postRender();
@@ -2975,7 +3201,7 @@ const fallback=()=>{const r=document.createRange();r.selectNodeContents(node);co
 if(navigator.clipboard&&navigator.clipboard.writeText)navigator.clipboard.writeText(t).then(()=>toast('Copied'),fallback);else fallback();
 }
 };
-Object.assign(ACT,CALACT,PORTACT,ENCLACT,LOGACT,HPACT,DCPACT,SRTACT,SHELLACT,CTACT,PHYSACT);
+Object.assign(ACT,CALACT,PORTACT,ENCLACT,LOGACT,HPACT,DCPACT,SRTACT,SHELLACT,CTACT,PHYSACT,STUFFACT,IMPACT);
 document.addEventListener('click',e=>{const el=e.target.closest('[data-act]');if(!el)return;if(el.tagName==='A'&&el.getAttribute('href')==='#')e.preventDefault();const f=ACT[el.dataset.act];if(f)f(el,e)});
 document.addEventListener('submit',e=>{if(e.target.id!=='frm')return;e.preventDefault();const sheet=e.target.dataset.sheet;const r=submitForm(e.target);if(r&&sheet==='Issues'&&r.ID){IS.sel=r.ID;route()}});
 document.addEventListener('input',e=>{const el=e.target,a=el.dataset&&el.dataset.act;if(a==='pvq'){PV.q=el.value;const p=el.selectionStart;route();const n=document.querySelector('[data-act=pvq]');if(n){n.focus();try{n.setSelectionRange(p,p)}catch(x){}}}else if(a==='oiq'){OS.q=el.value;const l=$('oi-list');if(l)l.innerHTML=oiList()}else if(a==='bjq'){BJ.q=el.value;const l=$('bj-list');if(l)l.innerHTML=bjServerTable()}else if(a==='bjmq'){const q=el.value.toLowerCase();document.querySelectorAll('.bjrow').forEach(r=>{r.style.display=r.dataset.t.indexOf(q)>=0?'':'none'})}else if(a==='pbprev'){ptPreview()}else if(a==='pq'){PT.q=el.value;const l=$('pt-list');if(l)l.innerHTML=patchTable()}else if(a==='kbq'){KS.q=el.value;const l=$('kb-list');if(l)l.innerHTML=kbList()}else if(a==='q'){uiOf(el.dataset.sheet).q=el.value;redrawTable(el.dataset.sheet)}else if(a==='fval'||a==='fval2'){const s=el.dataset.sheet,f=uiOf(s).fl[+el.dataset.fi];if(f){f[a==='fval'?'v':'v2']=el.value;redrawTable(s)}}});
@@ -2984,6 +3210,7 @@ const el=e.target;
 if(el.dataset&&el.dataset.act==='devsel'){const o=el.dataset.v==='ports'?PV:DV;o[el.dataset.f]=el.dataset.f==='per'?+el.value:el.value;route();return}
 if(el.dataset&&el.dataset.act==='caljumpx'){calJump(el);return}
 if(el.classList&&el.classList.contains('hpc')){hpSync(el);return}
+if(impField(el))return;
 if(el.dataset&&el.dataset.act==='ctvis'){CTACT.ctvis(el);return}
 if(el.dataset&&el.dataset.act==='srtf'){srtField(el);return}
 if(el.dataset&&el.dataset.act==='dcpf'){dcpField(el);return}
