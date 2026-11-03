@@ -1054,7 +1054,7 @@ function syncActivityStatuses(){const col=SCHEMA.DCSSActivity.cols.find(c=>c.k==
 function syncKBTypes(){const col=SCHEMA.KB.cols.find(c=>c.k==='Type');if(!col)return;const names=DB.KBTypes.filter(t=>t.Active!=='No').map(t=>String(t.Name));DB.KB.forEach(a=>{const v=String(a.Type||'');if(v&&names.indexOf(v)<0)names.push(v)});col.o=names;KB_TYPES.length=0;names.forEach(n=>KB_TYPES.push(n))}
 function syncActivityTypes(){const col=SCHEMA.DCSSActivity.cols.find(c=>c.k==='Type');if(!col)return;const names=DB.ActivityTypes.filter(t=>t.Active!=='No').map(t=>String(t.Name));DB.DCSSActivity.forEach(a=>{const v=String(a.Type||'');if(v&&names.indexOf(v)<0)names.push(v)});col.o=names}
 function syncBackupTypes(){const col=SCHEMA.BackupJobs.cols.find(c=>c.k==='Type');if(!col)return;const names=DB.BackupTypes.filter(t=>t.Active!=='No').map(t=>String(t.Name));DB.BackupJobs.forEach(j=>{const v=String(j.Type||'');if(v&&names.indexOf(v)<0)names.push(v)});col.o=names}
-function syncEnvOptions(){const col=SCHEMA.ServerMI.cols.find(c=>c.k==='Env');if(!col)return;const names=DB.Environments.filter(e=>e.Active!=='No').map(e=>String(e.Name));DB.ServerMI.forEach(r=>{const v=String(r.Env||'');if(v&&names.indexOf(v)<0)names.push(v)});col.o=names}
+function syncEnvOptions(){[SCHEMA.Clusters].forEach(S=>{const c2=S&&S.cols.find(c=>c.k==='Env');if(c2){const n2=DB.Environments.filter(e=>e.Active!=='No').map(e=>String(e.Name));(DB.Clusters||[]).forEach(r=>{const v=String(r.Env||'');if(v&&n2.indexOf(v)<0)n2.push(v)});c2.o=n2}});const col=SCHEMA.ServerMI.cols.find(c=>c.k==='Env');if(!col)return;const names=DB.Environments.filter(e=>e.Active!=='No').map(e=>String(e.Name));DB.ServerMI.forEach(r=>{const v=String(r.Env||'');if(v&&names.indexOf(v)<0)names.push(v)});col.o=names}
 const MONO=['Datastore','NAA ID','Array NAA','LUN ID','Array LUN ID','vCenter read','Array read','Hostname','Array','Device','IP','Serial','BMC IP','ESXi host','Rack','ID','Reading time'];
 function load(r){return r['Limit kW']?Math.round(num(r['Power kW'])/num(r['Limit kW'])*100):0}
 function dsSync(r){
@@ -1216,6 +1216,7 @@ const cls=(c.req?'req':'')+(c.w?' wide':'')+(c.t==='area'?' wide':'');
 if(c.t==='hosts')return hostPick(c,v);
 if(c.t==='vms')return vmPick(c,v);
 if(sheet==='ServerMI'&&CMB[c.k])return cmbField(c,v,id,cls);
+if(LISTCMB[sheet+'.'+c.k])return lcField(sheet,c,v,id,cls);
 let inp;const nopts=nameOpts(sheet,c.k);
 if(nopts){const names=nopts.slice();if(v!==''&&names.indexOf(String(v))<0)names.push(String(v));inp='<select class="inp" id="'+id+'" name="'+esc(c.k)+'"><option value=""></option>'+names.map(o=>'<option'+(String(v)===o?' selected':'')+'>'+esc(o)+'</option>').join('')+'</select>'}
 else if((sheet==='DCChecks'&&c.k==='Checked by')||(sheet==='OpenIssues'&&(c.k==='Assignee'||c.k==='Raised by'))||(sheet==='RackDevices'&&c.k==='Type')){const names=(sheet==='RackDevices'?DB.DeviceTypes:DB.Operators).filter(o=>o.Active!=='No').map(o=>String(o.Name));if(v!==''&&names.indexOf(String(v))<0)names.push(String(v));inp='<select class="inp" id="'+id+'" name="'+esc(c.k)+'"><option value="">'+(names.length?'':(sheet==='RackDevices'?'Add device types in Settings first':'Add operators in Settings first'))+'</option>'+names.map(o=>'<option'+(String(v)===o?' selected':'')+'>'+esc(o)+'</option>').join('')+'</select>'}
@@ -2843,6 +2844,18 @@ function cmbField(c,v,id,cls){const names=cmbNames(c.k);v=String(v||'');if(v&&na
 return '<label class="'+cls+'" for="'+id+'">'+esc(c.label||c.k)+'<select class="inp" id="'+id+'" name="'+esc(c.k)+'_sel"><option value=""></option>'+names.map(o=>'<option'+(v===o?' selected':'')+'>'+esc(o)+'</option>').join('')+'<option value="__new__">＋ New…</option></select><input class="inp" name="'+esc(c.k)+'" type="text" placeholder="Type the new value" value="'+esc(v)+'" style="display:none;margin-top:6px"></label>'}
 function cmbSel(el){const f=el.form,k=el.name.replace(/_sel$/,''),t=f.elements[k];if(el.value==='__new__'){t.style.display='';t.value='';t.focus()}else{t.style.display='none';t.value=el.value}srvStand(f)}
 function cmbCanon(b){Object.keys(CMB).forEach(k=>{const v=String(b[k]||'').trim();if(!v)return;const m=cmbNames(k).find(x=>x.toLowerCase()===v.toLowerCase());b[k]=m||v})}
+
+/* dropdowns fed by a Settings list; "New…" adds the value to that list */
+const LISTCMB={'DCSSActivity.Type':['ActivityTypes',n=>({Name:n,Active:'Yes'}),'syncActivityTypes'],'DCSSActivity.Status':['ActivityStatuses',n=>({Name:n,Actionable:'No',Active:'Yes'}),'syncActivityStatuses'],'PatchEvents.Status':['ActivityStatuses',n=>({Name:n,Actionable:'No',Active:'Yes'}),'syncActivityStatuses'],
+'DCSSActivity.Performed by':['Operators',n=>({Name:n,Active:'Yes'})],'DCChecks.Checked by':['Operators',n=>({Name:n,Active:'Yes'})],'OpenIssues.Assignee':['Operators',n=>({Name:n,Active:'Yes'})],'OpenIssues.Raised by':['Operators',n=>({Name:n,Active:'Yes'})],
+'ServerMI.Env':['Environments',n=>({Name:n,Color:'Blue',Production:'No',Active:'Yes'}),'syncEnvOptions'],'Clusters.Env':['Environments',n=>({Name:n,Color:'Blue',Production:'No',Active:'Yes'}),'syncEnvOptions'],
+'KB.Type':['KBTypes',n=>({Name:n,Active:'Yes'}),'syncKBTypes'],'BackupJobs.Type':['BackupTypes',n=>({Name:n,'Counts as backup':'Yes',Cloud:'No',Active:'Yes'}),'syncBackupTypes']};
+function lcNames(sheet,k){const d=LISTCMB[sheet+'.'+k];if(!d)return null;const m=new Map();(DB[d[0]]||[]).filter(r=>r.Active!=='No').forEach(r=>{const v=String(r.Name||'').trim();if(v&&!m.has(v.toLowerCase()))m.set(v.toLowerCase(),v)});return[...m.values()]}
+function lcField(sheet,c,v,id,cls){const names=lcNames(sheet,c.k);v=String(v||'');if(v&&!names.some(x=>x.toLowerCase()===v.toLowerCase()))names.push(v);
+return '<label class="'+cls+'" for="'+id+'">'+esc(c.label||c.k)+'<select class="inp" id="'+id+'" name="'+esc(c.k)+'_sel"><option value=""></option>'+names.map(o=>'<option'+(v.toLowerCase()===o.toLowerCase()?' selected':'')+'>'+esc(o)+'</option>').join('')+'<option value="__new__">＋ New…</option></select><input class="inp" name="'+esc(c.k)+'" type="text" placeholder="Type the new value (it is added to the list in Settings)" value="'+esc(v)+'" style="display:none;margin-top:6px"></label>'}
+function lcBefore(sheet,b){Object.keys(LISTCMB).forEach(key=>{if(key.indexOf(sheet+'.')!==0)return;const k=key.slice(sheet.length+1),d=LISTCMB[key],v=String(b[k]==null?'':b[k]).trim();if(!v)return;const L=DB[d[0]]=DB[d[0]]||[],hit=L.find(r=>String(r.Name||'').trim().toLowerCase()===v.toLowerCase());
+if(hit){b[k]=String(hit.Name)}else{const r={};SCHEMA[d[0]].cols.forEach(c=>{r[c.k]=''});Object.assign(r,d[1](v));L.push(r);b[k]=v}
+if(d[2]&&typeof window[d[2]]==='function')try{window[d[2]]()}catch(e){}else if(d[2])try{eval(d[2]+'()')}catch(e){}})}
 /* ---------- app settings (sheet AppSettings: Key / Value) ---------- */
 function cfg(k,d){const r=(DB.AppSettings||[]).find(x=>x.Key===k);return r&&String(r.Value).trim()!==''?String(r.Value).trim():d}
 function setCfg(k,v,n){if(!DB.AppSettings)DB.AppSettings=[];let r=DB.AppSettings.find(x=>x.Key===k);if(!r){r={Key:k,Value:'',Notes:n||'',Updated:ds(0)};DB.AppSettings.push(r)}if(String(r.Value)!==String(v)){r.Value=v;r.Updated=ds(0);changed()}}
@@ -3284,6 +3297,7 @@ if(form&&form.dataset.warned!=='1'){const w=b.Purpose==='Heartbeat'&&b['DNS name
 return ''}
 function srvSetCl(node,cl){const ni=clNodeInfo(node);if(ni)ni.s['Failover cluster']=cl}
 function clusterBefore(sheet,b,old){
+lcBefore(sheet,b);
 if(sheet==='ServerMI'){cmbCanon(b);if(isStand(b['Cluster/Standalone']))b['Failover cluster']=''}
 if(sheet==='RemoteCopyGroups'&&old&&old.Group!==b.Group)['ArrayVolumes','Datastores','ClusterDisks'].forEach(s=>(DB[s]||[]).forEach(r=>{if(r['Remote copy group']===old.Group)r['Remote copy group']=b.Group}));
 if(sheet==='ServerMI'&&b.Platform!=='Physical'){b.Blade='';b.Enclosure='';b.Bay=''}
@@ -4113,7 +4127,7 @@ if(el.dataset&&el.dataset.act==='dcpopt'){if(el.dataset.o==='heat')DPS.heat=el.c
 if(el.dataset&&el.dataset.act==='pdprev'){ptdPrev();return}
 if(el.name==='Blade'&&el.form&&el.form.id==='frm'){bladeSync(el.form);srvSync(el.form);return}
 if(el.name==='Platform'&&el.form&&el.form.id==='frm'){srvSync(el.form);return}
-if(/_sel$/.test(el.name||'')&&el.form&&el.form.id==='frm'&&el.form.dataset.sheet==='ServerMI'&&CMB[el.name.replace(/_sel$/,'')]){cmbSel(el);return}
+if(/_sel$/.test(el.name||'')&&el.form&&el.form.id==='frm'&&((el.form.dataset.sheet==='ServerMI'&&CMB[el.name.replace(/_sel$/,'')])||LISTCMB[el.form.dataset.sheet+'.'+el.name.replace(/_sel$/,'')])){cmbSel(el);return}
 if(el.id==='csv-sep'){META.csvSep=el.value;persist();return}
 if(el.dataset&&el.dataset.act==='bscol'){bsRender(el.dataset.sheet);return}
 if(el.id==='pl-dc'){$('pl-rack').innerHTML=dcRacks(el.value).map(x=>'<option>'+esc(x)+'</option>').join('');return}
