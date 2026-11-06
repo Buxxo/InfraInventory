@@ -938,6 +938,7 @@ html.dense .lcard{padding:9px 11px;gap:5px}
 .cagebody.sff .pt{padding:2px 0;font-size:10px}.cagebody.sff .pt i{font-size:10px}.cagebody.sff .pt small{font-size:9px}
 .cagegrid .pt{min-height:0;height:100%}.cagegrid .pt.free{background:transparent;border-style:dashed;color:var(--muted)}
 .hwcards{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:10px}.hwcard{display:flex;flex-direction:column;align-items:flex-start;gap:4px;padding:12px;border-radius:14px;border:1px solid var(--line);background:var(--surface2);color:var(--ink);cursor:pointer;text-align:left;font:inherit}.hwcard:hover{border-color:var(--accent)}
+.rk .dev.nested{width:calc(100% - 14px);justify-self:center;z-index:3;box-shadow:0 0 0 1px rgba(0,0,0,.45),inset 0 0 0 1px rgba(255,255,255,.25);filter:brightness(1.12)}
 .dev.part{background:var(--u-stor)}.rk .dev.part{--dc:var(--u-stor)}
 </style>
 <div class="app">
@@ -1242,7 +1243,7 @@ function hwDemoParts(){const P=(o)=>Object.assign({Part:'',Device:'san-a01',Kind
 return [P({Part:'san-a01 cage 0',Kind:'Controller enclosure','Cage ID':0,Profile:'3PAR 7000/8000 controller enclosure (2U, 24 SFF)',Serial:'SN-S0001'}),
 P({Part:'san-a01 node 0',Kind:'Controller node','Cage ID':0,Enclosure:'san-a01 cage 0',Profile:'3PAR controller node',Serial:'SN-N0'}),
 P({Part:'san-a01 node 1',Kind:'Controller node','Cage ID':1,Enclosure:'san-a01 cage 0',Profile:'3PAR controller node',Serial:'SN-N1'}),
-P({Part:'san-a01 cage 1',Kind:'Drive enclosure','Cage ID':1,Profile:'3PAR 7000/8000 SFF drive enclosure (2U, 24 SFF)',DC:'DC2A',Rack:'R05','U start':22,'U size':2,Serial:'SN-C1'}),
+P({Part:'san-a01 cage 1',Kind:'Drive enclosure','Cage ID':1,Profile:'3PAR 7000/8000 SFF drive enclosure (2U, 24 SFF)',DC:'DC2A',Rack:'R05','U start':12,'U size':2,Serial:'SN-C1'}),
 P({Part:'san-a01 cage 2',Kind:'Drive enclosure','Cage ID':2,Profile:'3PAR 7000/8000 SFF drive enclosure (2U, 24 SFF)',DC:'DC2A',Rack:'R05','U start':24,'U size':2,Serial:'SN-C2'}),
 P({Part:'san-a01 service processor',Kind:'Service processor',Profile:'3PAR Service Processor (1U)',DC:'DC2A',Rack:'R05','U start':27,'U size':1,Serial:'SN-SP1'})]}
 const disks=[];
@@ -1323,7 +1324,7 @@ return out;
 }
 
 /* ---------- state + persistence ---------- */
-const LS=DEMO?'infra-inventory-demo-v42':'infra-inventory-v1';
+const LS=DEMO?'infra-inventory-demo-v43':'infra-inventory-v1';
 let DB=null,META={source:DEMO?'Built-in demo data':'Not loaded yet',loadedAt:nowStr(),fileModified:null,savedAt:null},dirty=0,handle=null;
 function loadState(){
 let o=null;try{const r=localStorage.getItem(LS);if(r){o=JSON.parse(r);if(!(o&&o.DB&&o.DB.ServerMI))o=null}}catch(e){o=null}
@@ -2112,7 +2113,7 @@ return '<div class="tw"><table><thead><tr><th>Sheet</th><th>Rows</th><th>Last up
 /* ---------- rack layout ---------- */
 function devices(){const o=[];[['ESXi','Hostname','esxi'],['Storage','Array','stor'],['Backup','Device','back'],['RackDevices','Name','cust'],['ServerMI','Hostname','phys']].forEach(a=>DB[a[0]].forEach((r,i)=>{if(a[0]==='ESXi'&&inEncl(r))return;if(a[0]==='ServerMI'&&(r.Platform!=='Physical'||isBlade(r)||srvKind(r)==='Decommissioned'))return;o.push({sheet:a[0],i:i,name:r[a[1]],t:a[2],dc:r.DC,rack:r.Rack,u:parseInt(r['U start']),sz:parseInt(r['U size']),r:r})}));return o}
 function valid(d){return !isNaN(d.u)&&!isNaN(d.sz)&&d.sz>=1&&d.u>=1&&d.u+d.sz-1<=rackU(d.dc,d.rack)&&dcRacks(d.dc).indexOf(String(d.rack))>=0}
-function overlaps(all){const hit=new Set(),pairs=[];const ok=all.filter(valid);for(let a=0;a<ok.length;a++)for(let b=a+1;b<ok.length;b++){const x=ok[a],y=ok[b];if(x.dc===y.dc&&x.rack===y.rack&&x.u<=y.u+y.sz-1&&y.u<=x.u+x.sz-1){hit.add(x.sheet+x.i);hit.add(y.sheet+y.i);pairs.push([x,y])}}return{hit:hit,pairs:pairs}}
+function overlaps(all){const hit=new Set(),pairs=[];const ok=all.filter(valid);for(let a=0;a<ok.length;a++)for(let b=a+1;b<ok.length;b++){const x=ok[a],y=ok[b];if(!x.nest&&!y.nest&&x.dc===y.dc&&x.rack===y.rack&&x.u<=y.u+y.sz-1&&y.u<=x.u+x.sz-1){hit.add(x.sheet+x.i);hit.add(y.sheet+y.i);pairs.push([x,y])}}return{hit:hit,pairs:pairs}}
 const RK={dc:'DC2A',sel:null,z:1},RKZ=[['Compact',136,13,9],['Large',306,16,11],['Extra large',504,22,13]];
 const TYPE_LABEL={phys:'Physical server',esxi:'ESXi host',stor:'Storage array',back:'Backup device'};
 function devLabel(d){return d.t==='srv'?'Blade server':d.t==='cust'?String(d.r.Type||'Other device'):TYPE_LABEL[d.t]}
@@ -2124,10 +2125,10 @@ const all=devices(),ov=overlaps(all);
 const NR=dcRackN(RK.dc),TU=dcTotalU(RK.dc);
 const rackHtml=dcRacks(RK.dc).map(rk=>{const UH=rackU(RK.dc,rk);
 const ds_=all.filter(d=>d.dc===RK.dc&&d.rack===rk),ok=ds_.filter(valid),bad=ds_.filter(d=>!valid(d));
-const used=ok.reduce((s,d)=>s+d.sz,0),pr=DB.DCMI.find(x=>x.DC===RK.dc&&x.Rack===rk);
+const used=ok.reduce((s,d)=>s+(d.nest?0:d.sz),0),pr=DB.DCMI.find(x=>x.DC===RK.dc&&x.Rack===rk);
 let cells='';for(let u=UH;u>=1;u--)cells+='<span class="un'+(u%5===0?' u5':'')+'" style="grid-row:'+(UH+1-u)+'" aria-hidden="true">'+u+'</span><button class="f" tabindex="-1" aria-label="Free U'+u+' in '+rk+', place a device" data-act="rkfree" data-rack="'+rk+'" data-u="'+u+'" style="grid-row:'+(UH+1-u)+'" title="U'+u+' · free, click to place a device"></button>';
 const lane={};ok.slice().sort((a,b)=>a.u-b.u).forEach((d,ix,arr)=>{if(!ov.hit.has(d.sheet+d.i))return;lane[devKey(d)]=arr.slice(0,ix).some(e=>lane[devKey(e)]===0&&e.u<=d.u+d.sz-1&&d.u<=e.u+e.sz-1)?1:0});
-ok.forEach(d=>{const ln=lane[devKey(d)];if(d.sheet==='RackDevices'&&isEncl(d.r)){cells+=enclCell(d,UH,ov.hit.has(d.sheet+d.i),ln);return}const rng='U'+d.u+(d.sz>1?'–'+(d.u+d.sz-1):''),isSel=RK.sel&&RK.sel.sheet===d.sheet&&RK.sel.i===d.i;cells+='<button class="dev '+d.t+(ov.hit.has(d.sheet+d.i)?' hit':'')+(isSel?' sel':'')+(d.sz>1?' tall':'')+'" style="grid-row:'+(UH+2-d.u-d.sz)+' / span '+d.sz+(d.t==='cust'?';--dc:'+devColor(d):'')+(ln===undefined?'':';width:50%;justify-self:'+(ln?'end':'start'))+'" data-act="rkdev" data-sheet="'+d.sheet+'" data-i="'+d.i+'" title="'+esc(d.name)+' · '+rng+'"><i class="led"></i><span class="dn">'+esc(d.name)+'</span><span class="du">'+rng+'</span></button>'});
+ok.slice().sort((a,b)=>(a.nest?1:0)-(b.nest?1:0)).forEach(d=>{const ln=lane[devKey(d)];if(d.sheet==='RackDevices'&&isEncl(d.r)){cells+=enclCell(d,UH,ov.hit.has(d.sheet+d.i),ln);return}const rng='U'+d.u+(d.sz>1?'–'+(d.u+d.sz-1):''),isSel=RK.sel&&RK.sel.sheet===d.sheet&&RK.sel.i===d.i;cells+='<button class="dev '+d.t+(d.nest?' nested':'')+(ov.hit.has(d.sheet+d.i)?' hit':'')+(isSel?' sel':'')+(d.sz>1?' tall':'')+'" style="grid-row:'+(UH+2-d.u-d.sz)+' / span '+d.sz+(d.t==='cust'?';--dc:'+devColor(d):'')+(ln===undefined?'':';width:50%;justify-self:'+(ln?'end':'start'))+'" data-act="rkdev" data-sheet="'+d.sheet+'" data-i="'+d.i+'" title="'+esc(d.name)+' · '+rng+'"><i class="led"></i><span class="dn">'+esc(d.name)+'</span><span class="du">'+rng+'</span></button>'});
 const pct=Math.round(used/(UH||1)*100),pw=pr?load(pr):null;
 return '<div class="rack"><div class="rkh"><span class="rkn mono">'+rk+'</span><span class="rks">'+used+'/'+UH+' U'+(pw!=null?' · <b class="'+(pw>=80?'hot':pw>=60?'warm':'')+'">'+pw+'% power</b>':'')+'</span><button class="btn s rkp" data-act="rkplace" data-rack="'+rk+'" aria-label="Place a device in '+rk+'" title="Place a device">+</button></div><div class="rku" title="'+pct+'% of U used"><i style="width:'+pct+'%"></i></div><div class="rk">'+cells+'</div>'+(bad.length?'<div class="note" style="color:var(--bad-fg);margin-top:4px">Not placed: '+bad.map(d=>esc(d.name)).join(', ')+'</div>':'')+(!ds_.length?'<div class="note" style="margin-top:4px">Empty rack. Click a U slot to place a device.</div>':'')+'</div>';
 }).join('');
@@ -4491,7 +4492,9 @@ return head('Array hardware','Cages, controller nodes and the service processor 
 +'<section class="card"><div class="tools" style="margin-bottom:10px">'+(devs.length?sel:'<span class="note">No storage or backup devices yet.</span>')+'</div>'+tbl+'</section>'+nodeCards+cages}
 /* ---------- rack integration ---------- */
 const _devsHw=devices;devices=function(){const o=_devsHw();(DB.ArrayParts||[]).forEach((p,i)=>{if(p.Kind==='Controller node')return;const own=p.Rack&&p['U start']!==''&&p['U start']!=null;if(p.Kind==='Controller enclosure'&&!own)return;const pr=hwProf(p.Profile);const par=hwDevices().find(d=>d.n===p.Device)||{};
-o.push({sheet:'ArrayParts',i:i,name:p.Part,t:'part',dc:p.DC||(own?par.dc:''),rack:p.Rack,u:parseInt(p['U start']),sz:parseInt(p['U size'])||parseInt(pr&&pr['U size'])||1,r:p})});return o};
+o.push({sheet:'ArrayParts',i:i,name:p.Part,t:'part',dc:p.DC||(own?par.dc:''),rack:p.Rack,u:parseInt(p['U start']),sz:parseInt(p['U size'])||parseInt(pr&&pr['U size'])||1,r:p})});
+/* a component placed inside the U range of its own array is drawn inside that array block (like blades in an enclosure) */
+o.filter(d=>d.t==='part').forEach(d=>{const par=o.find(e=>e.t!=='part'&&e.name===d.r.Device&&e.dc===d.dc&&e.rack===d.rack&&e.u<=d.u&&d.u+d.sz<=e.u+e.sz&&e.sz>d.sz);if(d.dc&&par)d.nest=true});return o};
 const _devLabelHw=devLabel;devLabel=function(d){return d.t==='part'?String(d.r.Kind||'Array component'):_devLabelHw(d)};
 TYPE_LABEL.part='Array component';SHEET_VIEW.ArrayParts='arrayparts';
 const _rkfullHw=HPACT.rkfull;
