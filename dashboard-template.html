@@ -925,6 +925,11 @@ html.dense .lcard{padding:9px 11px;gap:5px}
 .cmpt{border-collapse:collapse;width:100%}.cmpt th,.cmpt td{padding:7px 10px;border-bottom:1px solid var(--line);text-align:left;vertical-align:top}.cmpt tr.df{background:var(--accent-soft)}.cmpt tbody th{color:var(--mut);font-weight:600;white-space:nowrap}
 .bsprev{padding:8px 10px;margin-top:8px;border-radius:10px;background:var(--accent-soft);font-size:13px}
 #vwpop .hfrow{display:flex;gap:6px;align-items:center;justify-content:space-between;padding:4px 6px}#vwpop .hfv{flex:1;color:var(--ink);text-decoration:none;font-weight:600}
+
+/* bright attention badges (sidebar) */
+.nav a em,.navlbl em{background:#FF4D55!important;color:#fff!important;font-weight:800!important;font-size:12px!important;min-width:24px;padding:2px 8px!important;box-shadow:0 0 0 2px rgba(255,77,85,.28),0 0 14px rgba(255,77,85,.65)}
+.nav a.on em{background:#fff!important;color:#C81E2A!important;box-shadow:0 0 14px rgba(255,255,255,.5)}
+.navlbl em{font-size:11px!important}
 </style>
 <div class="app">
 <aside class="side" aria-label="Navigation">
@@ -1004,7 +1009,7 @@ ActivityTypes:{key:'Name',label:'Activity types',cols:[{k:'Name',req:1},sel('Act
 BackupTypes:{key:'Name',label:'Backup job categories',cols:[{k:'Name',req:1},sel('Counts as backup',['Yes','No'],1),sel('Cloud',['Yes','No'],1),sel('Active',['Yes','No'],1),{k:'Notes',t:'area',w:1}]},
 Contacts:{key:'Name',label:'Contacts',cols:[{k:'Name',req:1},{k:'Company / team'},{k:'Role'},{k:'Email'},{k:'Phone'},{k:'Mobile'},{k:'Assignment group'},sel('Active',['Yes','No'],1),{k:'Notes',t:'area',w:1}]},
 AssignGroups:{key:'Group',label:'Assignment groups',cols:[{k:'Group',req:1},{k:'Description',w:1},{k:'Manager'},{k:'Email / DL'},{k:'Phone / on-call'},{k:'Support hours'},{k:'Queue / tool'},{k:'Escalation',w:1},sel('Active',['Yes','No'],1),{k:'Notes',t:'area',w:1}]},
-DCSSActivity:{key:'ID',label:'DCSS Activity',cols:[{k:'ID'},{k:'Date',t:'date',req:1},{k:'End date',t:'date'},{k:'Title',req:1,w:1},sel('Type',['Change','Maintenance','Incident','Installation','Audit','Visit','Other'],1),sel('DC',DCS,1),{k:'Performed by'},{k:'Assignment group'},{k:'Ticket / ref'},sel('Status',['Planned','In progress','Done','Cancelled'],1),{k:'Details',t:'area'},{k:'Outcome / lessons',t:'area'},{k:'In calendar',t:'chk'},{k:'Attachments',att:1}]},
+DCSSActivity:{key:'ID',label:'DCSS Activity',cols:[{k:'ID'},{k:'Date',t:'date',req:1},{k:'End date',t:'date'},{k:'Title',req:1,w:1},sel('Type',['Change','Maintenance','Incident','Installation','Audit','Visit','Other'],1),sel('DC',DCS),{k:'Performed by'},{k:'Assignment group'},{k:'Ticket / ref'},sel('Status',['Planned','In progress','Done','Cancelled'],1),{k:'Details',t:'area'},{k:'Outcome / lessons',t:'area'},{k:'In calendar',t:'chk'},{k:'Attachments',att:1}]},
 BackupJobs:{key:'Job',label:'Backup jobs',cols:[{k:'Job',req:1},sel('Type',['Image-level (VM)','Agent / file','Database','Cloud','Tape','Replication','Exempt'],1),{k:'Software'},sel('Backup level',['Full','Differential','Incremental','Full + Incremental','Full + Differential','Synthetic full','Log / archive']),{k:'Target'},{k:'Catalyst store'},{k:'Schedule'},{k:'Retention'},sel('Active',['Yes','No'],1),{k:'Notes',t:'area',w:1}]},
 Catalyst:{key:'Store',label:'Catalyst stores',cols:[{k:'Store',req:1},{k:'Appliance',req:1},sel('DC',DCS),{k:'Capacity TB',t:'num'},{k:'Used %',t:'num'},{k:'Dedup ratio'},{k:'Replica appliance'},{k:'Replica store'},sel('Status',['Active','Degraded','Read only','Decom']),{k:'Notes',t:'area',w:1}]},
 ReplJobs:{key:'Job',label:'Replication jobs',cols:[{k:'Job',req:1},sel('Type',['Catalyst object copy','StoreOnce replication','Object copy','Media copy','Other'],1),{k:'Source store'},{k:'Source appliance'},{k:'Target store'},{k:'Target appliance'},{k:'Backup jobs replicated'},{k:'Schedule'},{k:'Copy retention'},{k:'Last run',t:'date'},sel('Last result',['OK','Warning','Failed','Not run']),{k:'Cell Manager'},sel('Active',['Yes','No'],1),{k:'Notes',t:'area',w:1}]},
@@ -1598,7 +1603,7 @@ if(isNew&&sheet==='AssignGroups')row.Active='Yes'
 if(isNew&&(sheet==='ActivityTypes'||sheet==='KBTypes'))row.Active='Yes';
 if(isNew&&sheet==='ServerStatuses'){row.Active='Yes';row.Meaning='Running'}
 if(isNew&&sheet==='ActivityStatuses'){row.Active='Yes';row.Actionable='No'}
-if(isNew&&sheet==='DCSSActivity'){row.Date=row.Date||ds(0);row.Status=(DB.ActivityStatuses.find(x=>x.Name==='Done'&&x.Active!=='No')?'Done':(SCHEMA.DCSSActivity.cols.find(c=>c.k==='Status').o||[''])[0]);row.Type=(SCHEMA.DCSSActivity.cols.find(c=>c.k==='Type').o||[''])[0];row.DC=RK.dc||''}
+if(isNew&&sheet==='DCSSActivity'){row.Date=row.Date||ds(0);row.Status=(DB.ActivityStatuses.find(x=>x.Name==='Done'&&x.Active!=='No')?'Done':(SCHEMA.DCSSActivity.cols.find(c=>c.k==='Status').o||[''])[0]);row.Type=(SCHEMA.DCSSActivity.cols.find(c=>c.k==='Type').o||[''])[0];row.DC=''}
 if(isNew&&sheet==='RackList'){row.DC=RK.dc||DCS[0];row['U count']=42}
 if(isNew&&sheet==='DeviceTypes'){row.Color='Slate';row['Default U']=1}
 if(isNew&&sheet==='OpenIssues'){row.Created=ds(0);row.Status='New';row.Priority='Medium';row.Type='Task'}
@@ -3219,12 +3224,13 @@ function cmbCanon(b){Object.keys(CMB).forEach(k=>{const v=String(b[k]||'').trim(
 const LISTCMB={'DCSSActivity.Type':['ActivityTypes',n=>({Name:n,Active:'Yes'}),'syncActivityTypes'],'DCSSActivity.Status':['ActivityStatuses',n=>({Name:n,Actionable:'No',Active:'Yes'}),'syncActivityStatuses'],'PatchEvents.Status':['ActivityStatuses',n=>({Name:n,Actionable:'No',Active:'Yes'}),'syncActivityStatuses'],
 'DCSSActivity.Performed by':['Operators',n=>({Name:n,Active:'Yes'})],'DCChecks.Checked by':['Operators',n=>({Name:n,Active:'Yes'})],'OpenIssues.Assignee':['Operators',n=>({Name:n,Active:'Yes'})],'OpenIssues.Raised by':['Operators',n=>({Name:n,Active:'Yes'})],
 'ServerMI.Env':['Environments',n=>({Name:n,Color:'Blue',Production:'No',Active:'Yes'}),'syncEnvOptions'],'Clusters.Env':['Environments',n=>({Name:n,Color:'Blue',Production:'No',Active:'Yes'}),'syncEnvOptions'],
-'KB.Type':['KBTypes',n=>({Name:n,Active:'Yes'}),'syncKBTypes'],'BackupJobs.Type':['BackupTypes',n=>({Name:n,'Counts as backup':'Yes',Cloud:'No',Active:'Yes'}),'syncBackupTypes']};
-function lcNames(sheet,k){const d=LISTCMB[sheet+'.'+k];if(!d)return null;const m=new Map();(DB[d[0]]||[]).filter(r=>r.Active!=='No').forEach(r=>{const v=String(r.Name||'').trim();if(v&&!m.has(v.toLowerCase()))m.set(v.toLowerCase(),v)});return[...m.values()]}
+'DCSSActivity.Assignment group':['AssignGroups',n=>({Group:n,Active:'Yes'})],'Contacts.Assignment group':['AssignGroups',n=>({Group:n,Active:'Yes'})],'KB.Type':['KBTypes',n=>({Name:n,Active:'Yes'}),'syncKBTypes'],'BackupJobs.Type':['BackupTypes',n=>({Name:n,'Counts as backup':'Yes',Cloud:'No',Active:'Yes'}),'syncBackupTypes']};
+function lcNames(sheet,k){const d=LISTCMB[sheet+'.'+k];if(!d)return null;const m=new Map();(DB[d[0]]||[]).filter(r=>r.Active!=='No').forEach(r=>{const v=String(r[lcKey(d[0])]||'').trim();if(v&&!m.has(v.toLowerCase()))m.set(v.toLowerCase(),v)});return[...m.values()]}
+function lcKey(l){return SCHEMA[l]&&SCHEMA[l].key||'Name'}
 function lcField(sheet,c,v,id,cls){const names=lcNames(sheet,c.k);v=String(v||'');if(v&&!names.some(x=>x.toLowerCase()===v.toLowerCase()))names.push(v);
 return '<label class="'+cls+'" for="'+id+'">'+esc(c.label||c.k)+'<select class="inp" id="'+id+'" name="'+esc(c.k)+'_sel"><option value=""></option>'+names.map(o=>'<option'+(v.toLowerCase()===o.toLowerCase()?' selected':'')+'>'+esc(o)+'</option>').join('')+'<option value="__new__">＋ New…</option></select><input class="inp" name="'+esc(c.k)+'" type="text" placeholder="Type the new value (it is added to the list in Settings)" value="'+esc(v)+'" style="display:none;margin-top:6px"></label>'}
-function lcBefore(sheet,b){Object.keys(LISTCMB).forEach(key=>{if(key.indexOf(sheet+'.')!==0)return;const k=key.slice(sheet.length+1),d=LISTCMB[key],v=String(b[k]==null?'':b[k]).trim();if(!v)return;const L=DB[d[0]]=DB[d[0]]||[],hit=L.find(r=>String(r.Name||'').trim().toLowerCase()===v.toLowerCase());
-if(hit){b[k]=String(hit.Name)}else{const r={};SCHEMA[d[0]].cols.forEach(c=>{r[c.k]=''});Object.assign(r,d[1](v));L.push(r);b[k]=v}
+function lcBefore(sheet,b){Object.keys(LISTCMB).forEach(key=>{if(key.indexOf(sheet+'.')!==0)return;const k=key.slice(sheet.length+1),d=LISTCMB[key],v=String(b[k]==null?'':b[k]).trim();if(!v)return;const L=DB[d[0]]=DB[d[0]]||[],KK=lcKey(d[0]),hit=L.find(r=>String(r[KK]||'').trim().toLowerCase()===v.toLowerCase());
+if(hit){b[k]=String(hit[KK])}else{const r={};SCHEMA[d[0]].cols.forEach(c=>{r[c.k]=''});Object.assign(r,d[1](v));L.push(r);b[k]=v}
 if(d[2]&&typeof window[d[2]]==='function')try{window[d[2]]()}catch(e){}else if(d[2])try{eval(d[2]+'()')}catch(e){}})}
 /* ---------- app settings (sheet AppSettings: Key / Value) ---------- */
 function cfg(k,d){const r=(DB.AppSettings||[]).find(x=>x.Key===k);return r&&String(r.Value).trim()!==''?String(r.Value).trim():d}
