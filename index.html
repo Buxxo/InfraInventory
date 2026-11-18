@@ -1214,6 +1214,22 @@ button.fc.on{background:var(--ink)!important;border-color:var(--ink)!important;c
 ::-webkit-scrollbar-thumb:hover{background:var(--sb-h);background-clip:padding-box;border:3px solid transparent}
 ::-webkit-scrollbar-corner{background:transparent}
 .tw::-webkit-scrollbar-thumb{background:var(--sb);background-clip:padding-box}.tw::-webkit-scrollbar-thumb:hover{background:var(--sb-h);background-clip:padding-box}
+/* list toolbars: search + filters always top left */
+.tools[style*="space-between"]>.tools:has(>.srch){order:-1;margin-right:12px}
+.tools[style*="space-between"]>.tools:has(>.srch)>.srch{order:-1;min-width:220px}
+.tools[style*="space-between"]:has(>.tools>.srch){justify-content:flex-start!important;gap:12px}
+/* to do & notes */
+.td-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(340px,1fr));gap:16px;align-items:start}
+.td-card{padding:18px}.td-h{display:flex;justify-content:space-between;gap:10px;align-items:flex-start;margin-bottom:12px}
+.td-add{display:flex;gap:8px;margin-bottom:10px}.td-add .inp{flex:1}
+.td-ul{list-style:none;margin:0;padding:0}.td-it{border-top:1px solid var(--line)}.td-it:first-child{border-top:0}
+.td-row{display:flex;align-items:center;gap:10px;padding:9px 2px}.td-chk{flex:0 0 auto;width:17px;height:17px}
+.td-txt{flex:1;min-width:0;text-align:left;background:none;border:0;color:var(--ink);font:inherit;padding:0;cursor:pointer;overflow-wrap:anywhere}.td-txt:hover{text-decoration:underline;text-decoration-color:var(--line)}
+.td-it.done .td-txt{color:var(--muted);text-decoration:line-through}
+.td-bd{display:flex;gap:6px;align-items:center;flex-wrap:wrap;justify-content:flex-end}.td-by{margin:0;font-size:11.5px}
+.td-det{display:grid;gap:10px;padding:4px 0 14px 27px}.td-det label{display:grid;gap:4px;font-size:12px;color:var(--muted)}.td-det textarea{resize:vertical;min-height:72px}
+.td-two{display:grid;grid-template-columns:1fr 1fr;gap:10px}.td-act{display:flex;gap:8px;align-items:center}
+.td-dh{display:flex;gap:8px;margin:12px 0 4px}.td-none{margin:8px 0}.td-empty{padding:18px 0;display:grid;gap:10px;justify-items:start}
 
 </style>
 <div class="app">
@@ -1307,6 +1323,7 @@ BackupAssign:{key:'Server',label:'Backup assignments',cols:[{k:'Server',req:1},{
 DataCenters:{key:'Name',label:'Data centers',cols:[{k:'Name',req:1},{k:'Notes',t:'area',w:1}]},
 RackList:{key:'Rack',label:'Racks',cols:[sel('DC',DCS,1),{k:'Rack',req:1},{k:'U count',t:'num',req:1},{k:'Notes',t:'area',w:1}]},
 Environments:{key:'Name',label:'Environments',cols:[{k:'Name',req:1},sel('Color',['Blue','Green','Amber','Red','Grey'],1),sel('Production',['Yes','No'],1),sel('Active',['Yes','No'],1),{k:'Patch days',t:'num'},{k:'Notes',t:'area',w:1}]},
+Todos:{key:'ID',label:'To do & notes',cols:[{k:'ID',req:1},{k:'Scope'},{k:'Owner'},{k:'Text',req:1,w:1},{k:'Notes',t:'area',w:1},sel('Done',['Yes','No'],1),sel('Priority',['High','Normal','Low']),{k:'Due'},{k:'Created'},{k:'Created by'},{k:'Done by'},{k:'Done at'}]},
 Operators:{key:'Name',label:'Operators',cols:[{k:'Name',req:1},{k:'Role / shift'},sel('Active',['Yes','No'],1),{k:'Notes',t:'area',w:1}]}
 };
 const SHEETS=Object.keys(SCHEMA);
@@ -1597,11 +1614,12 @@ wAV.push({Volume:'ERP_data',Array:'san-b01',Updated:U,'NAA ID':'naa.60002ac00000
 const wDHG=[{Group:'Licensed DB hosts',Cluster:'CL-PROD-A',vCenter:'vc-a.corp.example',Hosts:'esx-a04; esx-a05',Owner:'Team DB',Notes:'Hosts covered by the database licence',Updated:U},{Group:'Site A hosts',Cluster:'CL-PROD-A',vCenter:'vc-a.corp.example',Hosts:'esx-a01; esx-a02; esx-a03',Owner:'Team Infra',Notes:'',Updated:U}];
 const out={DrsHostGroups:wDHG,RemoteCopyGroups:wRCG,DrsRules:wDRS,DatastoreClusters:wDSC,ArrayVolumes:wAV,ServerDisks:wSD,ServerNics:wSN,Clusters:wClusters,ClusterNodes:wNodes,ClusterRoles:wRoles,ClusterResources:wRes,ClusterDisks:wDisks,Subnets:[['10.20.4.0/24','104','App servers PROD','DC2A','10.20.4.1','Application tier'],['10.20.5.0/24','105','Database PROD','DC2A','10.20.5.1','Database tier'],['10.20.8.0/24','108','Monitoring','DC2A','10.20.8.1',''],['10.20.9.0/24','109','File and backup','DC2A','10.20.9.1',''],['10.20.100.0/24','100','Management / iLO','DC2A','10.20.100.1','Out-of-band'],['10.40.0.0/22','400','Non-production','DC2A','10.40.0.1','TEST and DEV'],['10.60.0.0/16','600','Disaster recovery','DC1B','10.60.0.1','DR site']].map(a=>({Subnet:a[0],VLAN:a[1],Name:a[2],DC:a[3],Gateway:a[4],Purpose:a[5],Notes:'',Updated:ds(-5)})),AppSettings:[{Key:'RDP port',Value:'3389',Notes:'TCP port for Remote Desktop',Updated:ds(0)}],DCLayout:dcl,PatchEvents:pevents,NetPorts:netports,Disks:disks,ActivityLog:actlog,Catalyst:catalyst,ReplJobs:repljobs,KBTypes:defaultKT(),ServerStatuses:defaultSS(),ActivityStatuses:defaultAS(),ActivityTypes:defaultAT(),CalCategories:defaultCC(),HwProfiles:defaultHP(),ArrayParts:hwDemoParts(),BackupTypes:defaultBT(),Contacts:ctc,AssignGroups:agr,DCSSActivity:act,BackupJobs:bjobs,BackupAssign:bassign,ServerMI:server,ESXi:esxi,Storage:storage,Backup:backup,Datastores:dstores,Operators:operators,Environments:defaultEnvs(),DataCenters:defaultDCs(),RackList:defaultRacks(),DeviceTypes:dtypes,RackDevices:rdev,Links:links,KB:kb,KBComments:kbc,OpenIssues:oi,OIComments:oic,DCMI:dcmi,DCChecks:checks,Issues:issues,Comments:comments};
 if(!DEMO)Object.keys(out).forEach(k=>{out[k]=defaultsFor(k)});
+SHEETS.forEach(s=>{if(!Array.isArray(out[s]))out[s]=defaultsFor(s)});
 return out;
 }
 
 /* ---------- state + persistence ---------- */
-const LS=DEMO?'infra-inventory-demo-v45':'infra-inventory-v1';
+const LS=DEMO?'infra-inventory-demo-v46':'infra-inventory-v1';
 let DB=null,META={source:DEMO?'Built-in demo data':'Not loaded yet',loadedAt:nowStr(),fileModified:null,savedAt:null},dirty=0,handle=null;
 function loadState(){
 let o=null;try{const r=localStorage.getItem(LS);if(r){o=JSON.parse(r);if(!(o&&o.DB&&o.DB.ServerMI))o=null}}catch(e){o=null}
@@ -1642,6 +1660,7 @@ issues:'<path d="M12 3l10 18H2z"/><path d="M12 10v5M12 18h.01"/>',
 otherdevices:'<rect x="3" y="14" width="18" height="6" rx="1.5"/><path d="M12 14V9M6 9h12M6 9V5M18 9V5M12 9V5"/>',
 tracker:'<circle cx="12" cy="12" r="9"/><path d="M12 7v6M12 16.5h.01"/>',
 kb:'<path d="M4 5a2 2 0 0 1 2-2h13v16H6a2 2 0 0 0-2 2z"/><path d="M4 19V5M9 8h6M9 12h6"/>',
+todo:'<path d="M9 6h11M9 12h11M9 18h11"/><path d="M3.5 6l1.2 1.2L7 5M3.5 12l1.2 1.2L7 11M3.5 18l1.2 1.2L7 17"/>',
 stuff:'<path d="M3 6a2 2 0 0 1 2-2h4l2 2h8a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>',
 serverdisks:'<ellipse cx="12" cy="6" rx="8" ry="3"/><path d="M4 6v6c0 1.7 3.6 3 8 3s8-1.3 8-3V6M4 12v6c0 1.7 3.6 3 8 3s8-1.3 8-3v-6"/>',
 drshostgroups:'<rect x="3" y="4" width="18" height="7" rx="1.5"/><rect x="3" y="14" width="18" height="6" rx="1.5"/><path d="M7 7.5h.01M7 17h.01"/>',
@@ -1673,7 +1692,7 @@ quality:'<path d="M12 3l8 3v6c0 5-3.5 8-8 9-4.5-1-8-4-8-9V6z"/><path d="M9 12l2 
 sources:'<path d="M10 14a4 4 0 0 0 5.7 0l3-3a4 4 0 0 0-5.7-5.7l-1 1"/><path d="M14 10a4 4 0 0 0-5.7 0l-3 3a4 4 0 0 0 5.7 5.7l1-1"/>'};
 const TV_HW_PLACEHOLDER=0;
 const NAV=[
-['',[['overview','Overview'],['calendar','Calendar'],['stuff','Stuff'],['kb','Knowledge base'],['tracker','Open issues'],['contacts','Contacts'],['agroups','Assignment groups'],['activity','DCSS activity']]],
+['',[['overview','Overview'],['calendar','Calendar'],['stuff','Stuff'],['todo','To do & notes'],['kb','Knowledge base'],['tracker','Open issues'],['contacts','Contacts'],['agroups','Assignment groups'],['activity','DCSS activity']]],
 ['Inventory',[['servermi','ServersMI'],['serverdisks','Server disks'],['clusters','Failover clusters'],['patching','Patching'],['patchevents','Patch events'],['esxi','ESXi hosts'],['drsrules','DRS rules'],['drshostgroups','DRS host groups'],['storage','Storage'],['arrayhw','Array hardware'],['datastores','Datastores'],['datastoreclusters','Datastore clusters'],['arrayvolumes','Array volumes'],['lunmap','LUN map'],['remotecopy','Remote copy groups'],['backup','Backup'],['catalyst','Catalyst stores'],['backupjobs','Backup jobs'],['repljobs','Replication jobs'],['otherdevices','Other devices'],['lifecycle','Lifecycle'],['relations','Relations']]],
 ['Data center',[['dcmi','DCMI'],['checks','DC checks'],['issues','DC open issues'],['racks','DC rack layout'],['dcdesign','DC designer'],['ports','Ports & cabling'],['ipam','IP & VLANs'],['disks','Disks']]],
 ['System',[['quality','Data quality'],['import','Data import'],['wsfc','Collector'],['sources','Data sources'],['activitylog','Activity log'],['settings','Settings']]]];
@@ -1834,6 +1853,7 @@ pre:()=>logPre()},
 Catalyst:{id:'catalyst',title:'Catalyst stores',sub:'StoreOnce Catalyst stores: which backup jobs write to them and where they are replicated · sheet “Catalyst”. Jobs come from Backup jobs (column Catalyst store), replication from Replication jobs or the Replica columns.',add:'Add store',filter:'Status',show:['Store','Appliance','DC','Capacity TB','Used %','Dedup ratio','@cjobs','@crepl','Status'],
 kpis:d=>[{l:'Catalyst stores',v:d.length,s:new Set(d.map(r=>r.Appliance)).size+' appliances'},{l:'Capacity',v:r1(sum(d,'Capacity TB'))+' TB',s:'avg used '+Math.round(sum(d,'Used %')/(d.length||1))+'%'},{l:'Used 85% or more',v:d.filter(r=>num(r['Used %'])>=85).length,s:'Plan expansion',c:d.some(r=>num(r['Used %'])>=85)?'w':''},{l:'Not replicated',v:d.filter(r=>!catRepl(r).length).length,s:'no replica or copy job',c:d.some(r=>!catRepl(r).length)?'w':'g'}]},
 Clusters:{id:'clusters',title:'Failover clusters',sub:'Microsoft failover clusters',add:'Add cluster',filter:'Env',show:['Cluster','Cluster IP','Env','DC','Purpose','Quorum type','Owner'],kpis:d=>[]},
+Todos:{id:'todo',title:'To do & notes',sub:'Personal and shared to do items · sheet “Todos”',add:'Add item',filter:'Scope',show:['Text','Scope','Owner','Priority','Due','Done'],kpis:d=>[]},
 ClusterNodes:{id:'clusternodes',title:'Cluster nodes',sub:'Nodes of the failover clusters',add:'Add node',filter:'Primary',show:['Cluster','Node','Primary','Note'],kpis:d=>[]},
 ClusterRoles:{id:'clusterroles',title:'Cluster roles',sub:'Roles of the failover clusters',add:'Add role',filter:'Type',show:['Cluster','Role','Type','Virtual name','State','Owner node','Role IP','Drives'],kpis:d=>[]},
 RemoteCopyGroups:{id:'remotecopy',title:'Remote copy groups',sub:'3PAR Remote Copy groups: which array replicates to which, the mode and the volumes in the group. Volumes, datastores and cluster RDM drives point to their group in the field Remote copy group · sheet “RemoteCopyGroups”.',add:'Add remote copy group',filter:'Mode',show:['Group','Source array','Target array','Mode','Sync period (min)','RPO target (min)','Status','@rcv','@rcu','@rci','Owner'],kpis:d=>[{l:'Groups',v:d.length,s:d.filter(g=>/async/i.test(g.Mode)).length+' asynchronous, '+d.filter(g=>/Sync/.test(g.Mode)&&!/async/i.test(g.Mode)).length+' synchronous'},{l:'Volumes in groups',v:avA().filter(v=>v['Remote copy group']).length,s:'array volumes'},{l:'Not started',v:d.filter(g=>g.Status&&g.Status!=='Started').length,s:'stopped or failed over',c:d.some(g=>g.Status&&g.Status!=='Started')?'b':'g'},{l:'With problems',v:d.filter(g=>rcgIssues(g).length).length,s:'see the checks column',c:'w'}]},
@@ -2101,7 +2121,7 @@ Object.keys(TV).forEach(s=>{SCHEMA[s].cols.forEach(c=>{const sp=sm[s+'|'+c.k];if
 Object.keys(TV).forEach(s=>{const ord=[];TV[s].show.forEach(k=>{const sp=sm[s+'|'+k];const n=sp?parseInt(sp.Order):NaN;if(!isNaN(n))ord.push([n,k])});if(ord.length){ord.sort((a,b)=>a[0]-b[0]);const names=ord.map(o=>o[1]);TV[s].show=names.concat(TV[s].show.filter(k=>names.indexOf(k)<0))}});
 SHEETS.forEach(s=>{SCHEMA[s].cols.forEach(c=>{const sp=sm[s+'|'+c.k];if(!sp)return;if(sp.Label)c.label=String(sp.Label);if(CORE[s].has(c.k)&&yes(sp.Hidden)&&c.k!==SCHEMA[s].key)hideCol(s,c);if(CORE[s].has(c.k)&&sp.Required!==''&&sp.Required!=null){if(yes(sp.Required))c.req=1;else delete c.req}})});
 if(!found)return{ok:false,missing:missing};
-missing=missing.filter(x=>['DrsHostGroups','ArrayParts','BackupJobs','BackupAssign','Contacts','AssignGroups','DCSSActivity','PatchEvents','NetPorts','Disks','ActivityLog','KBTypes','Catalyst','ReplJobs','DCLayout','Scripts','ScriptRuns','AppSettings','Subnets','Clusters','ClusterNodes','ClusterRoles','ClusterResources','ClusterDisks','ServerDisks','ServerNics','ArrayVolumes','DatastoreClusters','DrsRules','RemoteCopyGroups'].indexOf(x)<0);
+missing=missing.filter(x=>['Todos','DrsHostGroups','ArrayParts','BackupJobs','BackupAssign','Contacts','AssignGroups','DCSSActivity','PatchEvents','NetPorts','Disks','ActivityLog','KBTypes','Catalyst','ReplJobs','DCLayout','Scripts','ScriptRuns','AppSettings','Subnets','Clusters','ClusterNodes','ClusterRoles','ClusterResources','ClusterDisks','ServerDisks','ServerNics','ArrayVolumes','DatastoreClusters','DrsRules','RemoteCopyGroups'].indexOf(x)<0);
 ['Environments','DataCenters','BackupTypes','KBTypes','ActivityTypes','CalCategories','HwProfiles','ActivityStatuses','ServerStatuses'].forEach(s=>{if(!wb.Sheets[s]){nd[s]=defaultsFor(s);missing=missing.filter(x=>x!==s)}});
 if(!wb.Sheets.RackList){missing=missing.filter(x=>x!=='RackList');if(wb.Sheets.DataCenters){nd.RackList=[];XLSX.utils.sheet_to_json(wb.Sheets.DataCenters,{defval:''}).forEach(r=>{const n=parseInt(r.Racks),u=parseInt(r['U per rack']);if(r.Name)nd.RackList=nd.RackList.concat(makeRacks(String(r.Name),n>=1?n:8,u>=1?u:42,'R',1,2))})}else nd.RackList=defaultRacks()}
 DB=nd;DVER++;handle=info.handle||null;dirty=0;SNAP=snap();baseSet();PENDLOG=[];
@@ -3269,7 +3289,7 @@ openForm('RackDevices',null,{Name:'',Type:'Blade enclosure',DC:RK.dc,Model:'HPE 
 /* ---------- Activity log (who changed what, written to the workbook on every save) ---------- */
 let USER='';try{USER=localStorage.getItem('infra-user')||''}catch(e){}
 let SNAP=null,PENDLOG=[],USERRES=null;
-const LOGSKIP={ActivityLog:1};
+const LOGSKIP={ActivityLog:1},LOGHIDE={ActivityLog:1,Todos:1};
 function rid(sheet,r){const g=k=>String(r[k]==null?'':r[k]);return sheet==='DCMI'||sheet==='RackList'?g('DC')+'/'+g('Rack'):sheet==='BackupAssign'?g('Server')+' / '+g('Job'):sheet==='NetPorts'?g('Device')+' / '+g('Port'):sheet==='Disks'?g('Device')+' / '+g('Slot'):sheet==='DCChecks'?g('Date').slice(0,10)+' '+g('DC'):g(SCHEMA[sheet].key)}
 function snap(){const o={};SHEETS.forEach(s=>{if(LOGSKIP[s])return;const m=new Map(),cnt={};(DB[s]||[]).forEach(r=>{let k=rid(s,r);cnt[k]=(cnt[k]||0)+1;if(cnt[k]>1)k+=' #'+cnt[k];const c={};Object.keys(r).forEach(h=>{if(h!=='Updated')c[h]=r[h]==null?'':String(r[h])});m.set(k,c)});o[s]=m});return o}
 function logChanges(){
@@ -3278,7 +3298,7 @@ if(!SNAP)return;
 const now=snap(),t=nowStr(),out=[];
 const mk=(a,s,rec,det)=>({Time:t,User:USER,Action:a,Sheet:s?SCHEMA[s].label:'',Record:rec,Details:det||'',Updated:ds(0)});
 const sh=v=>{v=String(v==null?'':v).replace(/\s+/g,' ');return v.length>40?v.slice(0,38)+'…':v};
-SHEETS.forEach(s=>{if(LOGSKIP[s])return;const a=SNAP[s]||new Map(),b=now[s],add=[],del=[],chg=[];
+SHEETS.forEach(s=>{if(LOGHIDE[s])return;const a=SNAP[s]||new Map(),b=now[s],add=[],del=[],chg=[];
 b.forEach((c,k)=>{const o=a.get(k);if(!o)add.push(k);else{const fs=[];Object.keys(c).concat(Object.keys(o)).forEach(h=>{if(fs.indexOf(h)<0&&(c[h]||'')!==(o[h]||''))fs.push(h)});if(fs.length)chg.push([k,fs.map(h=>h+': '+(sh(o[h])||'∅')+' → '+(sh(c[h])||'∅')).join('; ').slice(0,500)])}});
 a.forEach((c,k)=>{if(!b.has(k))del.push(k)});
 if(add.length>25)out.push(mk('Added',s,'('+add.length+' records)'));else add.forEach(k=>out.push(mk('Added',s,k)));
@@ -5571,7 +5591,7 @@ finall(el){const s=el.dataset.sheet,f=uiOf(s).fl[+el.dataset.fi];if(!f)return;f.
 /* ---- unsaved changes: review what changed, discard all or per sheet ---- */
 let BASE={};
 function baseSet(){BASE={};Object.keys(DB).forEach(s=>{try{BASE[s]=JSON.stringify(DB[s])}catch(e){}})}
-function pendDiff(){const out=[];if(!SNAP)return out;const now=snap();SHEETS.forEach(s=>{if(LOGSKIP[s])return;const a=SNAP[s]||new Map(),b=now[s]||new Map(),rec={s:s,label:SCHEMA[s].label,add:[],del:[],chg:[]};
+function pendDiff(){const out=[];if(!SNAP)return out;const now=snap();SHEETS.forEach(s=>{if(LOGHIDE[s])return;const a=SNAP[s]||new Map(),b=now[s]||new Map(),rec={s:s,label:SCHEMA[s].label,add:[],del:[],chg:[]};
 b.forEach((c,k)=>{const o=a.get(k);if(!o)rec.add.push(k);else{const fs=[];Object.keys(c).concat(Object.keys(o)).forEach(h=>{if(fs.indexOf(h)<0&&(c[h]||'')!==(o[h]||''))fs.push(h)});if(fs.length)rec.chg.push([k,fs.map(h=>[h,o[h]||'',c[h]||''])])}});
 a.forEach((c,k)=>{if(!b.has(k))rec.del.push(k)});if(rec.add.length+rec.del.length+rec.chg.length)out.push(rec)});return out}
 const pdN=d=>d.reduce((n,r)=>n+r.add.length+r.del.length+r.chg.length,0);
@@ -5590,6 +5610,37 @@ $('modal').innerHTML=h}
 const PDACT={pendview(){pendView(false)},pendclose(){closeForm()},
 penddiscard(el){if(!dirty&&!pdN(pendDiff()))return;if(!el.dataset.arm){el.dataset.arm='1';el.textContent='Click again to discard everything';return}pendRestore(Object.keys(BASE));toast('Unsaved changes discarded')},
 penddsheet(el){pendRestore([el.dataset.s]);const d=pendDiff();if(d.length)pendView(false);else toast('Unsaved changes discarded')}};
+/* ---------- To do & notes: "My list" (per operator name) and "Shared" (everyone), sheet Todos ---------- */
+const TDX={open:null,showDone:{}};
+function tdNew(scope,text){return{ID:'T'+Date.now().toString(36)+Math.random().toString(36).slice(2,5),Scope:scope,Owner:scope==='Personal'?USER:'',Text:text,Notes:'',Done:'No',Priority:'Normal',Due:'',Created:ds(0),'Created by':USER||'','Done by':'','Done at':'',Updated:ds(0)}}
+function tdMine(r){return r.Scope==='Personal'&&USER&&String(r.Owner||'').trim().toLowerCase()===String(USER).trim().toLowerCase()}
+function tdList(scope){return (DB.Todos||[]).filter(r=>scope==='Personal'?tdMine(r):r.Scope!=='Personal')}
+function tdSort(a,b){const P={High:0,Normal:1,Low:2},pa=P[a.Priority]==null?1:P[a.Priority],pb=P[b.Priority]==null?1:P[b.Priority];if(pa!==pb)return pa-pb;const da=a.Due||'9999',db=b.Due||'9999';if(da!==db)return da<db?-1:1;return String(a.Created||'')<String(b.Created||'')?-1:1}
+function tdItem(r,scope){const open=TDX.open===r.ID,od=r.Done!=='Yes'&&r.Due&&String(r.Due)<ds(0),i=DB.Todos.indexOf(r);
+const bd=(r.Priority==='High'?'<span class="badge b-bad">High</span>':r.Priority==='Low'?'<span class="badge b-off">Low</span>':'')+(r.Due?'<span class="badge '+(od?'b-bad':'b-off')+'">'+(od?'Overdue · ':'Due ')+esc(String(r.Due).slice(0,10))+'</span>':'')+(r.Notes?'<span class="badge b-off" title="Has a note">note</span>':'')+(scope==='Shared'&&r['Created by']?'<span class="note td-by">'+esc(r['Created by'])+'</span>':'');
+return '<li class="td-it'+(r.Done==='Yes'?' done':'')+(open?' open':'')+'"><div class="td-row"><input type="checkbox" class="td-chk" data-act="tdtog" data-id="'+esc(r.ID)+'"'+(r.Done==='Yes'?' checked':'')+' aria-label="Done"><button class="td-txt" data-act="tdopen" data-id="'+esc(r.ID)+'" aria-expanded="'+open+'">'+esc(r.Text)+'</button><span class="td-bd">'+bd+'</span></div>'
++(open?'<div class="td-det"><label>Text<input class="inp" id="td-text" value="'+esc(r.Text)+'"></label><label>Note<textarea class="inp" id="td-notes" rows="4" placeholder="Details, links, anything you want to remember">'+esc(r.Notes||'')+'</textarea></label>'
++'<div class="td-two"><label>Priority<select class="inp" id="td-prio">'+['High','Normal','Low'].map(p=>'<option'+(p===(r.Priority||'Normal')?' selected':'')+'>'+p+'</option>').join('')+'</select></label><label>Due<input class="inp" id="td-due" type="date" value="'+esc(String(r.Due||'').slice(0,10))+'"></label></div>'
++'<div class="td-act"><button class="btn s d" data-act="tddel" data-id="'+esc(r.ID)+'">Delete</button><span style="flex:1"></span><button class="btn s" data-act="tdopen" data-id="'+esc(r.ID)+'">Close</button><button class="btn s p" data-act="tdsave" data-id="'+esc(r.ID)+'">Save</button></div>'
++(r.Done==='Yes'&&r['Done by']?'<p class="note" style="margin:0">Done by '+esc(r['Done by'])+(r['Done at']?' · '+esc(String(r['Done at']).slice(0,10)):'')+'</p>':'')+'</div>':'')+'</li>'}
+function tdCard(scope){const all=tdList(scope),openL=all.filter(r=>r.Done!=='Yes').sort(tdSort),doneL=all.filter(r=>r.Done==='Yes').sort((a,b)=>String(b['Done at']||'')<String(a['Done at']||'')?-1:1),sd=!!TDX.showDone[scope];
+const mine=scope==='Personal',title=mine?'My list':'Shared list';
+const head='<div class="td-h"><div><h2 style="margin:0">'+title+(mine&&USER?' <span class="note">· '+esc(USER)+'</span>':'')+'</h2><p class="note" style="margin:2px 0 0">'+(mine?'Only items under your name. Shown to whoever works as you in this browser.':'Visible and editable for every operator.')+'</p></div><span class="badge b-info">'+openL.length+' open</span></div>';
+if(mine&&!USER)return '<section class="card td-card">'+head+'<div class="td-empty"><p class="note">Tell the page who you are to get your own list.</p><button class="btn p" data-act="logwho">Set my name</button></div></section>';
+return '<section class="card td-card">'+head+'<div class="td-add"><input class="inp" data-tdadd="'+scope+'" placeholder="Add an item and press Enter" aria-label="Add to '+title+'"><button class="btn p" data-act="tdadd" data-scope="'+scope+'">Add</button></div>'
++(openL.length?'<ul class="td-ul">'+openL.map(r=>tdItem(r,scope)).join('')+'</ul>':'<p class="note td-none">Nothing open.</p>')
++(doneL.length?'<div class="td-dh"><button class="btn s" data-act="tdshow" data-scope="'+scope+'">'+(sd?'Hide':'Show')+' done ('+doneL.length+')</button>'+(sd?'<button class="btn s d" data-act="tdclear" data-scope="'+scope+'">Clear done</button>':'')+'</div>'+(sd?'<ul class="td-ul">'+doneL.map(r=>tdItem(r,scope)).join('')+'</ul>':''):'')+'</section>'}
+function todoView(){return '<div class="phead"><div><h1>To do &amp; notes</h1><p class="note">Your own list (follows the name you work under) and one list for everybody. Saved in the workbook, sheet “Todos”, with Save to Excel.</p></div></div><div class="td-grid">'+tdCard('Personal')+tdCard('Shared')+'</div><p class="note" style="margin-top:12px">“My list” is selected by operator name, it is not private: anyone who opens the workbook in Excel can read every row.</p>'}
+function tdAdd(scope,txt){txt=String(txt||'').trim();if(!txt)return;const go=()=>{if(!DB.Todos)DB.Todos=[];DB.Todos.push(tdNew(scope,txt));changed();route();setTimeout(()=>{const e=document.querySelector('[data-tdadd="'+scope+'"]');if(e)e.focus()},30)};if(scope==='Personal'&&!USER){askUser().then(ok=>{if(ok)go()});return}go()}
+const TDACT={
+tdadd(el){const i=document.querySelector('[data-tdadd="'+el.dataset.scope+'"]');tdAdd(el.dataset.scope,i&&i.value)},
+tdtog(el){const r=DB.Todos.find(x=>x.ID===el.dataset.id);if(!r)return;const on=el.checked;r.Done=on?'Yes':'No';r['Done by']=on?(USER||''):'';r['Done at']=on?ds(0):'';r.Updated=ds(0);changed();route()},
+tdopen(el){TDX.open=TDX.open===el.dataset.id?null:el.dataset.id;route()},
+tdsave(el){const r=DB.Todos.find(x=>x.ID===el.dataset.id);if(!r)return;const t=($('td-text').value||'').trim();if(!t){toast('Text cannot be empty',true);return}r.Text=t;r.Notes=$('td-notes').value;r.Priority=$('td-prio').value;r.Due=$('td-due').value;r.Updated=ds(0);TDX.open=null;changed();route()},
+tddel(el){const i=DB.Todos.findIndex(x=>x.ID===el.dataset.id);if(i<0)return;if(!el.dataset.arm){el.dataset.arm='1';el.textContent='Click again to delete';return}DB.Todos.splice(i,1);TDX.open=null;changed();route()},
+tdshow(el){TDX.showDone[el.dataset.scope]=!TDX.showDone[el.dataset.scope];route()},
+tdclear(el){const sc=el.dataset.scope,l=tdList(sc).filter(r=>r.Done==='Yes');if(!l.length)return;if(!el.dataset.arm){el.dataset.arm='1';el.textContent='Click again to delete '+l.length;return}DB.Todos=DB.Todos.filter(r=>l.indexOf(r)<0);changed();route()}};
+document.addEventListener('keydown',e=>{const t=e.target;if(e.key==='Enter'&&t&&t.dataset&&t.dataset.tdadd){e.preventDefault();tdAdd(t.dataset.tdadd,t.value)}});
 
 /* ---------- data quality (computed from the data) ---------- */
 function sevN(s){return s==='high'?0:s==='medium'?1:2}
@@ -5888,7 +5939,7 @@ return head('Stuff','Files from the Stuff folder and the links you go through on
 }
 
 /* ---------- router + events ---------- */
-const VIEWDEF={drshostgroups:()=>tableView('DrsHostGroups'),arrayhw:hwView,arrayparts:()=>tableView('ArrayParts'),overview:overview,calendar:calendarView,servermi:()=>tableView('ServerMI'),serverdisks:()=>tableView('ServerDisks'),clusters:clustersView,arrayvolumes:()=>tableView('ArrayVolumes'),lunmap:lunMapView,remotecopy:()=>tableView('RemoteCopyGroups'),datastoreclusters:()=>tableView('DatastoreClusters'),drsrules:()=>tableView('DrsRules'),patching:patchView,patchevents:()=>tableView('PatchEvents'),catalyst:()=>tableView('Catalyst'),repljobs:()=>tableView('ReplJobs'),activitylog:()=>tableView('ActivityLog'),ports:portsView,disks:disksView,netports:()=>tableView('NetPorts'),disklist:()=>tableView('Disks'),contacts:()=>tableView('Contacts'),agroups:()=>tableView('AssignGroups'),activity:()=>tableView('DCSSActivity'),backupjobs:bjView,esxi:()=>tableView('ESXi'),storage:()=>tableView('Storage'),backup:()=>tableView('Backup'),dcmi:()=>tableView('DCMI'),racks:racksView,lifecycle:lifecycleView,ipam:ipView,relations:relView,import:importView,wsfc:wsfcView,dcdesign:dcdesignView,dclayoutlist:()=>tableView('DCLayout'),checks:()=>tableView('DCChecks'),issues:issuesView,stuff:stuffView,kb:kbView,otherdevices:()=>tableView('RackDevices'),tracker:oiView,quality:qualityView,sources:sourcesView,datastores:()=>tableView('Datastores'),settings:settingsView};
+const VIEWDEF={todo:todoView,drshostgroups:()=>tableView('DrsHostGroups'),arrayhw:hwView,arrayparts:()=>tableView('ArrayParts'),overview:overview,calendar:calendarView,servermi:()=>tableView('ServerMI'),serverdisks:()=>tableView('ServerDisks'),clusters:clustersView,arrayvolumes:()=>tableView('ArrayVolumes'),lunmap:lunMapView,remotecopy:()=>tableView('RemoteCopyGroups'),datastoreclusters:()=>tableView('DatastoreClusters'),drsrules:()=>tableView('DrsRules'),patching:patchView,patchevents:()=>tableView('PatchEvents'),catalyst:()=>tableView('Catalyst'),repljobs:()=>tableView('ReplJobs'),activitylog:()=>tableView('ActivityLog'),ports:portsView,disks:disksView,netports:()=>tableView('NetPorts'),disklist:()=>tableView('Disks'),contacts:()=>tableView('Contacts'),agroups:()=>tableView('AssignGroups'),activity:()=>tableView('DCSSActivity'),backupjobs:bjView,esxi:()=>tableView('ESXi'),storage:()=>tableView('Storage'),backup:()=>tableView('Backup'),dcmi:()=>tableView('DCMI'),racks:racksView,lifecycle:lifecycleView,ipam:ipView,relations:relView,import:importView,wsfc:wsfcView,dcdesign:dcdesignView,dclayoutlist:()=>tableView('DCLayout'),checks:()=>tableView('DCChecks'),issues:issuesView,stuff:stuffView,kb:kbView,otherdevices:()=>tableView('RackDevices'),tracker:oiView,quality:qualityView,sources:sourcesView,datastores:()=>tableView('Datastores'),settings:settingsView};
 /* page transitions: tabs slide + fade in the tab direction (200 ms), page change rises (220 ms), first visit cascades */
 const PGSEEN={};let PGLAST='';
 function pgAnim(){
@@ -6042,7 +6093,7 @@ if(navigator.clipboard&&navigator.clipboard.writeText)navigator.clipboard.writeT
 };
 ACT.undo=()=>undoDo();
 ACT.menu=el=>{const s=document.querySelector('.side'),o=s.classList.toggle('open');document.querySelectorAll('.mbtn[data-act=menu]').forEach(b=>b.setAttribute('aria-expanded',String(o)))};
-Object.assign(ACT,CALACT,PORTACT,ENCLACT,LOGACT,HPACT,DCPACT,SRTACT,SHELLACT,CTACT,PHYSACT,STUFFACT,IMPACT,LCACT,PGACT,CLACT,DRSACT,LEACT,NEONACT,WSACT,PDACT);
+Object.assign(ACT,CALACT,PORTACT,ENCLACT,LOGACT,HPACT,DCPACT,SRTACT,SHELLACT,CTACT,PHYSACT,STUFFACT,IMPACT,LCACT,PGACT,CLACT,DRSACT,LEACT,NEONACT,WSACT,PDACT,TDACT);
 document.addEventListener('click',e=>{const el=e.target.closest('[data-act]');if(!el||/^avm(arr2?|from|to)$/.test(el.dataset.act))return;if(el.tagName==='A'&&el.getAttribute('href')==='#')e.preventDefault();const f=ACT[el.dataset.act];if(f)f(el,e)});
 document.addEventListener('submit',e=>{if(e.target.id!=='frm')return;e.preventDefault();const sheet=e.target.dataset.sheet;const r=submitForm(e.target);if(r&&sheet==='Issues'&&r.ID){IS.sel=r.ID;route()}});
 let QT=0;
