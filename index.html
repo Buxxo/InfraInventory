@@ -944,21 +944,21 @@ th sup{font-size:9px;margin-left:1px;opacity:.85}
 :root{
 --font:'Geist',system-ui,-apple-system,'Segoe UI',Roboto,Arial,sans-serif;--mono:'Geist Mono',ui-monospace,'Cascadia Mono',Consolas,monospace;--font-n:var(--font);--mono-n:var(--mono);
 --bg:#F4F5F7;--surface:#FFFFFF;--surface2:#F7F8FA;--ink:#0E1116;--muted:#5B6472;--line:#E7E9EE;--line2:#F0F1F4;
---accent:#2F4BFF;--accent-ink:#FFFFFF;--accent-soft:#EEF0F4;--accent-hover:#2238D6;--grad:var(--accent);--glow:transparent;
+--accent:#0E1116;--accent-ink:#FFFFFF;--accent-soft:#EEF0F4;--accent-hover:#3A3F4A;--grad:var(--accent);--glow:transparent;
 --side:transparent;--side2:#ECEEF2;--side-on:#E9EBF0;--side-ink:#3B4350;--side-muted:#6B7280;
 --ok-c:#1F9D63;--warn-c:#B86E00;--bad-c:#D63A3A;
---ok-bg:#E8F6EF;--ok-fg:#137A4B;--warn-bg:#FDF1E0;--warn-fg:#8A4B00;--bad-bg:#FDECEC;--bad-fg:#C42B2B;--off-bg:#F1F2F5;--off-fg:#4B5563;--info-bg:#EEF1FF;--info-fg:#2437C0;
+--ok-bg:#E8F6EF;--ok-fg:#137A4B;--warn-bg:#FDF1E0;--warn-fg:#8A4B00;--bad-bg:#FDECEC;--bad-fg:#C42B2B;--off-bg:#F1F2F5;--off-fg:#4B5563;--info-bg:#EEF0F4;--info-fg:#3A3F4A;
 --u-esxi:#2F4BFF;--u-phys:#7A5AF0;--u-stor:#D98A00;--u-back:#14907F;--u-free:#EEF0F3;
 --sh-1:none;--sh-2:0 1px 2px rgba(14,17,22,.06),0 6px 16px -8px rgba(14,17,22,.12);--sh-3:0 18px 48px -12px rgba(14,17,22,.28),0 2px 8px rgba(14,17,22,.08);--sh-a:none;--sh-b:var(--sh-2);
 --r-1:8px;--r-2:10px;--r-3:12px}
 :root[data-theme="dark"]{
---bg:#0B0C0F;--surface:#121317;--surface2:#16181D;--ink:#ECEEF2;--muted:#9AA0AC;--line:#23252C;--line2:#1B1D23;
---accent:#7D92FF;--accent-ink:#0B0C0F;--accent-soft:#1D1F25;--accent-hover:#9AABFF;--grad:var(--accent);--glow:transparent;
---side:transparent;--side2:#1A1C22;--side-on:#1D1F25;--side-ink:#A4A9B4;--side-muted:#8A909C;
+--bg:#000000;--surface:#000000;--surface2:#0A0A0C;--ink:#F2F3F5;--muted:#8E939E;--line:#1F2024;--line2:#141417;
+--accent:#F2F3F5;--accent-ink:#000000;--accent-soft:#131316;--accent-hover:#C9CCD3;--grad:var(--accent);--glow:transparent;
+--side:transparent;--side2:#101012;--side-on:#17171A;--side-ink:#A0A5B0;--side-muted:#7E838E;
 --ok-c:#3DD68C;--warn-c:#F5A524;--bad-c:#FF6369;
---ok-bg:rgba(61,214,140,.12);--ok-fg:#5FE0A3;--warn-bg:rgba(245,165,36,.12);--warn-fg:#F5B94D;--bad-bg:rgba(255,99,105,.12);--bad-fg:#FF8A8F;--off-bg:#1D1F25;--off-fg:#A4A9B4;--info-bg:#1B2142;--info-fg:#A9B7FF;
---u-esxi:#7D92FF;--u-phys:#A78BFA;--u-stor:#F5A524;--u-back:#3DD6C0;--u-free:#1D1F25;
---sh-2:0 1px 2px rgba(0,0,0,.4),0 8px 20px -8px rgba(0,0,0,.55);--sh-3:0 24px 60px -12px rgba(0,0,0,.75),0 2px 8px rgba(0,0,0,.4);color-scheme:dark}
+--ok-bg:rgba(61,214,140,.12);--ok-fg:#5FE0A3;--warn-bg:rgba(245,165,36,.12);--warn-fg:#F5B94D;--bad-bg:rgba(255,99,105,.12);--bad-fg:#FF8A8F;--off-bg:#141417;--off-fg:#A4A9B4;--info-bg:#17181C;--info-fg:#B4B8C2;
+--u-esxi:#7D92FF;--u-phys:#A78BFA;--u-stor:#F5A524;--u-back:#3DD6C0;--u-free:#101012;
+--sh-2:none;--sh-3:0 0 0 1px #2A2B31,0 24px 60px -12px #000;color-scheme:dark}
 
 html{scroll-behavior:auto}
 body{background:var(--bg)!important;background-image:none!important;font-size:13px;line-height:1.45;letter-spacing:0;font-feature-settings:"tnum" 1,"ss01" 0}
@@ -1178,6 +1178,42 @@ html.rail .seg{display:none}
 .dayhero .big b{background:none!important;color:var(--ink)!important;-webkit-text-fill-color:currentColor;font-weight:600;font-size:44px}
 .agd.today .agh{background:var(--side-on);border-color:var(--line)}
 .agd.today .agh *{color:var(--ink)!important}
+
+/* AMOLED dark: true black, popups lifted by a lighter edge */
+:root[data-theme="dark"] .dlg,:root[data-theme="dark"] details.menu .pop,:root[data-theme="dark"] .hfpop,:root[data-theme="dark"] .palbox,:root[data-theme="dark"] .ckdlg{background:#0B0B0D!important;border:1px solid #2A2B31!important}
+:root[data-theme="dark"] .modal,:root[data-theme="dark"] .pal{background:rgba(0,0,0,.72)}
+:root[data-theme="dark"] .main{border-color:#1A1B1F}
+:root[data-theme="dark"] .seg input:checked+span{background:#232428}
+:root[data-theme="dark"] .toast{background:#F2F3F5;color:#000}
+:root[data-theme="dark"] .rk{--cab:#050506}
+:root[data-theme="dark"] .pending{background:rgba(245,165,36,.08)}
+:root[data-theme="dark"] .card,:root[data-theme="dark"] .kpi{background:#000}
+:root[data-theme="dark"] .welcome,:root[data-theme="dark"] .dayhero{background:#0A0A0C!important}
+:root[data-theme="dark"] .dcp-box{background:#050506}
+:root[data-theme="dark"] .inp,:root[data-theme="dark"] input:not([type=checkbox]):not([type=radio]),:root[data-theme="dark"] select,:root[data-theme="dark"] textarea{border-color:#2A2B31}
+:root[data-theme="dark"] .btn{border-color:#2A2B31}
+:root[data-theme="dark"] .chip{border-color:#26272C}
+
+/* neutralise leftover blues */
+a{color:var(--ink);text-decoration:underline;text-decoration-color:var(--line);text-underline-offset:2px}a:hover{text-decoration-color:var(--ink)}
+.nav a,.side a,a.btn,a.chip,a.badge,.tabs a,.gtabs a{text-decoration:none}
+.h1{background:var(--off-bg)!important;color:var(--off-fg)!important}:root{--h2c:#C9CCD3;--h3c:#5B606B}.h2{background:var(--h2c)!important;color:#111!important}.h3{background:var(--h3c)!important;color:#fff!important}
+:root[data-theme="dark"]{--h2c:#3A3D45;--h3c:#7A7F8B}:root[data-theme="dark"] .h2{color:#F2F3F5!important}:root[data-theme="dark"] .h3{color:#000!important}
+.pt.spare{background:#6B7280!important;border-color:#6B7280!important}
+.ipc.u{background:var(--ink)!important;border-color:var(--ink)!important;color:var(--bg)!important}
+button.fc.on{background:var(--ink)!important;border-color:var(--ink)!important;color:var(--bg)!important}
+/* top status bar: neutral, amber dot only */
+.pending,:root[data-theme="dark"] .pending{background:var(--surface2,var(--surface))!important;border:1px solid var(--line)!important;color:var(--muted)!important;font-weight:400}
+.pending b{color:var(--ink);font-weight:600}
+.pending>span::before{background:var(--warn-c)!important}
+/* neutral slim scrollbars */
+:root{--sb:#D3D6DC;--sb-h:#A9ADB6}:root[data-theme="dark"]{--sb:#26272C;--sb-h:#4A4C55}
+*{scrollbar-width:thin;scrollbar-color:var(--sb) transparent!important}.side{scrollbar-color:var(--sb) transparent!important}
+::-webkit-scrollbar{width:10px;height:10px;background:transparent}::-webkit-scrollbar-track{background:transparent}
+::-webkit-scrollbar-thumb{background:var(--sb);border-radius:10px;border:3px solid transparent;background-clip:padding-box;min-height:32px}
+::-webkit-scrollbar-thumb:hover{background:var(--sb-h);background-clip:padding-box;border:3px solid transparent}
+::-webkit-scrollbar-corner{background:transparent}
+.tw::-webkit-scrollbar-thumb{background:var(--sb);background-clip:padding-box}.tw::-webkit-scrollbar-thumb:hover{background:var(--sb-h);background-clip:padding-box}
 
 </style>
 <div class="app">
@@ -1659,7 +1695,7 @@ const item=v=>'<a href="#'+(GRP[v[0]]&&GLAST[v[0]]&&GOF[GLAST[v[0]]]===v[0]?GLAS
 $('nav').innerHTML='<button class="navsearch" data-act="ckopen"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/></svg><span>Search…</span><kbd>Ctrl K</kbd></button>'+NAV.map(g=>{g=[g[0],g[1].filter(v=>!GOF[v[0]]||GOF[v[0]]===v[0])];if(!g[0])return '<div class="navg">'+g[1].map(item).join('')+'</div>';const has=g[1].some(v=>v[0]===CUR||GOF[CUR]===v[0]),shut=NAVC[g[0]]&&!has,cnt=g[1].reduce((a,v)=>a+(badge[v[0]]||0),0);
 return '<button class="navlbl" data-act="navgrp" data-g="'+g[0]+'" aria-expanded="'+(!shut)+'"><span>'+g[0]+'</span>'+(shut&&cnt?'<em>'+cnt+'</em>':'')+'<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg></button><div class="navg"'+(shut?' hidden':'')+'>'+g[1].map(item).join('')+'</div>'}).join('');
 const row=(l,s)=>{const u=sheetUpdated(s);const f=fresh(u);return '<div><span>'+l+'</span><span'+(f[0]==='b-bad'?' style="color:#FF9492"':f[0]==='b-warn'?' style="color:#FFC966"':'')+'>'+ago(u)+'</span></div>'};
-$('fresh').innerHTML='<b>Data freshness</b><span class="mono" style="color:var(--side-muted)">'+esc(META.fileName||'inventory.xlsx')+'</span>'+row('ServersMI','ServerMI')+row('ESXi hosts','ESXi')+row('Storage','Storage')+row('Datastores','Datastores')+row('Backup','Backup')+row('DCMI','DCMI')+row('DC Checks','DCChecks')+'<span style="color:var(--side-muted);border-top:1px solid #2B4070;padding-top:8px">Page built '+esc(META.loadedAt)+'</span>';
+$('fresh').innerHTML='<b>Data freshness</b><span class="mono" style="color:var(--side-muted)">'+esc(META.fileName||'inventory.xlsx')+'</span>'+row('ServersMI','ServerMI')+row('ESXi hosts','ESXi')+row('Storage','Storage')+row('Datastores','Datastores')+row('Backup','Backup')+row('DCMI','DCMI')+row('DC Checks','DCChecks')+'<span style="color:var(--side-muted);border-top:1px solid var(--line);padding-top:8px">Page built '+esc(META.loadedAt)+'</span>';
 }
 let RPOBJ=null,RPST=null;
 function rootBar(){
@@ -1817,7 +1853,7 @@ DCChecks:{id:'checks',title:'DC checks',sub:'Data center check log, entered by h
 kpis:d=>{const last=d.slice().sort((x,y)=>String(y.Date).localeCompare(String(x.Date)))[0];return[{l:'Checks logged',v:d.length,s:'on '+(new Set(d.map(r=>String(r.Date).slice(0,10))).size)+' days'},{l:'Last check',v:last?String(last.Date).slice(0,10):'—',s:last?ago(last.Date)+' · '+(last.DC||''):'Nothing logged yet'},{l:'Checks with issues',v:d.filter(r=>r.Result==='Issue').length,s:'in the log',c:d.some(r=>r.Result==='Issue')?'w':''}]}}
 };
 function heatHtml(){
-return '<div class="row">'+DCS.map(dc=>'<div class="card"><h2>Rack power load · '+dc+'</h2><div class="heat">'+dcRacks(dc).map(rk=>{const r=DB.DCMI.find(x=>x.DC===dc&&x.Rack===rk);if(!r)return '<div class="cell h1"><span class="mono">'+rk+'</span><span>no reading</span></div>';const l=load(r);const k=l>=80?'h4':l>=60?'h3':l>=40?'h2':'h1';return '<div class="cell '+k+'"><span class="mono">'+rk+'</span><b style="font-size:18px">'+l+'%'+(l>=80?' ▲':'')+'</b></div>'}).join('')+'</div></div>').join('')+'</div><div class="leg"><span><i style="background:var(--info-bg)"></i>&lt; 40%</span><span><i style="background:#A9C4F5"></i>40–59%</span><span><i style="background:#2F66C4"></i>60–79%</span><span><i style="background:#B85C00"></i>≥ 80% ▲</span></div>';
+return '<div class="row">'+DCS.map(dc=>'<div class="card"><h2>Rack power load · '+dc+'</h2><div class="heat">'+dcRacks(dc).map(rk=>{const r=DB.DCMI.find(x=>x.DC===dc&&x.Rack===rk);if(!r)return '<div class="cell h1"><span class="mono">'+rk+'</span><span>no reading</span></div>';const l=load(r);const k=l>=80?'h4':l>=60?'h3':l>=40?'h2':'h1';return '<div class="cell '+k+'"><span class="mono">'+rk+'</span><b style="font-size:18px">'+l+'%'+(l>=80?' ▲':'')+'</b></div>'}).join('')+'</div></div>').join('')+'</div><div class="leg"><span><i style="background:var(--info-bg)"></i>&lt; 40%</span><span><i style="background:var(--h2c)"></i>40–59%</span><span><i style="background:var(--h3c)"></i>60–79%</span><span><i style="background:#B85C00"></i>≥ 80% ▲</span></div>';
 }
 function uiOf(s){if(!UI[s]){const t=TV[s];UI[s]={q:'',f:'All',fl:[],open:false,sk:t.sort?t.sort[0]:(t.show[0]||null),sd:t.sort?t.sort[1]:(s==='DCSSActivity'?-1:1)}}return UI[s]}
 function tableView(sheet){
@@ -3265,7 +3301,7 @@ const days=parseInt($('log-days').value);if(!(days>=1)){el.dataset.arm='';el.tex
 const cut=ds(-days),n0=DB.ActivityLog.length;DB.ActivityLog=DB.ActivityLog.filter(r=>String(r.Time||'').slice(0,10)>=cut);
 const n=n0-DB.ActivityLog.length;if(n)changed();route();toast(n+' log entr'+(n===1?'y':'ies')+' deleted')}};
 /* ---------- DC designer (container data centers: floor plan with drag, resize, snapping, checks) ---------- */
-const DKIND={'Container 40 ft':{w:12.19,h:2.44,c:'#5B6B82'},'Container 20 ft':{w:6.06,h:2.44,c:'#6B7B92'},'Rack':{w:0.6,h:1.2,c:'#2F66C4'},'Rack row':{w:6,h:1.2,c:'#3F7BDB'},'Network cabinet':{w:0.8,h:0.8,c:'#1C7C94'},'Cooling unit':{w:1.2,h:0.9,c:'#0F9D9A'},'Chiller':{w:3,h:2,c:'#2B8F8C'},'UPS / batteries':{w:1.5,h:1,c:'#4E7F1E'},'Power cabinet':{w:1,h:0.8,c:'#B85C00'},'Generator':{w:3,h:1.5,c:'#9A6B00'},'Door / entrance':{w:1,h:0.25,c:'#A3221B'},'Zone':{w:8,h:6,c:'#8FA3C0'},'Label':{w:3,h:0.8,c:'#5B6B82'}};
+const DKIND={'Container 40 ft':{w:12.19,h:2.44,c:'#5B6B82'},'Container 20 ft':{w:6.06,h:2.44,c:'#6B7B92'},'Rack':{w:0.6,h:1.2,c:'#6B7B92'},'Rack row':{w:6,h:1.2,c:'#3F7BDB'},'Network cabinet':{w:0.8,h:0.8,c:'#1C7C94'},'Cooling unit':{w:1.2,h:0.9,c:'#0F9D9A'},'Chiller':{w:3,h:2,c:'#2B8F8C'},'UPS / batteries':{w:1.5,h:1,c:'#4E7F1E'},'Power cabinet':{w:1,h:0.8,c:'#B85C00'},'Generator':{w:3,h:1.5,c:'#9A6B00'},'Door / entrance':{w:1,h:0.25,c:'#A3221B'},'Zone':{w:8,h:6,c:'#8FA3C0'},'Label':{w:3,h:0.8,c:'#5B6B82'}};
 const DOUT={'Container 40 ft':1,'Container 20 ft':1,'Chiller':1,'Generator':1};
 const DSKIP={'Zone':1,'Label':1,'Door / entrance':1};
 const DRKK={'Rack':1,'Rack row':1};
@@ -3334,7 +3370,7 @@ const S=exp?24:24*DPS.z,all=dcpRows(),rows=all.filter(x=>!DPS.hide[x.r.Kind]),se
 let mx=0,my=0,x0=1e9,y0=1e9;all.forEach(x=>{const b=dbox(x.r);mx=Math.max(mx,b.x+b.w);my=Math.max(my,b.y+b.h);x0=Math.min(x0,b.x);y0=Math.min(y0,b.y)});
 let W=Math.max(60,mx+6),H=Math.max(36,my+6),ox=0,oy=0;
 if(exp){if(!all.length){x0=0;y0=0;mx=20;my=10}ox=Math.max(0,x0-2);oy=Math.max(0,y0-2);W=mx+2-ox;H=my+2-oy}
-const T=(n,f)=>exp?f:'var('+n+')',cInk=T('--ink','#1b2430'),cAcc=T('--accent','#2F66C4'),cMut=T('--muted','#5b6b82'),cL=T('--line','#d3dae6'),cL2=T('--line2','#e8ecf3');
+const T=(n,f)=>exp?f:'var('+n+')',cInk=T('--ink','#1b2430'),cAcc=T('--accent','#0E1116'),cMut=T('--muted','#5b6b82'),cL=T('--line','#d3dae6'),cL2=T('--line2','#e8ecf3');
 const order=k=>k==='Zone'?0:/^Container/.test(k)?1:k==='Label'?3:2;
 const sorted=rows.slice().sort((a,b)=>order(a.r.Kind)-order(b.r.Kind));
 const heat=DPS.heat,CF=exp?new Set():DCF;let g='',dim='';
@@ -3400,7 +3436,7 @@ return '<h2>'+a.length+' blocks selected</h2><p class="note" style="margin:0 0 8
 +'<div class="dcp-bg"><span class="note">Align</span><button class="btn s" data-act="dcpalign" data-m="l" title="Align left edges">⇤ Left</button><button class="btn s" data-act="dcpalign" data-m="cx" title="Center horizontally">↔ Center</button><button class="btn s" data-act="dcpalign" data-m="r" title="Align right edges">⇥ Right</button><button class="btn s" data-act="dcpalign" data-m="t" title="Align top edges">⤒ Top</button><button class="btn s" data-act="dcpalign" data-m="cy" title="Center vertically">↕ Middle</button><button class="btn s" data-act="dcpalign" data-m="b" title="Align bottom edges">⤓ Bottom</button></div>'
 +'<div class="dcp-bg"><span class="note">Spread</span><button class="btn s" data-act="dcpdist" data-m="h"'+(a.length<3?' disabled':'')+'>Distribute horizontally</button><button class="btn s" data-act="dcpdist" data-m="v"'+(a.length<3?' disabled':'')+'>Distribute vertically</button></div>'
 +'<div class="dcp-bg"><span class="note">Size</span><button class="btn s" data-act="dcpsame" data-m="w">Same width</button><button class="btn s" data-act="dcpsame" data-m="h">Same height</button></div>'
-+'<label class="wide" style="display:block;margin:10px 0 0">Color for all<input class="inp" type="color" data-act="dcpcolall" value="#2f66c4" style="padding:2px;height:36px;width:100%"></label>'
++'<label class="wide" style="display:block;margin:10px 0 0">Color for all<input class="inp" type="color" data-act="dcpcolall" value="#6b7b92" style="padding:2px;height:36px;width:100%"></label>'
 +'<div class="tools" style="margin-top:12px"><button class="btn s" data-act="dcprot" title="Rotate the group around its center (R)">Rotate 90°</button><button class="btn s" data-act="dcpdup">Duplicate</button><button class="btn s" data-act="dcplock">'+(lk===a.length?'Unlock':'Lock')+'</button><button class="btn s d" data-act="dcpdel">Delete</button><button class="btn s" data-act="dcpsel0">Deselect</button></div>'}
 const i=a[0],r=DB.DCLayout[i],rackLink=!!DRKK[r.Kind],cont=/^Container/.test(r.Kind);let info='';
 if(rackLink&&r.Rack){const ri=dRackInfo(r.Rack);info='<p class="note" style="margin:8px 0 0">Rack '+esc(r.Rack)+': '+ri.used+' of '+ri.tot+' U used ('+ri.upct+'%)'+(ri.pr?' · power '+esc(ri.pr['Power kW'])+' of '+esc(ri.pr['Limit kW'])+' kW ('+ri.load+'%) · inlet '+esc(ri.pr['Inlet C'])+' °C':' · no DCMI reading')+'. <a href="#racks">Open rack layout</a></p>'}
@@ -3917,11 +3953,11 @@ if(j.target==='ServerDisks'){const hs=Object.keys(r),f=n=>hs.find(h=>impNorm(h)=
 if(/^(true|yes)$/i.test(String(o.Provisioning||'').trim()))o.Provisioning='Thin';else if(/^(false|no)$/i.test(String(o.Provisioning||'').trim()))o.Provisioning='Thick lazy zeroed';
 if(o.Provisioning&&!/^(Thin|Thick lazy zeroed|Thick eager zeroed)$/.test(o.Provisioning)){const p=String(o.Provisioning).toLowerCase();o.Provisioning=/eager/.test(p)?'Thick eager zeroed':/thin/.test(p)?'Thin':/thick|lazy/.test(p)?'Thick lazy zeroed':''}
 const raw=f('raw'),rm=f('raw comp mode')||f('raw compat mode')||f('raw mode');if(raw&&/^(true|yes|1)$/i.test(String(r[raw]).trim())){o.Type=/virtual/i.test(String(r[rm]||''))?'RDM - virtual':'RDM - physical'}else if(!o.Type)o.Type='VMDK';
-if(o.Server)o.Server=String(o.Server).trim()}
+if(o.Server)o.Server=String(o.Server).trim();if(r[SHT])o.Purpose='Cluster shared'}
 if(j.target==='Datastores'&&o['Capacity TB']!=null&&o['Free TB']!=null&&o['Used %']==null&&o['Capacity TB']>0)o['Used %']=Math.round((1-o['Free TB']/o['Capacity TB'])*1000)/10;
 if(j.target==='Storage'&&o['Used %']==null&&o['Usable TB']!=null){}
 return o}
-function impSkip(j,r){const t=Object.keys(r).find(h=>impNorm(h)==='template');return t&&/^(true|yes|1)$/i.test(String(r[t]))}
+function impSkip(j,r){if(r&&r[SHT]&&!IMP.keepNode)return true;const t=Object.keys(r).find(h=>impNorm(h)==='template');return t&&/^(true|yes|1)$/i.test(String(r[t]))}
 /* import rules: saved in AppSettings (key ImportRules), applied to every import */
 const IR_KINDS=[['skip','Skip row if'],['only','Import only rows if'],['blank','Ignore value if'],['strip','Remove text from value if'],['fill','Fill empty cells from the row above']];
 const IR_OPS=[['ends','ends with'],['starts','starts with'],['contains','contains'],['equals','equals'],['wild','matches wildcard (* ?)'],['regex','matches regex'],['empty','is empty'],['filled','is not empty']];
@@ -3977,6 +4013,28 @@ out.push({ri:ri,st:ch.filter(x=>x.c!=='__skip').length?'upd':'same',label:label,
 if(IMP.prune&&IMP_PRUNE.indexOf(j.target)>=0){const sc=j.target==='ServerNics'?'Server':'Cluster',norm=v=>{v=String(v||'').trim().toLowerCase();return sc==='Server'?v.split('.')[0]:v},scope=new Set();j.t.rows.forEach(r0=>{const r=impPrep(j,r0,false);if(!r)return;const o=impRowVals(j,r);if(o[sc])scope.add(norm(o[sc]))});
 DB[j.target].forEach((tr,ti)=>{if(hit[ti]!=null||!scope.has(norm(tr[sc])))return;out.push({ri:-1,st:'gone',label:(tr[sc]||'')+' · '+(tr[kname]||''),ti:ti,o:{}})})}
 j.plan=out;out.forEach((p,i)=>{if(j.sel[i]==null)j.sel[i]=p.st==='upd'||(p.st==='new'&&IMP.addNew)||(p.st==='gone'&&j.target!=='ServerNics')});return out}
+/* RVTools vDisk: disks shared by the nodes of a failover cluster are written once to Cluster drives, not to every node */
+const SHT=Symbol('shared');
+function impVmCluster(vm){const i=srvFind(vm);if(i>=0){const s=DB.ServerMI[i];if(s['Cluster/Standalone']==='Standalone')return '';if(s['Failover cluster'])return String(s['Failover cluster']).trim()}
+const n=String(vm||'').trim().toLowerCase().split('.')[0],cn=n&&(DB.ClusterNodes||[]).find(x=>String(x.Node||'').trim().toLowerCase().split('.')[0]===n);return cn?String(cn.Cluster||'').trim():''}
+function impClusterSplit(){IMP.jobs=IMP.jobs.filter(j=>!j.derived);IMP.clinfo=null;const vj=IMP.jobs.find(j=>j.target==='ServerDisks'&&j.on);if(!vj)return;
+vj.t.rows.forEach(r=>{delete r[SHT]});if(IMP.clsplit===false)return;
+const hs=vj.t.headers,fh=n=>hs.find(h=>impNorm(h)===n),hSm=fh('sharing mode'),hSb=fh('shared bus'),hRaw=fh('raw'),hRl=fh('raw lun id'),G=new Map();
+vj.t.rows.forEach(r0=>{if(impSkip(vj,r0))return;const r=impPrep(vj,r0,false);if(!r)return;const o=impRowVals(vj,r),cl=impVmCluster(o.Server);if(!cl)return;
+const rawv=hRl?String(r[hRl]||'').trim().toLowerCase():'',path=String(o['Disk path']||'').trim().toLowerCase(),key=rawv?'n|'+rawv:path?'p|'+path:'';if(!key)return;
+const isRaw=hRaw&&/^(true|yes|1)$/i.test(String(r[hRaw]).trim()),mw=hSm&&/multi/i.test(String(r[hSm]||'')),sb=hSb&&/sharing/i.test(String(r[hSb]||''))&&!/^no/i.test(String(r[hSb]).trim());
+const gk=cl.toLowerCase()+'|'+key;let g=G.get(gk);if(!g){g={cl:cl,key:key,rows:[],nodes:[],flag:false,first:o,rawv:rawv};G.set(gk,g)}
+g.rows.push(r0);const sv=String(o.Server).split('.')[0];if(g.nodes.indexOf(sv)<0)g.nodes.push(sv);if(isRaw||mw||sb)g.flag=true});
+const sh=[...G.values()].filter(g=>g.flag||g.nodes.length>=2);if(!sh.length)return;
+const A=[],B=[],cls={};sh.forEach(g=>{g.rows.forEach(r=>{r[SHT]=g});const o=g.first,naa=/^naa\./i.test(g.rawv)?g.rawv.toLowerCase():(/^naa\./.test(o['NAA ID']||'')?o['NAA ID']:'');
+const row={Cluster:g.cl,Disk:naa?'RDM '+naa.slice(-8):(o.Disk||'Shared disk'),'Size GB':o['Size GB']!=null?o['Size GB']:'',Type:o.Type&&o.Type!=='VMDK'?o.Type:'VMDK','NAA ID':naa,'Datastore / array':o.Type&&o.Type!=='VMDK'?'':(o['Datastore / array']||'')};
+(naa?A:B).push(row);(cls[g.cl]=cls[g.cl]||[]).push(g)});
+const H=['Cluster','Disk','Size GB','Type','NAA ID','Datastore / array'],mk=(name,rows,key)=>({t:{name:name,headers:H,rows:rows,raw:null},target:'ClusterDisks',map:{Cluster:'Cluster',Disk:'Disk','Size GB':'Size GB',Type:'Type','NAA ID':'NAA ID','Datastore / array':'Datastore / array'},key:key,on:true,sel:{},plan:null,remembered:false,arr:'',derived:true});
+if(A.length)IMP.jobs.push(mk('vDisk shared RDM',A,'@k:Cluster|NAA ID'));if(B.length)IMP.jobs.push(mk('vDisk shared VMDK',B,'@k:Cluster|Disk'));
+IMP.clinfo={n:sh.length,rows:sh.reduce((a,g)=>a+g.rows.length,0),cls:Object.keys(cls).map(c=>({c:c,n:cls[c].length,nodes:[...new Set([].concat(...cls[c].map(g=>g.nodes)))]}))}}
+function impClusterPanel(){if(!IMP.clinfo&&IMP.clsplit!==false)return '';const ci=IMP.clinfo,off=IMP.clsplit===false;
+return '<div class="card callout" style="margin-bottom:12px"><div class="tools" style="justify-content:space-between"><b>Failover cluster disks</b><div class="chips"><button class="chip'+(off?'':' on')+'" data-act="clsplit">Assign shared disks to the cluster</button>'+(off?'':'<button class="chip'+(IMP.keepNode?' on':'')+'" data-act="clkeep">Also keep a row per node</button>')+'</div></div>'
++(off?'<p class="note" style="margin:6px 0 0">Off: every disk goes to its own server, shared disks appear on each node.</p>':'<p class="note" style="margin:6px 0 0"><b>'+ci.n+'</b> shared disk'+(ci.n===1?'':'s')+' ('+ci.rows+' VM disk rows) go to Cluster drives once, matched by cluster + NAA ID or disk file. '+(IMP.keepNode?'Each node also keeps a Server disks row marked “Cluster shared”.':'They are left out of Server disks.')+'</p><ul class="note" style="margin:6px 0 0;padding-left:18px">'+ci.cls.map(x=>'<li><b>'+esc(x.c)+'</b>: '+x.n+' disk'+(x.n===1?'':'s')+' on '+esc(x.nodes.join(', '))+'</li>').join('')+'</ul>')+'</div>'}
 /* file loading */
 async function impLoadFiles(files){IMP.err='';IMP.sheets=[];IMP.files=[...files].map(f=>f.name);
 for(const f of files){try{if(/\.(xlsx|xlsm|xls)$/i.test(f.name)){if(typeof XLSX==='undefined'){IMP.err='The Excel reader (vendor/xlsx.full.min.js) is not loaded. Save the sheet as CSV or paste the table.';continue}
@@ -3986,7 +4044,7 @@ impAfterLoad()}
 function impAfterLoad(){if(!IMP.sheets.length&&!IMP.err)IMP.err='No table found. The file needs a header row and at least one data row.';
 IMP.jobs=IMP.sheets.map(t=>{const g=impGuessTarget(t);const j=impMakeJob(t,g||(IMP_SRC.find(s=>s.id===IMP.src)||{t:['ServerMI']}).t[0]);j.on=!!g;return j});
 if(IMP.src==='rvtools'&&!IMP.jobs.some(j=>j.on)&&IMP.jobs.length){IMP.err='No vInfo, vHost, vDisk or vDatastore tab found. Is this an RVTools export?'}
-IMP.cur=Math.max(0,IMP.jobs.findIndex(j=>j.on));IMP.step=IMP.jobs.length?2:1;IMP.done=null;route()}
+if(IMP.src==='rvtools')impClusterSplit();IMP.cur=Math.max(0,IMP.jobs.findIndex(j=>j.on));IMP.step=IMP.jobs.length?2:1;IMP.done=null;route()}
 /* views */
 function impStepper(){const st=[['1','Source'],['2','Match columns'],['3','Review and write']];return '<ol class="impsteps">'+st.map((s,i)=>'<li class="'+(IMP.step===i+1?'on':IMP.step>i+1?'done':'')+'"><b>'+(IMP.step>i+1?'✓':s[0])+'</b>'+s[1]+'</li>').join('')+'</ol>'}
 function impStep1(){const src=IMP_SRC.find(s=>s.id===IMP.src);
@@ -3999,7 +4057,7 @@ function impStep2(){const j=IMP.jobs[IMP.cur];if(!j)return '';const cols=SCHEMA[
 const sample=h=>j.t.rows.map(r=>r[h]).filter(v=>v!==''&&v!=null).slice(0,3).map(v=>esc(String(v).slice(0,40))).join(' · ');
 const keyOk=j.key==='@name'?Object.values(j.map).some(v=>/^(Hostname|vCenter name|FQDN)$/.test(v)):Object.values(j.map).includes(j.key);
 return '<section class="card"><div class="tools" style="justify-content:space-between"><h2 style="margin:0">2 · Match the columns</h2><span class="note">'+esc(IMP.files.join(', '))+'</span></div><p class="note" style="margin:6px 0 12px">Suggested from the column names; units (MiB, GB, TB, %) are converted. Check the arrows, change what is wrong, choose “ignore” for what you do not want. The choice is remembered for the next file with the same columns'+(j.remembered?' <span class="badge b-info">loaded from last time</span>':'')+'.</p>'
-+(IMP.jobs.length>1?impJobTabs():'')
++(IMP.src==='rvtools'?impClusterPanel():'')+(IMP.jobs.length>1?impJobTabs():'')
 +(j.t.raw&&j.t.raw.length>1?'<div class="tools" style="margin:0 0 10px"><label class="note">Header row <select class="inp" data-act="imphdr" aria-label="Header row">'+j.t.raw.slice(0,Math.min(15,j.t.raw.length-1)).map((r,i)=>'<option value="'+i+'"'+(i===j.t.hi?' selected':'')+'>'+(i+1)+' · '+esc(r.filter(c=>c!=='').slice(0,4).map(c=>String(c).slice(0,18)).join(', '))+'</option>').join('')+'</select></label><span class="note">Wrong columns? Pick the row that holds the column names.</span></div>':'')
 +'<div class="fgrid" style="grid-template-columns:repeat(auto-fit,minmax(220px,1fr));margin-bottom:12px"><label class="chkrow" style="grid-column:auto;align-self:end"><input type="checkbox" data-act="impon"'+(j.on?' checked':'')+'> Import this table ('+j.t.rows.length+' rows)</label>'
 +'<label>Write into<select class="inp" data-act="imptarget">'+IMP_T.map(t=>'<option value="'+t+'"'+(j.target===t?' selected':'')+'>'+esc(SCHEMA[t].label||t)+'</option>').join('')+'</select></label>'
@@ -4054,6 +4112,8 @@ impjob(el){IMP.cur=+el.dataset.i;route()},
 impback(){IMP.step=Math.max(1,IMP.step-1);route()},
 impnext(){IMP.jobs.forEach(j=>{j.sel={}});IMP.step=3;if(!IMP.jobs[IMP.cur]||!IMP.jobs[IMP.cur].on)IMP.cur=IMP.jobs.findIndex(j=>j.on);route()},
 impreset(){const j=IMP.jobs[IMP.cur];j.map=impSuggest(j.target,j.t.headers);j.key=IMP_KEYS[j.target][0][0];j.remembered=false;route()},
+clsplit(){IMP.clsplit=IMP.clsplit===false;impClusterSplit();IMP.jobs.forEach(j=>{j.sel={};j.plan=null});route()},
+clkeep(){IMP.keepNode=!IMP.keepNode;IMP.jobs.forEach(j=>{j.sel={};j.plan=null});route()},
 impmode(el){IMP.mode=el.dataset.v;IMP.jobs.forEach(j=>{j.sel={}});route()},
 impall(el){const j=IMP.jobs[IMP.cur];j.plan.forEach((p,i)=>{if(p.st==='upd'||p.st==='new'||p.st==='gone')j.sel[i]=el.dataset.v==='1'});route()},
 impapply(el){if(!el.dataset.arm){el.dataset.arm='1';el.textContent='Click again to write the changes';el.classList.add('d');return}impApply()},
@@ -4098,17 +4158,17 @@ function mgParse(wb,f){const keep={DB:DB,META:META,handle:handle,dirty:dirty,SNA
 let theirs=null;try{const r=applyWorkbook(wb,{name:f.name,modified:'',handle:handle});if(r.ok)theirs=DB}finally{DB=keep.DB;META=keep.META;handle=keep.handle;dirty=keep.dirty;SNAP=keep.SNAP;PENDLOG=keep.PENDLOG;SHEETS.forEach(s=>{SCHEMA[s].cols=keep.cols[s]});Object.keys(TV).forEach(s=>{TV[s].show=keep.tv[s]});rebuildHead()}return theirs}
 function mgMap(s,rows){const m=new Map(),cnt={};(rows||[]).forEach(r=>{let k=rid(s,r);cnt[k]=(cnt[k]||0)+1;if(cnt[k]>1)k+=' #'+cnt[k];m.set(k,r)});return m}
 const mgStr=v=>v==null?'':String(v instanceof Date?fmt(v):v);
-function mgCompute(T){const res={rows:{},theirs:0,mine:0,conf:[],added:0,removed:0};
+function mgCompute(T){const res={rows:{},theirs:0,mine:0,conf:[],added:0,removed:0,det:[]};
 SHEETS.forEach(s=>{if(s==='ActivityLog')return;const b=SNAP&&SNAP[s]?SNAP[s]:new Map(),mm=mgMap(s,DB[s]),tm=mgMap(s,T[s]||[]),keys=[];
 mm.forEach((v,k)=>keys.push(k));tm.forEach((v,k)=>{if(!mm.has(k))keys.push(k)});b.forEach((v,k)=>{if(!mm.has(k)&&!tm.has(k))keys.push(k)});
 const out=[];keys.forEach(k=>{const bv=b.get(k),m=mm.get(k),t=tm.get(k);
 const changed=(row)=>{if(!bv)return true;const ks=new Set(Object.keys(row).concat(Object.keys(bv)));for(const c of ks){if(c==='Updated')continue;if(mgStr(row[c])!==(bv[c]||''))return true}return false};
-if(!bv){if(m&&t){const r=Object.assign({},t,m);Object.keys(t).forEach(c=>{if(c!=='Updated'&&mgStr(m[c])!==mgStr(t[c])&&mgStr(m[c])!==''&&mgStr(t[c])!=='')res.conf.push({s:s,k:k,c:c,m:m[c],t:t[c],row:r,pick:'m'})});out.push(r)}else if(m)out.push(m);else{out.push(t);res.added++;res.theirs++}return}
+if(!bv){if(m&&t){const r=Object.assign({},t,m);Object.keys(t).forEach(c=>{if(c!=='Updated'&&mgStr(m[c])!==mgStr(t[c])&&mgStr(m[c])!==''&&mgStr(t[c])!=='')res.conf.push({s:s,k:k,c:c,m:m[c],t:t[c],row:r,pick:'m'})});out.push(r)}else if(m){out.push(m);res.det.push({w:'m',s:s,k:k,t:'add'})}else{out.push(t);res.added++;res.theirs++;res.det.push({w:'t',s:s,k:k,t:'add'})}return}
 if(!m&&!t)return;
-if(!t){if(changed(m)){out.push(m);res.conf.push({s:s,k:k,c:'(row)',m:'changed by you',t:'deleted by them',row:m,del:'t',pick:'m'})}else{res.removed++;res.theirs++}return}
-if(!m){if(changed(t)){out.push(t);res.conf.push({s:s,k:k,c:'(row)',m:'deleted by you',t:'changed by them',row:t,del:'m',pick:'t'})}return}
+if(!t){if(changed(m)){out.push(m);res.conf.push({s:s,k:k,c:'(row)',m:'changed by you',t:'deleted by them',row:m,del:'t',pick:'m'})}else{res.removed++;res.theirs++;res.det.push({w:'t',s:s,k:k,t:'del'})}return}
+if(!m){if(changed(t)){out.push(t);res.conf.push({s:s,k:k,c:'(row)',m:'deleted by you',t:'changed by them',row:t,del:'m',pick:'t'})}else res.det.push({w:'m',s:s,k:k,t:'del'});return}
 const r=Object.assign({},m),ks=new Set(Object.keys(m).concat(Object.keys(t)));let took=false;
-ks.forEach(c=>{if(c==='Updated')return;const mv=mgStr(m[c]),tv=mgStr(t[c]),bc=bv[c]||'';if(mv===tv)return;if(mv===bc){r[c]=t[c];took=true}else if(tv===bc){}else res.conf.push({s:s,k:k,c:c,m:m[c],t:t[c],row:r,pick:'m'})});
+ks.forEach(c=>{if(c==='Updated')return;const mv=mgStr(m[c]),tv=mgStr(t[c]),bc=bv[c]||'';if(mv===tv)return;if(mv===bc){r[c]=t[c];took=true;res.det.push({w:'t',s:s,k:k,t:'chg',c:c,f:bc,to:tv})}else if(tv===bc){res.det.push({w:'m',s:s,k:k,t:'chg',c:c,f:tv,to:mv})}else res.conf.push({s:s,k:k,c:c,m:m[c],t:t[c],row:r,pick:'m'})});
 if(took){res.theirs++;if(mgStr(t.Updated)>mgStr(r.Updated))r.Updated=t.Updated}out.push(r)});
 res.rows[s]=out});
 const seen=new Set(),log=[];(DB.ActivityLog||[]).concat(T.ActivityLog||[]).forEach(r=>{const k=[r.Time,r.User,r.Action,r.Sheet,r.Record,r.Details].join('|');if(!seen.has(k)){seen.add(k);log.push(r)}});log.sort((a,b)=>mgStr(b.Time).localeCompare(mgStr(a.Time)));res.rows.ActivityLog=log;
@@ -4117,10 +4177,19 @@ return res}
 async function mgOpen(f){let T=null;try{T=mgParse(XLSX.read(await f.arrayBuffer(),{type:'array',cellDates:true}),f)}catch(e){T=null}
 if(!T){SAVE_ARMED=true;toast('The workbook on disk was changed but could not be read. Click Save to Excel again to overwrite it.');return}
 const res=mgCompute(T),who=(T.ActivityLog||[]).filter(r=>r.Action==='Saved').sort((a,b)=>mgStr(b.Time).localeCompare(mgStr(a.Time)))[0];MG={res:res,f:f,who:who};mgDlg()}
+function mgOverview(){const d=MG.res.det,fl=MG.flt||'all',nt=d.filter(x=>x.w==='t').length,nm=d.filter(x=>x.w==='m').length,L=fl==='all'?d:d.filter(x=>x.w===fl),LIM=250;
+if(!d.length)return '<p class="note" style="margin:0">Overview: no other changes, only the conflicts below.</p>';
+const lab=s=>SCHEMA[s]?SCHEMA[s].label:s,cv=v=>{const t=mgStr(v);return t===''?'<i>empty</i>':esc(t.length>60?t.slice(0,57)+'…':t)};
+return '<div class="sec" style="margin:4px 0 0">What will change</div><p class="note" style="margin:0"><b>Theirs</b> = saved by the other person, you will see it after the merge. <b>Yours</b> = your edits, written to the file on disk. Overwrite keeps only yours and drops all of theirs.</p>'
++'<div class="chips"><button class="chip'+(fl==='all'?' on':'')+'" data-act="mgflt" data-v="all">All '+d.length+'</button><button class="chip'+(fl==='t'?' on':'')+'" data-act="mgflt" data-v="t">Theirs '+nt+'</button><button class="chip'+(fl==='m'?' on':'')+'" data-act="mgflt" data-v="m">Yours '+nm+'</button></div>'
++'<div class="tw" style="max-height:30vh"><table><thead><tr><th>From</th><th>Sheet</th><th>Record</th><th>Change</th><th>Before → after</th></tr></thead><tbody>'
++L.slice(0,LIM).map(x=>'<tr><td><span class="badge '+(x.w==='t'?'b-info':'b-ok')+'">'+(x.w==='t'?'Theirs':'Yours')+'</span></td><td>'+esc(lab(x.s))+'</td><td class="mono">'+esc(x.k)+'</td><td>'+(x.t==='add'?'<span class="badge b-ok">New row</span>':x.t==='del'?'<span class="badge b-bad">Row deleted</span>':esc(x.c))+'</td><td>'+(x.t==='chg'?cv(x.f)+' → <b>'+cv(x.to)+'</b>':'')+'</td></tr>').join('')
++'</tbody></table></div>'+(L.length>LIM?'<p class="note" style="margin:0">Showing the first '+LIM+' of '+L.length+'.</p>':'')}
 function mgDlg(){const r=MG.res,w=MG.who,lm=new Date(MG.f.lastModified);
 $('modal').innerHTML='<div class="modal"><div class="dlg" role="dialog" aria-modal="true" aria-label="Workbook changed" style="width:min(760px,100%)"><h2>Someone else saved the workbook</h2>'
 +'<p style="margin:0">“'+esc(MG.f.name)+'” was saved at <b>'+fmtT(lm)+'</b>'+(w?' by <b>'+esc(w.User||'?')+'</b>':'')+' after you opened it. Your changes and theirs can be combined.</p>'
 +'<div class="pillrow"><span class="badge b-info">'+r.theirs+' of their changes will be kept</span><span class="badge '+(r.conf.length?'b-warn':'b-ok')+'">'+r.conf.length+' conflict'+(r.conf.length===1?'':'s')+'</span>'+(r.added?'<span class="badge b-off">'+r.added+' rows they added</span>':'')+(r.removed?'<span class="badge b-off">'+r.removed+' rows they deleted</span>':'')+'</div>'
++mgOverview()
 +(r.conf.length?'<p class="note" style="margin:0">A conflict is a field both of you changed. Pick which value wins:</p><div class="tools"><button class="btn s" data-act="mgall" data-v="m">Keep mine for all</button><button class="btn s" data-act="mgall" data-v="t">Take theirs for all</button></div><div class="tw" style="max-height:44vh"><table><thead><tr><th>Sheet</th><th>Record</th><th>Field</th><th>Mine</th><th>Theirs</th></tr></thead><tbody>'
 +r.conf.map((c,i)=>'<tr><td>'+esc(SCHEMA[c.s]?SCHEMA[c.s].label:c.s)+'</td><td class="mono">'+esc(c.k)+'</td><td>'+esc(c.c)+'</td><td><label class="chkrow" style="grid-column:auto"><input type="radio" name="mg'+i+'" data-act="mgpick" data-i="'+i+'" data-v="m"'+(c.pick==='m'?' checked':'')+'> '+esc(mgStr(c.m)||'empty')+'</label></td><td><label class="chkrow" style="grid-column:auto"><input type="radio" name="mg'+i+'" data-act="mgpick" data-i="'+i+'" data-v="t"'+(c.pick==='t'?' checked':'')+'> '+esc(mgStr(c.t)||'empty')+'</label></td></tr>').join('')+'</tbody></table></div>':'<p class="note" style="margin:0">No conflicts: nobody changed the same field.</p>')
 +'<div class="acts"><button class="btn" data-act="mgcancel">Cancel</button><div class="tools"><button class="btn d" data-act="mgover">Overwrite with mine only</button><button class="btn p" data-act="mggo">Merge and save</button></div></div></div></div>'}
@@ -4131,6 +4200,7 @@ bkrefresh(){BKL=null;route()},
 async bkrestore(el){const b=BKL&&BKL[+el.dataset.i];if(!b)return;if(!el.dataset.arm){el.dataset.arm='1';el.textContent='Click again to load it';return}
 const f=await b.h.getFile(),main=handle;let mt=0;try{mt=main?(await main.getFile()).lastModified:0}catch(e){}
 await importFile(f,main);if(main){handle=main;META.fileName=main.name;META.diskMtime=mt;keepHandle(main)}dirty=Math.max(1,dirty);persist();renderPending();route();toast('Backup '+b.n+' loaded. Press Save to Excel to make it the current workbook.')},
+mgflt(el){MG.flt=el.dataset.v;mgDlg()},
 mgall(el){MG.res.conf.forEach(c=>{c.pick=el.dataset.v});mgDlg()},
 mgcancel(){MG=null;closeForm();toast('Not saved. Your changes are still in the page.')},
 mgover(){MG=null;closeForm();SAVE_ARMED=true;saveExcel()},
