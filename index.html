@@ -1231,11 +1231,55 @@ button.fc.on{background:var(--ink)!important;border-color:var(--ink)!important;c
 .td-two{display:grid;grid-template-columns:1fr 1fr;gap:10px}.td-act{display:flex;gap:8px;align-items:center}
 .td-dh{display:flex;gap:8px;margin:12px 0 4px}.td-none{margin:8px 0}.td-empty{padding:18px 0;display:grid;gap:10px;justify-items:start}
 
+/* ---- dark mode comfort: softer contrast, lifted background, calmer colours ---- */
+:root[data-theme="dark"]{--bg:#15191F;--surface:#1C212A;--surface2:#222832;--ink:#CBD2DC;--muted:#8B96A6;--line:#2D3542;--line2:#252C37;
+--accent:#7EA3E0;--accent-hover:#97B6EA;--accent-ink:#0F1622;--accent-soft:#222E44;
+--side:#11151B;--side2:#181D25;--side-on:#212A39;--side-ink:#B4BDCA;--side-muted:#7C8797;
+--ok-bg:#1B2D25;--ok-fg:#86C79A;--warn-bg:#342D1D;--warn-fg:#D6B068;--bad-bg:#382426;--bad-fg:#E39792;--off-bg:#262C35;--off-fg:#9CA7B4;--info-bg:#1F2B40;--info-fg:#93B4E4;
+--ok-c:#5DAE78;--warn-c:#CFA14A;--bad-c:#DB7D78;
+--u-esxi:#4A73B5;--u-phys:#7B68B8;--u-stor:#B7773A;--u-back:#3C8C86;--u-free:#222832;
+--glow:rgba(126,163,224,.045);--sh-1:0 1px 2px rgba(0,0,0,.28);--sh-2:0 1px 2px rgba(0,0,0,.3),0 6px 16px -8px rgba(0,0,0,.4);--sh-3:0 20px 50px -14px rgba(0,0,0,.55);
+--grad:linear-gradient(135deg,#97B6EA 0%,#7EA3E0 55%,#6890D0 100%)}
+:root[data-theme="dark"] body{-webkit-font-smoothing:auto;letter-spacing:0}
+:root[data-theme="dark"] .modal{background:rgba(6,9,13,.55)}
+:root[data-theme="dark"] .dot.b-ok,:root[data-theme="dark"] .dot.b-warn,:root[data-theme="dark"] .dot.b-bad{box-shadow:none}
+:root[data-theme="dark"] .rk .dev .led{box-shadow:none;background:#6FCF97}
+:root[data-theme="dark"] .rk{--cab:#12161C}
+:root[data-theme="dark"] .rk .f{background:#222832}
+:root[data-theme="dark"] .nav a.on::before{background:#7EA3E0}
+:root[data-theme="dark"] td.tn-bad{color:#E39792}:root[data-theme="dark"] td.tn-warn{color:#D6B068}
+:root[data-theme="dark"] .chip.on{color:#B4C8EE}
+:root[data-theme="dark"] .btn.p{color:#0F1622}
+:root[data-theme="dark"] .hfpop{background:linear-gradient(180deg,#1E2633,#181E28);border-color:#33405A;box-shadow:0 20px 50px -16px rgba(0,0,0,.6)}
+/* dark comfort, part 2: undo the pure-black / white-button look from the v3 layer */
+:root[data-theme="dark"]{--sb:#2D3542;--sb-h:#4A5565;--prim:#4B6CA8;--prim-h:#5A7DB8;--h2c:#3A404B;--h3c:#6B7482}
+:root[data-theme="dark"] .card,:root[data-theme="dark"] .kpi,:root[data-theme="dark"] .glass{background:var(--surface)}
+:root[data-theme="dark"] .welcome,:root[data-theme="dark"] .dayhero{background:var(--surface)!important}
+:root[data-theme="dark"] .dlg,:root[data-theme="dark"] details.menu .pop,:root[data-theme="dark"] .hfpop,:root[data-theme="dark"] .palbox,:root[data-theme="dark"] .ckdlg{background:var(--surface)!important;border:1px solid var(--line)!important}
+:root[data-theme="dark"] .modal,:root[data-theme="dark"] .pal{background:rgba(8,10,14,.58)}
+:root[data-theme="dark"] .main{border-color:var(--line2)}
+:root[data-theme="dark"] .inp,:root[data-theme="dark"] input:not([type=checkbox]):not([type=radio]),:root[data-theme="dark"] select,:root[data-theme="dark"] textarea{border-color:var(--line);background:var(--bg)}
+:root[data-theme="dark"] .btn{border-color:var(--line);background:var(--surface2)}
+:root[data-theme="dark"] .btn:hover{background:#29303C;border-color:#445064}
+:root[data-theme="dark"] .chip{border-color:var(--line)}
+:root[data-theme="dark"] .btn.p,:root[data-theme="dark"] .btn.p:hover{background:var(--prim);border-color:var(--prim);color:#F1F5FB!important}
+:root[data-theme="dark"] .btn.p:hover{background:var(--prim-h);border-color:var(--prim-h)}
+:root[data-theme="dark"] .chip.on,:root[data-theme="dark"] .fc.on{background:var(--accent-soft);border-color:color-mix(in srgb,var(--accent) 45%,transparent);color:#B4C8EE!important}
+:root[data-theme="dark"] .toast{background:var(--surface2);color:var(--ink);border:1px solid var(--line)}
+:root[data-theme="dark"] .brand i{background:var(--accent);color:var(--accent-ink)}
+:root[data-theme="dark"] .seg input:checked+span{background:var(--side-on);color:var(--ink)}
+:root[data-theme="dark"] .rk{--cab:#12161C}
+:root[data-theme="dark"] .dcp-box{background:var(--surface2)}
+:root[data-theme="dark"] .h2{color:var(--ink)!important}
+:root[data-theme="dark"] .h3{color:#0F1319!important}
+:root[data-theme="dark"] .pending{background:rgba(214,176,104,.08)!important;border-color:rgba(214,176,104,.25)!important}
+:root[data-theme="dark"] .nav a em,:root[data-theme="dark"] .navlbl em{background:rgba(227,151,146,.16)!important;color:#E39792!important}
 </style>
 <div class="app">
 <aside class="side" aria-label="Navigation">
 <div class="brand"><i aria-hidden="true"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="4" width="18" height="6" rx="1.5"/><rect x="3" y="14" width="18" height="6" rx="1.5"/><path d="M7 7h.01M7 17h.01"/></svg></i><div><b>Infra Inventory</b><span>Master inventory</span></div><button type="button" class="railbtn" data-act="railtoggle" aria-label="Collapse or expand the sidebar" title="Collapse sidebar"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M4 6h16M4 12h10M4 18h16"/></svg></button><button type="button" class="mbtn" data-act="ckopen" aria-label="Search"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/></svg></button><button type="button" class="mbtn" data-act="menu" aria-label="Menu" aria-expanded="false" aria-controls="nav"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"/></svg></button></div>
 <div class="seg" role="radiogroup" aria-label="Theme"><label><input type="radio" name="theme" value="light"><span>Light</span></label><label><input type="radio" name="theme" value="dark"><span>Dark</span></label><label><input type="radio" name="theme" value="auto"><span>Auto</span></label></div>
+
 <nav class="nav" id="nav" aria-label="Views"></nav>
 <div class="fresh" id="fresh"></div>
 </aside>
@@ -1675,7 +1719,7 @@ datastores:'<ellipse cx="12" cy="6" rx="8" ry="3"/><path d="M4 6v6c0 1.7 3.6 3 8
 patchevents:'<rect x="3" y="5" width="18" height="16" rx="2"/><path d="M3 10h18M8 3v4M16 3v4"/>',
 ports:'<rect x="3" y="8" width="18" height="9" rx="1.5"/><path d="M7 11v3M10.5 11v3M14 11v3M17.5 11v3"/>',
 backuphw:'<rect x="3" y="3" width="18" height="5" rx="1.5"/><rect x="3" y="10" width="18" height="5" rx="1.5"/><rect x="3" y="17" width="18" height="4" rx="1.5"/>',
-arrayhw:'<rect x="3" y="3" width="18" height="5" rx="1.5"/><rect x="3" y="10" width="18" height="5" rx="1.5"/><rect x="3" y="17" width="18" height="4" rx="1.5"/>',
+arrayhw:'<rect x="3" y="3" width="18" height="5" rx="1.5"/><rect x="3" y="10" width="18" height="5" rx="1.5"/><rect x="3" y="17" width="18" height="4" rx="1.5"/>',serverhw:'<rect x="3" y="3" width="18" height="5" rx="1.5"/><rect x="3" y="10" width="18" height="5" rx="1.5"/><rect x="3" y="17" width="18" height="4" rx="1.5"/>',
 disks:'<rect x="3" y="4" width="18" height="16" rx="2"/><circle cx="12" cy="12" r="4"/><circle cx="12" cy="12" r="1"/>',
 calendar:'<rect x="3" y="5" width="18" height="16" rx="2"/><path d="M3 10h18M8 3v4M16 3v4"/>',
 log:'<path d="M5 4h14v16H5z"/><path d="M8 9h8M8 13h8M8 17h5"/>',
@@ -1696,7 +1740,7 @@ sources:'<path d="M10 14a4 4 0 0 0 5.7 0l3-3a4 4 0 0 0-5.7-5.7l-1 1"/><path d="M
 const TV_HW_PLACEHOLDER=0;
 const NAV=[
 ['',[['overview','Overview'],['calendar','Calendar'],['stuff','Stuff'],['todo','To do & notes'],['kb','Knowledge base'],['tracker','Open issues'],['contacts','Contacts'],['agroups','Assignment groups'],['activity','DCSS activity']]],
-['Inventory',[['servermi','ServersMI'],['serverdisks','Server disks'],['clusters','Failover clusters'],['patching','Patching'],['patchevents','Patch events'],['esxi','ESXi hosts'],['drsrules','DRS rules'],['drshostgroups','DRS host groups'],['storage','Storage'],['arrayhw','Array hardware'],['datastores','Datastores'],['datastoreclusters','Datastore clusters'],['arrayvolumes','Array volumes'],['lunmap','LUN map'],['remotecopy','Remote copy groups'],['backup','Backup'],['backuphw','Backup hardware'],['catalyst','Catalyst stores'],['backupjobs','Backup jobs'],['repljobs','Replication jobs'],['otherdevices','Other devices'],['lifecycle','Lifecycle'],['relations','Relations']]],
+['Inventory',[['servermi','ServersMI'],['serverdisks','Server disks'],['serverhw','Server hardware'],['clusters','Failover clusters'],['patching','Patching'],['patchevents','Patch events'],['esxi','ESXi hosts'],['drsrules','DRS rules'],['drshostgroups','DRS host groups'],['storage','Storage'],['arrayhw','Array hardware'],['datastores','Datastores'],['datastoreclusters','Datastore clusters'],['arrayvolumes','Array volumes'],['lunmap','LUN map'],['remotecopy','Remote copy groups'],['backup','Backup'],['backuphw','Backup hardware'],['catalyst','Catalyst stores'],['backupjobs','Backup jobs'],['repljobs','Replication jobs'],['otherdevices','Other devices'],['lifecycle','Lifecycle'],['relations','Relations']]],
 ['Data center',[['dcmi','DCMI'],['checks','DC checks'],['issues','DC open issues'],['racks','DC rack layout'],['dcdesign','DC designer'],['ports','Ports & cabling'],['ipam','IP & VLANs'],['disks','Disks']]],
 ['System',[['quality','Data quality'],['import','Data import'],['wsfc','Collector'],['sources','Data sources'],['activitylog','Activity log'],['settings','Settings']]]];
 /* pages merged into tabbed groups: one sidebar entry per group, every tab keeps its own route (#clusters, #drsrules, ...) */
@@ -1932,11 +1976,11 @@ function redrawTable(sheet){const el=$('tbl');if(el)el.innerHTML=tableHtml(sheet
 
 /* rename a device everywhere: every cell that holds the old name (whole value or one item of a comma list) gets the new name; component names that start with the device name follow */
 function renameRefs(sheet,oldN,newN){if(!oldN||!newN||oldN===newN)return 0;let n=0;const skipK=/^(Notes|Note|Description|Content|Summary|Resolution|Title|Text|Updated|Detected by|Files|Attachments)$/;
-const re=new RegExp('(^|[,;]\\s*)'+oldN.replace(/[.*+?^${}()|[\]\\]/g,'\\$&')+'(?=\\s*([,;]|$))','g');
+const re=new RegExp('(^|[,;\\n]\\s*)'+oldN.replace(/[.*+?^${}()|[\]\\]/g,'\\$&')+'(?=\\s*([,;\\n]|$))','g');
 const pm=new Map();if(sheet==='Storage'||sheet==='Backup'||sheet==='RackDevices'){(DB.ArrayParts||[]).forEach(a=>{const p=String(a.Part||'');if(p.indexOf(oldN)===0&&(a.Device===oldN||sheet==='RackDevices')){pm.set(p,newN+p.slice(oldN.length))}});}
 pm.forEach((v,k)=>{(DB.ArrayParts||[]).forEach(a=>{if(a.Part===k)a.Part=v;if(a.Enclosure===k)a.Enclosure=v});(DB.Disks||[]).forEach(a=>{if(a.Enclosure===k)a.Enclosure=v});(DB.EnclModules||[]).forEach(a=>{if(a.Enclosure===k){a.Module=String(a.Module||'').indexOf(k)===0?v+String(a.Module).slice(k.length):a.Module;a.Enclosure=v}});n++});
 (DB.EnclModules||[]).forEach(a=>{if(a.Enclosure===oldN){if(String(a.Module||'').indexOf(oldN)===0)a.Module=newN+String(a.Module).slice(oldN.length);a.Enclosure=newN;n++}});
-SHEETS.forEach(sh=>{if(sh==='ActivityLog'||sh==='EnclModules'&&0)return;const cols=SCHEMA[sh].cols.filter(c=>c.t!=='area'&&!c.att&&!skipK.test(c.k));(DB[sh]||[]).forEach(r=>{cols.forEach(c=>{const v=r[c.k];if(typeof v==='string'&&v.indexOf(oldN)>=0){const w=v.replace(re,'$1'+newN);if(w!==v){r[c.k]=w;n++}}})})});
+SHEETS.forEach(sh=>{if(sh==='ActivityLog'||sh==='EnclModules'&&0)return;const cols=SCHEMA[sh].cols.filter(c=>(c.t!=='area'||/^(Servers|Hosts|VMs|Nodes|Members|Devices)$/.test(c.k))&&!c.att&&!skipK.test(c.k));(DB[sh]||[]).forEach(r=>{cols.forEach(c=>{const v=r[c.k];if(typeof v==='string'&&v.indexOf(oldN)>=0){const w=v.replace(re,'$1'+newN);if(w!==v){r[c.k]=w;n++}}})})});
 return n}
 function nameOpts(sheet,k){const cn=clusterOpts(sheet,k);if(cn)return cn;return sheet==='Contacts'&&k==='Assignment group'||sheet==='DCSSActivity'&&k==='Assignment group'?DB.AssignGroups.filter(o=>o.Active!=='No').map(o=>String(o.Group)):sheet==='AssignGroups'&&k==='Manager'?DB.Contacts.filter(o=>o.Active!=='No').map(o=>String(o.Name)):(sheet==='ESXi'||sheet==='ServerMI')&&k==='Enclosure'?enclNames():(sheet==='Catalyst'&&(k==='Appliance'||k==='Replica appliance'))?DB.Backup.map(r=>String(r.Device)):(sheet==='Catalyst'&&k==='Replica store')||(sheet==='ReplJobs'&&(k==='Source store'||k==='Target store'))||(sheet==='BackupJobs'&&k==='Catalyst store')?DB.Catalyst.map(r=>String(r.Store)):(sheet==='NetPorts'&&(k==='Device'||k==='Remote device'))||(sheet==='Disks'&&k==='Device')?devList().map(d=>d.n):sheet==='DCSSActivity'&&k==='Performed by'?DB.Operators.filter(o=>o.Active!=='No').map(o=>String(o.Name)):null}
 function fieldHtml(sheet,c,row,ro){
@@ -5798,7 +5842,21 @@ DB[sh].forEach((r,i)=>{if(have[sh+'|'+i]||add.length>=80)return;const d=hit(r,co
 add.push({k:'rec',t:t,s:sLabel(sh)+' · text match',d:d,sh:sh,i:i,ic:SHEET_VIEW[sh]||'servermi'});have[sh+'|'+i]=1})});
 Object.keys(CMS).forEach(cs=>{const m=CMS[cs],sh=m[0];if(!Array.isArray(DB[cs])||!Array.isArray(DB[sh]))return;DB[cs].forEach(c=>{if(add.length>=100)return;const id=c[m[1]],d=hit(c,['Text','Author','Type']);if(d===null)return;const i=DB[sh].findIndex(r=>r.ID===id);if(i<0||have[sh+'|'+i])return;have[sh+'|'+i]=1;const r=DB[sh][i];
 add.push({k:'rec',t:String(r.Title||r.ID),s:sLabel(sh)+' · in comment',d:(c.Author?c.Author+' — ':'')+snip(c.Text||'',toks),sh:sh,i:i,ic:SHEET_VIEW[sh]||'servermi'})})});
-CK.items=CK.items.concat(add).slice(0,90)}})();
+
+/* ranking: main records first, child/config rows (disks, NICs, ports, lookups) after, text-only matches last */
+const SW={ServerMI:0,ESXi:0,Storage:0,Backup:0,RackDevices:0,Clusters:0,Datastores:0,ArrayVolumes:0,Contacts:0,KB:0,OpenIssues:0,Issues:0,DCMI:0,
+DrsRules:1,DatastoreClusters:1,RemoteCopyGroups:1,Subnets:1,Links:1,HwProfiles:1,PatchEvents:1,DCChecks:1,DCLayout:1,
+ServerDisks:2,ServerNics:2,NetPorts:2,Disks:2,ClusterNodes:2,ClusterRoles:2,ClusterResources:2,ClusterDisks:2,DrsHostGroups:2,ArrayParts:2,EnclModules:2,
+DeviceTypes:3,ServerStatuses:3,ActivityStatuses:3,KBTypes:3,CalCategories:3,ActivityTypes:3,AppSettings:3};
+const mOf=x=>{const t=String(x.t).toLowerCase();if(x.k!=='rec'){return t===q?0:t.indexOf(q)===0?1:t.indexOf(q)>=0?2:toks.every(w=>t.indexOf(w)>=0)?2.5:3.5}
+if(/in comment$/.test(x.s))return 5;
+if(t===q)return 0;if(t.indexOf(q)===0)return 1;if(t.indexOf(q)>=0)return 2;if(toks.every(w=>t.indexOf(w)>=0))return 2.5;
+if(!/text match$/.test(x.s))return 3;/* matched through the short description (IP, OS, type...) */
+return 4};
+const all2=CK.items.concat(add);
+all2.forEach(x=>{const w=x.k==='rec'?(SW[x.sh]===undefined?2:SW[x.sh]):(x.k==='act'?0:-0.5);x._r=mOf(x)+w*2.2});
+all2.sort((a,b)=>a._r-b._r||(a.t.length-b.t.length)||String(a.s).localeCompare(String(b.s)));
+CK.items=all2.slice(0,60)}})();
 /* ---------- edit form: fields grouped into boxes ---------- */
 (function(){try{const st=document.createElement('style');st.textContent='details.fsec{background:var(--surface2);border:1px solid var(--line);border-radius:12px;padding:0;margin:0}details.fsec>summary{list-style:none;cursor:pointer;display:flex;align-items:center;gap:8px;padding:10px 14px;font-size:13px;font-weight:600;border-radius:12px;user-select:none}details.fsec>summary::-webkit-details-marker{display:none}details.fsec>summary::before{content:"▸";color:var(--muted);font-size:11px;width:10px;transition:transform .12s}details.fsec[open]>summary::before{transform:rotate(90deg)}details.fsec>summary .note{font-weight:400;margin:0}details.fsec>.fgrid{padding:2px 14px 14px}.fsecs{display:flex;flex-direction:column;gap:10px}';document.head.appendChild(st)}catch(e){}})();
 const L_LIFE=['Support end','Last patched','Last patch CRQ','FW patched'],L_LOC=['DC','Rack','U start','U size'];
@@ -5874,6 +5932,69 @@ fsnew(el){const f=el.closest('form'),w=f.querySelector('.fsecs'),d=document.crea
 fsreset(el){const f=el.closest('form'),sh=f.dataset.sheet;if(META.fl)delete META.fl[sh];changed();fsBuild(f,FSEC[sh],true)}});
 function fsBoxCell(s,k){const fl=META.fl&&META.fl[s];if(!fl)return['',''];for(let b=0;b<fl.length;b++){const p=fl[b][1].indexOf(k);if(p>=0)return[b+':'+fl[b][0],p+1]}return['','']}
 function fsFromSchema(sm){const t={};Object.keys(sm).forEach(key=>{const r=sm[key],m=/^(\d+):(.*)$/.exec(String(r.Box||''));if(!m)return;const sh=key.slice(0,key.indexOf('|'));(t[sh]=t[sh]||[]).push({b:+m[1],t:m[2],p:+r.BoxOrder||0,k:r.Column})});const fl={};Object.keys(t).forEach(sh=>{const bx={};t[sh].forEach(x=>{(bx[x.b]=bx[x.b]||{t:x.t,a:[]}).a.push(x)});fl[sh]=Object.keys(bx).map(Number).sort((a,b)=>a-b).map(b=>[bx[b].t,bx[b].a.sort((a,c)=>a.p-c.p).map(x=>x.k)])});return Object.keys(fl).length?fl:null}
+/* ---------- dark palette: generated from research-based rules (OKLCH), live tuning panel ---------- */
+const dkHex=h=>[1,3,5].map(i=>parseInt(h.substr(i,2),16)),dkMix=(a,b,t)=>{const x=dkHex(a),y=dkHex(b);return '#'+x.map((v,i)=>('0'+Math.round(v+(y[i]-v)*t).toString(16)).slice(-2)).join('')};
+function okhex(L,C,H){const a=C*Math.cos(H*Math.PI/180),b=C*Math.sin(H*Math.PI/180),l=Math.pow(L+0.3963377774*a+0.2158037573*b,3),m=Math.pow(L-0.1055613458*a-0.0638541728*b,3),s=Math.pow(L-0.0894841775*a-1.2914855480*b,3);
+const lin=[4.0767416621*l-3.3077115913*m+0.2309699292*s,-1.2684380046*l+2.6097574011*m-0.3413193965*s,-0.0041960863*l-0.7034186147*m+1.7076147010*s];
+return '#'+lin.map(v=>{v=Math.max(0,Math.min(1,v));v=v<=0.0031308?12.92*v:1.055*Math.pow(v,1/2.4)-0.055;return ('0'+Math.round(v*255).toString(16)).slice(-2)}).join('')}
+function dkLum(h){const c=dkHex(h).map(v=>{v/=255;return v<=.03928?v/12.92:Math.pow((v+.055)/1.055,2.4)});return .2126*c[0]+.7152*c[1]+.0722*c[2]}
+function dkCR(a,b){const x=dkLum(a),y=dkLum(b);return (Math.max(x,y)+.05)/(Math.min(x,y)+.05)}
+/* g = {b: base lightness .10-.30, t: text lightness .70-.95, c: tint chroma 0-.03, h: tint hue, a: accent hue} */
+function dkGen(g){const b=g.b,c=g.c,h=g.h,ah=g.a,t=g.t,N=(L,C,H)=>okhex(L,C,H);
+return{bg:N(b,c,h),sf:N(b+.05,c,h),sd:N(Math.max(.07,b-.04),c,h),ln:N(b+.15,c,h),ink:N(t,c*.5,h),mu:N(b+(t-b)*.7,c*.6,h),ac:N(.74,.10,ah),pr:N(.52,.115,ah),pt:N(.97,.01,ah),
+ok:[N(b+.07,.06,150),N(.82,.17,152)],wn:[N(b+.07,.07,90),N(.87,.17,92)],bd:[N(b+.07,.085,25),N(.74,.20,25)]}}
+const DKP=[
+{n:'Dim graphite',g:{b:.26,t:.85,c:.004,h:250,a:250}},
+{n:'Dim warm',g:{b:.26,t:.85,c:.010,h:70,a:65}},
+{n:'Dim green',g:{b:.25,t:.85,c:.012,h:165,a:165}},
+{n:'Dim violet',g:{b:.25,t:.85,c:.014,h:305,a:305}},
+{n:'Mid grey',g:{b:.32,t:.88,c:0,h:250,a:230}},
+{n:'Dark graphite',g:{b:.18,t:.86,c:0,h:250,a:250}},
+{n:'Dark warm',g:{b:.19,t:.86,c:.008,h:70,a:65}}];
+function dkCss(p){const M=dkMix,W='#ffffff',v={'--bg':p.bg,'--surface':p.sf,'--surface2':M(p.sf,p.ink,.06),'--line':p.ln,'--line2':M(p.sf,p.ln,.5),'--ink':p.ink,'--muted':p.mu,'--accent':p.ac,'--accent-hover':M(p.ac,W,.18),'--accent-ink':p.bg,'--accent-soft':M(p.sf,p.ac,.2),'--side':p.sd,'--side2':M(p.sd,p.sf,.55),'--side-on':M(p.sd,p.ac,.16),'--side-ink':M(p.ink,p.sd,.15),'--side-muted':M(p.mu,p.sd,.1),'--ok-bg':p.ok[0],'--ok-fg':p.ok[1],'--warn-bg':p.wn[0],'--warn-fg':p.wn[1],'--bad-bg':p.bd[0],'--bad-fg':p.bd[1],'--info-bg':M(p.sf,p.ac,.22),'--info-fg':M(p.ac,W,.25),'--off-bg':M(p.sf,p.ink,.1),'--off-fg':p.mu,'--ok-c':p.ok[1],'--warn-c':p.wn[1],'--bad-c':p.bd[1],'--prim':p.pr,'--prim-h':M(p.pr,W,.14),'--glow':'transparent','--u-free':M(p.sf,p.ink,.06),'--sb':p.ln,'--sb-h':M(p.ln,p.mu,.4),'--grad':'linear-gradient(135deg,'+M(p.ac,W,.15)+','+p.ac+')'};
+const R='html:root[data-theme="dark"]';
+let c=R+'{'+Object.keys(v).map(k=>k+':'+v[k]).join(';')+'}';
+c+=R+' .btn.p,'+R+' .btn.p:hover{color:'+p.pt+'!important}'+R+' .btn:hover{background:'+M(p.sf,p.ink,.12)+'}'+R+' .chip.on,'+R+' .fc.on{background:'+M(p.sf,p.ac,.32)+'!important;border-color:'+p.ac+'!important;color:'+M(p.ink,W,.4)+'!important}'+R+' .chip.on .badge,'+R+' .chip.on small{background:'+M(p.sf,p.ac,.5)+'!important;color:'+M(p.ink,W,.5)+'!important;opacity:1}'+R+' .rk{--cab:'+M(p.sd,p.bg,.5)+'}'+R+' .rk .f{background:'+M(p.sf,p.ink,.06)+'}'+R+' .nav a.on::before{background:'+p.ac+'}'+R+' .hfpop{background:'+p.sf+';border-color:'+p.ln+'}'+R+' .nav a em,'+R+' .navlbl em{background:'+p.bd[0]+'!important;color:'+p.bd[1]+'!important}'+R+' .card,'+R+' .kpi,'+R+' .glass{background:'+p.sf+'}'+R+' .dlg,'+R+' details.menu .pop,'+R+' .palbox,'+R+' .ckdlg{background:'+p.sf+'!important}';
+c+=R+' input:not([type=checkbox]):not([type=radio]):not([type=range]):not([type=color]),'+R+' select,'+R+' textarea,'+R+' .inp{background-color:'+p.bg+'!important;color:'+p.ink+'!important;border-color:'+p.ln+'!important;color-scheme:dark}'
++R+' input::placeholder,'+R+' textarea::placeholder{color:'+p.mu+'!important;opacity:1}'
++R+' input:focus,'+R+' select:focus,'+R+' textarea:focus,'+R+' .inp:focus{border-color:'+p.ac+'!important;box-shadow:0 0 0 3px '+M(p.sf,p.ac,.3)+'!important;outline:none}'
++R+' select option,'+R+' select optgroup{background:'+p.sf+';color:'+p.ink+'}'
++R+' thead th,'+R+' table th{background:'+M(p.sf,p.ink,.05)+'!important;color:'+p.mu+'!important}'
++R+' tbody tr:hover td{background:'+M(p.sf,p.ink,.05)+'!important}'
++R+' td,'+R+' th{border-color:'+p.ln+'!important}'
++R+' kbd,'+R+' .kbd{background:'+p.bg+'!important;color:'+p.mu+'!important;border-color:'+p.ln+'!important}'
++R+' ::selection{background:'+M(p.sf,p.ac,.45)+';color:'+p.ink+'}'
++R+' ::-webkit-scrollbar-thumb{background:'+p.ln+'}'+R+' *{scrollbar-color:'+p.ln+' transparent}'
++R+' .btn,'+R+' .chip{border-color:'+p.ln+'}'+R+' .btn.p{background:'+p.pr+'!important;border-color:'+p.pr+'!important}'+R+' .btn.p:hover{background:'+M(p.pr,W,.14)+'!important}'
++R+' .btn.d,'+R+' .btn.danger{color:'+p.bd[1]+'}'
++R+' input.srch{background-image:url("data:image/svg+xml,'+encodeURIComponent('<svg xmlns=\'http://www.w3.org/2000/svg\' width=\'16\' height=\'16\' viewBox=\'0 0 24 24\' fill=\'none\' stroke=\''+p.mu+'\' stroke-width=\'2\' stroke-linecap=\'round\'><circle cx=\'11\' cy=\'11\' r=\'7\'/><path d=\'M20 20l-3.5-3.5\'/></svg>')+'")!important;background-repeat:no-repeat!important;background-position:10px 50%!important;padding-left:32px!important}'
++R+' ::backdrop,'+R+' .ov,'+R+' .scrim{background:rgba(0,0,0,.55)}';
+return c}
+let DK=null;
+function dkCur(){return dkGen(DK&&DK.g?DK.g:DKP[0].g)}
+function dkApply(){let st=document.getElementById('dkpal');const p=dkCur();if(!p){if(st&&st.remove)st.remove();return}if(!st){st=document.createElement('style');st.id='dkpal'}st.textContent=dkCss(p);(document.body||document.head).appendChild(st)}
+function dkSet(o,keep){DK=o;try{if(o)localStorage.setItem('infra-dkpal',JSON.stringify(o));else localStorage.removeItem('infra-dkpal')}catch(e){}dkApply();if(!keep)dkPanel(true);else dkInfo()}
+function dkInfo(){const el=document.getElementById('dk-info');if(!el)return;const p=dkCur();if(!p){el.textContent='';return}const r=dkCR(p.ink,p.sf),m=dkCR(p.mu,p.sf);el.innerHTML='Body text <b>'+r.toFixed(1)+':1</b> · secondary <b>'+m.toFixed(1)+':1</b> <span class="note">(comfortable: 7 to 11; minimum 4.5)</span>'}
+function dkPanel(keep){let p=document.getElementById('dkp');if(p&&!keep){p.remove();return}if(!p){p=document.createElement('div');p.id='dkp';document.body.appendChild(p)}
+const g=(DK&&DK.g)||DKP[0].g,sl=(id,lb,mn,mx,st,v)=>'<label class="dks"><span>'+lb+'</span><input type="range" id="dk-'+id+'" min="'+mn+'" max="'+mx+'" step="'+st+'" value="'+v+'"></label>';
+p.innerHTML='<div class="dkh"><b>Dark palette</b><button type="button" class="btn s" data-act="dkpal">Close</button></div><div class="dkl"><button type="button" class="chip'+(!DK?' on':'')+'" data-act="dkpick" data-i="-1">Default</button>'+DKP.map((x,i)=>{const q=dkGen(x.g);return '<button type="button" class="chip'+(DK&&DK.i===i?' on':'')+'" data-act="dkpick" data-i="'+i+'"><i style="background:'+q.bg+';border-color:'+q.ac+'"></i>'+x.n+'</button>'}).join('')+'</div><div class="dkc">'+sl('b','Background brightness',.10,.36,.005,g.b)+sl('t','Text brightness',.70,.95,.005,g.t)+sl('c','Colour tint (0 = neutral grey)',0,.03,.001,g.c)+sl('h','Tint hue',0,360,1,g.h)+sl('a','Accent hue',0,360,1,g.a)+'</div><div id="dk-info"></div><div class="note">Applies live, remembered in this browser, Dark mode only. Rules: no pure black / white, surfaces get lighter as they rise, accents are lighter and softer, text contrast 7 to 11:1.</div>';dkInfo()}
+(function(){try{const st=document.createElement('style');st.textContent='#dkp{position:fixed;right:16px;bottom:16px;z-index:90;width:min(360px,calc(100vw - 32px));max-height:80vh;overflow:auto;background:var(--surface);border:1px solid var(--line);border-radius:14px;box-shadow:var(--sh-3);padding:12px;display:flex;flex-direction:column;gap:10px}#dkp .dkh{display:flex;align-items:center;justify-content:space-between}#dkp .dkl{display:flex;flex-wrap:wrap;gap:6px}#dkp .chip{gap:6px}#dkp .chip i{width:12px;height:12px;border-radius:4px;border:2px solid;display:inline-block}#dkp .dkc{display:flex;flex-direction:column;gap:6px}#dkp .dks{display:grid;grid-template-columns:150px 1fr;align-items:center;gap:8px;font-size:12px;color:var(--muted)}#dkp .dks input{width:100%;accent-color:var(--accent)}#dk-info{font-size:12px}';document.head.appendChild(st)}catch(e){}
+document.addEventListener('input',e=>{const t=e.target,m=/^dk-([bt chA]|[bt]|c|h|a)$/.exec(t&&t.id||'');if(!m||!$('dk-b'))return;DK={g:{b:+$('dk-b').value,t:+$('dk-t').value,c:+$('dk-c').value,h:+$('dk-h').value,a:+$('dk-a').value}};dkSet(DK,true)});
+dkApply()})();
+Object.assign(NEONACT,{dkpal(){const r=document.querySelector('input[name=theme][value=dark]');if(r&&!r.checked){r.click()}const p=document.getElementById('dkp');if(p)p.remove();else dkPanel(true)},dkpick(el){const i=+el.dataset.i;dkSet(i<0?null:{i:i,g:Object.assign({},DKP[i].g)})}});
+
+/* ---------- safety net: a renamed record always carries its links (ports, disks, NICs, nodes, volumes...) with it, whatever path made the change ---------- */
+(function(){const KEYSN=new WeakMap();
+const SRC=[['ServerMI','Hostname'],['ESXi','Hostname'],['Storage','Array'],['Backup','Device'],['RackDevices','Name'],['Clusters','Cluster'],['Datastores','Datastore'],['ArrayVolumes','Volume'],['DatastoreClusters','Datastore cluster'],['RemoteCopyGroups','Group'],['DrsHostGroups','Group'],['Catalyst','Store'],['Contacts','Name']];
+let busy=false;
+function keyScan(){if(busy)return;busy=true;try{let moved=[];
+SRC.forEach(a=>{const sh=a[0],k=a[1];if(!Array.isArray(DB[sh]))return;const cur=new Set(DB[sh].map(r=>String(r[k]==null?'':r[k])));
+DB[sh].forEach(r=>{const n=String(r[k]==null?'':r[k]),o=KEYSN.get(r);if(o!==undefined&&o!==n&&o.length>1&&n&&!cur.has(o)){let c=0;try{c=renameRefs(sh,o,n)}catch(e){}try{devRename(sh,o,n)}catch(e){}moved.push([o,n,c])}
+KEYSN.set(r,n)})});
+if(moved.length&&typeof toast==='function')toast('Renamed '+moved.map(m=>m[0]+' → '+m[1]).slice(0,2).join(', ')+': links followed')}finally{busy=false}}
+const _ch=changed;changed=function(){keyScan();return _ch.apply(this,arguments)};
+const _rt=route;route=function(){keyScan();return _rt.apply(this,arguments)};
+try{keyScan()}catch(e){}})();
 /* ---------- List features: edit in place, multi-column sort, select all in "is one of", copy a column ---------- */
 const LE={click:true,sel:null};
 try{const v=localStorage.getItem('infra-cellclick');if(v==='0')LE.click=false}catch(e){}
@@ -6613,7 +6734,7 @@ return head('Stuff','Files from the Stuff folder and the links you go through on
 }
 
 /* ---------- router + events ---------- */
-const VIEWDEF={todo:todoView,drshostgroups:()=>tableView('DrsHostGroups'),arrayhw:()=>{HWV.kind='Storage';return hwView()},backuphw:()=>{HWV.kind='Backup';return hwView()},arrayparts:()=>tableView('ArrayParts'),overview:overview,calendar:calendarView,servermi:()=>tableView('ServerMI'),serverdisks:()=>tableView('ServerDisks'),clusters:clustersView,arrayvolumes:()=>tableView('ArrayVolumes'),lunmap:lunMapView,remotecopy:()=>tableView('RemoteCopyGroups'),datastoreclusters:()=>tableView('DatastoreClusters'),drsrules:()=>tableView('DrsRules'),patching:patchView,patchevents:()=>tableView('PatchEvents'),catalyst:()=>tableView('Catalyst'),repljobs:()=>tableView('ReplJobs'),activitylog:()=>tableView('ActivityLog'),ports:portsView,disks:disksView,netports:()=>tableView('NetPorts'),disklist:()=>tableView('Disks'),contacts:()=>tableView('Contacts'),agroups:()=>tableView('AssignGroups'),activity:()=>tableView('DCSSActivity'),backupjobs:bjView,esxi:()=>tableView('ESXi'),storage:()=>tableView('Storage'),backup:()=>tableView('Backup'),dcmi:()=>tableView('DCMI'),racks:racksView,lifecycle:lifecycleView,ipam:ipView,relations:relView,import:importView,wsfc:wsfcView,dcdesign:dcdesignView,dclayoutlist:()=>tableView('DCLayout'),checks:()=>tableView('DCChecks'),issues:issuesView,stuff:stuffView,kb:kbView,otherdevices:()=>tableView('RackDevices'),tracker:oiView,quality:qualityView,sources:sourcesView,datastores:()=>tableView('Datastores'),settings:settingsView};
+const VIEWDEF={serverhw:()=>serverHwView(),todo:todoView,drshostgroups:()=>tableView('DrsHostGroups'),arrayhw:()=>{HWV.kind='Storage';return hwView()},backuphw:()=>{HWV.kind='Backup';return hwView()},arrayparts:()=>tableView('ArrayParts'),overview:overview,calendar:calendarView,servermi:()=>tableView('ServerMI'),serverdisks:()=>tableView('ServerDisks'),clusters:clustersView,arrayvolumes:()=>tableView('ArrayVolumes'),lunmap:lunMapView,remotecopy:()=>tableView('RemoteCopyGroups'),datastoreclusters:()=>tableView('DatastoreClusters'),drsrules:()=>tableView('DrsRules'),patching:patchView,patchevents:()=>tableView('PatchEvents'),catalyst:()=>tableView('Catalyst'),repljobs:()=>tableView('ReplJobs'),activitylog:()=>tableView('ActivityLog'),ports:portsView,disks:disksView,netports:()=>tableView('NetPorts'),disklist:()=>tableView('Disks'),contacts:()=>tableView('Contacts'),agroups:()=>tableView('AssignGroups'),activity:()=>tableView('DCSSActivity'),backupjobs:bjView,esxi:()=>tableView('ESXi'),storage:()=>tableView('Storage'),backup:()=>tableView('Backup'),dcmi:()=>tableView('DCMI'),racks:racksView,lifecycle:lifecycleView,ipam:ipView,relations:relView,import:importView,wsfc:wsfcView,dcdesign:dcdesignView,dclayoutlist:()=>tableView('DCLayout'),checks:()=>tableView('DCChecks'),issues:issuesView,stuff:stuffView,kb:kbView,otherdevices:()=>tableView('RackDevices'),tracker:oiView,quality:qualityView,sources:sourcesView,datastores:()=>tableView('Datastores'),settings:settingsView};
 /* page transitions: tabs slide + fade in the tab direction (200 ms), page change rises (220 ms), first visit cascades */
 const PGSEEN={};let PGLAST='';
 function pgAnim(){
